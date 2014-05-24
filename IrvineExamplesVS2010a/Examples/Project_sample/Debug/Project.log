@@ -1,0 +1,21 @@
+﻿Compilación iniciada a las 20/11/2013 11:51:24 p.m..
+     1>Proyecto "C:\Users\Tavo\Downloads\Universidad\Arquitectura\MATERIAL ENSAMBLADOR\IrvineExamplesVS2010a\Examples\Project_sample\Project.vcxproj" en el nodo 2 (build destinos).
+     1>InitializeBuildStatus:
+         Aplicando tarea Touch a "Debug\Project.unsuccessfulbuild".
+       _MASM:
+         Assembling [Inputs]...
+         cmd.exe /C "C:\Users\Tavo\AppData\Local\Temp\be6de75e07e24953abffa90f0ac3db34.cmd"
+         ml.exe /c /nologo /Zi /Fo"Debug\WriteColors.obj" /Fl".lst" /I "C:\Users\Tavo\Downloads\Universidad\Arquitectura\MATERIAL ENSAMBLADOR\IrvineExamplesVS2010a" /W3 /errorReport:prompt  /Ta..\..\..\WriteColors.asm
+       Link:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Tavo\Downloads\Universidad\Arquitectura\MATERIAL ENSAMBLADOR\IrvineExamplesVS2010a\Examples\Project_sample\Debug\Project.exe" /NOLOGO /LIBPATH:"C:\Users\Tavo\Downloads\Universidad\Arquitectura\MATERIAL ENSAMBLADOR\IrvineExamplesVS2010a" user32.lib irvine32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\Project.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\Tavo\Downloads\Universidad\Arquitectura\MATERIAL ENSAMBLADOR\IrvineExamplesVS2010a\Examples\Project_sample\Debug\Project.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE:NO /IMPLIB:"C:\Users\Tavo\Downloads\Universidad\Arquitectura\MATERIAL ENSAMBLADOR\IrvineExamplesVS2010a\Examples\Project_sample\Debug\Project.lib" /MACHINE:X86 Debug\WriteColors.obj
+         Project.vcxproj -> C:\Users\Tavo\Downloads\Universidad\Arquitectura\MATERIAL ENSAMBLADOR\IrvineExamplesVS2010a\Examples\Project_sample\Debug\Project.exe
+       Manifest:
+         c:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"C:\Users\Tavo\Downloads\Universidad\Arquitectura\MATERIAL ENSAMBLADOR\IrvineExamplesVS2010a\Examples\Project_sample\Debug\Project.exe;#1" /manifest Debug\Project.exe.intermediate.manifest
+       FinalizeBuildStatus:
+         Se eliminará el archivo "Debug\Project.unsuccessfulbuild".
+         Aplicando tarea Touch a "Debug\Project.lastbuildstate".
+     1>Compilación del proyecto terminada "C:\Users\Tavo\Downloads\Universidad\Arquitectura\MATERIAL ENSAMBLADOR\IrvineExamplesVS2010a\Examples\Project_sample\Project.vcxproj" (build destinos).
+
+Compilación correcta.
+
+Tiempo transcurrido 00:00:00.49
