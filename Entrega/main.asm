@@ -9,16 +9,16 @@ INCLUDE Irvine32.INC
 .data
 CuadrosAscii BYTE 176,0,177,0
 swich BYTE 0 ; interuptor para animaciones
-mensaje DWORD 9 DUP(0); array que da direccion donde empieza cada una de las lineas del mensaje
-mensajeBienvenida1 BYTE			        17 DUP(" "),"Bienvenido Al Programa De Regresion Multiple",0 ;lineas del mensaje de bienvenida 
-mensajeBienvenida2 BYTE				   22 DUP(" "),"Arquitectura Del Computador 2013-II",0		    ;con espacios en blanco para que cada mensaje se vea centrado
+mensaje DWORD 9 DUP(0); array que tiene la direccion donde empieza cada una de las lineas del mensaje
+mensajeBienvenida1 BYTE			        17 DUP(" "),"Bienvenido Al Programa De Estudio Estadistico",0 ;lineas del mensaje de bienvenida 
+mensajeBienvenida2 BYTE				   23 DUP(" "),"Arquitectura Del Computador 2012-I",0		    ;con espacios en blanco para que cada mensaje se vea centrado
 mensajeBienvenida3 BYTE				   22 DUP(" "),"Este Software Fue Desarrollado Por:",0
 mensajeBienvenida4 BYTE				   18 DUP(" "),"Gustavo Le",162d,"n Preciado Jiménez C.C 1037635880",0
-mensajeBienvenida5 BYTE				   18 DUP(" ")," ",0
-mensajeBienvenida6 BYTE				   20 DUP(" "),"Este software esta dise",164d,"ado para realizar",0
-mensajeBienvenida7 BYTE				   12 DUP(" "),"una regresion multiple apartir de los puntos ingresados",0
-mensajeBienvenida8 BYTE				   23 DUP(" "),"y el grado del polinomio deseado",0
-mensajeBienvenida9 BYTE				   79 DUP("-"),0; indica el final del mensaje.
+mensajeBienvenida5 BYTE				   16 DUP(" "),"Gustavo Andr",130d,"s Angarita Velasquez C.C 1037635327",0
+mensajeBienvenida6 BYTE				   19 DUP(" "),"Este software esta dise",164d,"ado para calcular",0
+mensajeBienvenida7 BYTE				   20 DUP(" "),"distintas medidas estadisticas apartir",0
+mensajeBienvenida8 BYTE				   8 DUP(" "),"de los datos de un archivo y la seleccion de la medida deseada",0
+mensajeBienvenida9 BYTE				   80 DUP("-"),0; indica el final del mensaje.
 contadorMensaje DWORD 0 ;servira para desplazar el mensaje de bienvenida
 
 auxCiclos	DWORD 5 DUP(0); array que servira como variables auxiliares y de control para durante los ciclos
