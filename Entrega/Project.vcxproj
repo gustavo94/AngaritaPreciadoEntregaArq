@@ -43,7 +43,8 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <MASM>
-      <IncludePaths>C:\Users\Tavo\Documents\GitHub\AngaritaPreciadoEntregaArq\IrvineExamplesVS2010a</IncludePaths>
+      <IncludePaths>
+      </IncludePaths>
       <AssembledCodeListingFile>$(InputName).lst</AssembledCodeListingFile>
     </MASM>
     <Link>

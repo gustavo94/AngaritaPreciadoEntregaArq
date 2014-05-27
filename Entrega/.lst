@@ -1,13 +1,12 @@
-Microsoft (R) Macro Assembler Version 10.00.30319.01	    05/23/14 21:40:55
-)REGRESION LINEAL Template						(main.asm  Page 1 - 1
+Microsoft (R) Macro Assembler Version 10.00.30319.01	    05/27/14 16:09:36
+ESTADÍSTICAS						(main.asm  Page 1 - 1
 
 
-				TITLE REGRESION LINEAL Template						(main.asm)
+				TITLE ESTADÍSTICAS						(main.asm)
 
-				; Descripcion:
-				; Este software fue desarrollado para la clase de arquitectura del computador 2013-II
-				; Esta diseñado para realizar una regresion lineal multiple apartir de los puntos ingresados por el usuario
-				; Revision date:
+				; Descripción:
+				; Este software fue desarrollado para la clase de Arquitectura de Computadores 2014-I
+				; Esta diseñado para generar diferentes estadísticas a partir de datos contenidos en un archivo de texto
 
 				INCLUDE Irvine32.INC
 			      C ; Include file for Irvine32.lib             (Irvine32.inc)
@@ -29,88 +28,89 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    05/23/14 21:40:55
 			      C 
  00000000			.data
  00000000 B0 00 B1 00		CuadrosAscii BYTE 176,0,177,0
- 00000004 00			swich BYTE 0 ; interuptor para animaciones
- 00000005  00000009 [		mensaje DWORD 9 DUP(0); array que tiene la direccion donde empieza cada una de las lineas del mensaje
+ 00000004 00			interruptor BYTE 0 ; interuptor para animaciones
+ 00000005  00000009 [		mensaje DWORD 9 DUP(0)	; array que tiene la dirección donde empieza cada una de las líneas del mensaje
 	    00000000
 	   ]
- 00000029  00000011 [		mensajeBienvenida1 BYTE			        17 DUP(" "),"Bienvenido Al Programa De Estudio Estadistico",0 ;lineas del mensaje de bienvenida 
+ 00000029  00000011 [		mensajeBienvenida1 BYTE			       17 DUP(" "),"Bienvenido al programa de estudio estad",161d,"stico",0 ;líneas del mensaje de bienvenida 
 	    20
 	   ] 42 69 65 6E
 	   76 65 6E 69 64
-	   6F 20 41 6C 20
-	   50 72 6F 67 72
-	   61 6D 61 20 44
-	   65 20 45 73 74
+	   6F 20 61 6C 20
+	   70 72 6F 67 72
+	   61 6D 61 20 64
+	   65 20 65 73 74
 	   75 64 69 6F 20
-	   45 73 74 61 64
-	   69 73 74 69 63
+	   65 73 74 61 64
+	   A1 73 74 69 63
 	   6F 00
- 00000068  00000017 [		mensajeBienvenida2 BYTE				   23 DUP(" "),"Arquitectura Del Computador 2012-I",0		    ;con espacios en blanco para que cada mensaje se vea centrado
+ 00000068  00000017 [		mensajeBienvenida2 BYTE				   23 DUP(" "),"Arquitectura del Computador 2014-I",0		    ;con espacios en blanco para que cada mensaje se vea centrado
 	    20
 	   ] 41 72 71 75
 	   69 74 65 63 74
-	   75 72 61 20 44
+	   75 72 61 20 64
 	   65 6C 20 43 6F
 	   6D 70 75 74 61
 	   64 6F 72 20 32
-	   30 31 32 2D 49
+	   30 31 34 2D 49
 	   00
- 000000A2  00000016 [		mensajeBienvenida3 BYTE				   22 DUP(" "),"Este Software Fue Desarrollado Por:",0
+ 000000A2  00000016 [		mensajeBienvenida3 BYTE				   22 DUP(" "),"Este software fue desarrollado por:",0
 	    20
 	   ] 45 73 74 65
-	   20 53 6F 66 74
+	   20 73 6F 66 74
 	   77 61 72 65 20
-	   46 75 65 20 44
+	   66 75 65 20 64
 	   65 73 61 72 72
 	   6F 6C 6C 61 64
-	   6F 20 50 6F 72
+	   6F 20 70 6F 72
 	   3A 00
- 000000DC  00000012 [		mensajeBienvenida4 BYTE				   18 DUP(" "),"Gustavo Le",162d,"n Preciado Jiménez C.C 1037635880",0
+ 000000DC  00000012 [		mensajeBienvenida4 BYTE				   18 DUP(" "),"Gustavo Le",162d,"n Preciado Jim",130d,"nez C.C 1037635880",0
 	    20
 	   ] 47 75 73 74
 	   61 76 6F 20 4C
 	   65 A2 6E 20 50
 	   72 65 63 69 61
 	   64 6F 20 4A 69
-	   6D E9 6E 65 7A
+	   6D 82 6E 65 7A
 	   20 43 2E 43 20
 	   31 30 33 37 36
 	   33 35 38 38 30
 	   00
- 0000011B  00000010 [		mensajeBienvenida5 BYTE				   16 DUP(" "),"Gustavo Andr",130d,"s Angarita Velasquez C.C 1037635327",0
+ 0000011B  00000010 [		mensajeBienvenida5 BYTE				   16 DUP(" "),"Gustavo Andr",130d,"s Angarita Vel",160d,"squez C.C 1037635327",0
 	    20
 	   ] 47 75 73 74
 	   61 76 6F 20 41
 	   6E 64 72 82 73
 	   20 41 6E 67 61
 	   72 69 74 61 20
-	   56 65 6C 61 73
+	   56 65 6C A0 73
 	   71 75 65 7A 20
 	   43 2E 43 20 31
 	   30 33 37 36 33
 	   35 33 32 37 00
- 0000015C  00000013 [		mensajeBienvenida6 BYTE				   19 DUP(" "),"Este software esta dise",164d,"ado para calcular",0
+ 0000015C  00000013 [		mensajeBienvenida6 BYTE				   19 DUP(" "),"Este software est",160d," dise",164d,"ado para calcular",0
 	    20
 	   ] 45 73 74 65
 	   20 73 6F 66 74
 	   77 61 72 65 20
-	   65 73 74 61 20
+	   65 73 74 A0 20
 	   64 69 73 65 A4
 	   61 64 6F 20 70
 	   61 72 61 20 63
 	   61 6C 63 75 6C
 	   61 72 00
- 00000199  00000014 [		mensajeBienvenida7 BYTE				   20 DUP(" "),"distintas medidas estadisticas apartir",0
+ 00000199  00000014 [		mensajeBienvenida7 BYTE				   20 DUP(" "),"distintas medidas estad",161d,"sticas a partir",0
 	    20
 	   ] 64 69 73 74
 	   69 6E 74 61 73
 	   20 6D 65 64 69
 	   64 61 73 20 65
-	   73 74 61 64 69
+	   73 74 61 64 A1
 	   73 74 69 63 61
-	   73 20 61 70 61
-	   72 74 69 72 00
- 000001D4  00000008 [		mensajeBienvenida8 BYTE				   8 DUP(" "),"de los datos de un archivo y la seleccion de la medida deseada",0
+	   73 20 61 20 70
+	   61 72 74 69 72
+	   00
+ 000001D5  00000009 [		mensajeBienvenida8 BYTE				   9 DUP(" "),"de los datos de un archivo y la selecci",162d,"n de la medida deseada",0
 	    20
 	   ] 64 65 20 6C
 	   6F 73 20 64 61
@@ -120,41 +120,48 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    05/23/14 21:40:55
 	   76 6F 20 79 20
 	   6C 61 20 73 65
 	   6C 65 63 63 69
-	   6F 6E 20 64 65
+	   A2 6E 20 64 65
 	   20 6C 61 20 6D
 	   65 64 69 64 61
 	   20 64 65 73 65
 	   61 64 61 00
- 0000021B  00000050 [		mensajeBienvenida9 BYTE				   80 DUP("-"),0; indica el final del mensaje.
+ 0000021D  0000000A [		mensajeBienvenida9 BYTE				   10 DUP(" "), 60 DUP("-"),0; indica el final del mensaje.
+	    20
+	   ]
+	   0000003C [
 	    2D
 	   ] 00
- 0000026C 00000000		contadorMensaje DWORD 0 ;servira para desplazar el mensaje de bienvenida
+ 00000264 00000000		contadorMensaje DWORD 0 ;servirá para desplazar el mensaje de bienvenida
 
- 00000270  00000005 [		auxCiclos	DWORD 5 DUP(0); array que servira como variables auxiliares y de control para durante los ciclos
+ 00000268  00000005 [		auxCiclos	DWORD 5 DUP(0); array que servirá como variables auxiliares y de control durante los ciclos
 	    00000000
 	   ]
 
 
- 00000284 01C9C37F		tiempoEspera DWORD 29999999,50 ; tiempos de espera para las animaciones
-	   00000032
+ 0000027C 0064 03E8		tiempoEspera WORD 100,1000 ; tiempos de espera para las animaciones
+
+				;fondos y colores de texto
+ = 000000F9			colores1 EQU lightBlue + (white * 16); Azul claro sobre blanco
+ = 00000091			colores2 EQU blue + (lightBlue * 16)
  00000000			.code
  00000000			main PROC
- 00000000  B8 000000F9		mov eax,lightBlue + (white * 16) ; Azul claro sobre blanco
+ 00000000  B8 000000F9		mov eax, colores1
  00000005  E8 00000000 E	call SetTextColor
- 0000000A  E8 00000000 E		CALL Clrscr
- 0000000F  E8 000000ED			CALL pintarBarras
- 00000014			INICIO:
- 00000014  E8 00000009		CALL mostrarMensaje
+ 0000000A  E8 00000000 E	call Clrscr
+ 0000000F  E8 000000F0		call pintarBarras
+ 00000014			inicio:
+ 00000014  E8 00000009		call mostrarMensaje
  00000019  EB F9		JMP INICIO
 					exit
  00000022			main ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
  00000022			mostrarMensaje PROC
-				;Mustra en mensaje de bienvenida en 6 lineas entre dos barras animadas, las 6 lineas se van desplazando para 
+				;Muestra el mensaje de bienvenida en 6 líneas entre dos barras animadas, las 6 líneas se van desplazando para 
 				;mostrar todo el mensaje de bienvenida
 				;-----------------------------------------------------------------------------------------------------------
- 00000022  C7 05 00000005 R	MOV mensaje,OFFSET mensajeBienvenida1 ; Muevo las direcciones al array
+				; Muevo las direcciones al array
+ 00000022  C7 05 00000005 R	MOV mensaje,OFFSET mensajeBienvenida1 
 	   00000029 R
  0000002C  C7 05 00000009 R	MOV [mensaje+4],OFFSET mensajeBienvenida2
 	   00000068 R
@@ -169,159 +176,161 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    05/23/14 21:40:55
  0000005E  C7 05 0000001D R	MOV [mensaje+24],OFFSET mensajeBienvenida7
 	   00000199 R
  00000068  C7 05 00000021 R	MOV [mensaje+28],OFFSET mensajeBienvenida8
-	   000001D4 R
+	   000001D5 R
  00000072  C7 05 00000025 R	MOV [mensaje+32],OFFSET mensajeBienvenida9
-	   0000021B R
+	   0000021D R
 
  0000007C  E8 00000000 E	CALL Clrscr ; limpiar la pantalla
 
- 00000081  E8 000000E3		CALL animarBarra
+ 00000081  E8 000000DD		CALL animarBarra
 
  00000086  E8 00000000 E	CALL Crlf
 
  0000008B  B9 00000006		MOV ecx,6
- 00000090  A1 0000026C R	MOV eax,contadorMensaje ; indica en que linea debe empezar
+ 00000090  A1 00000264 R	MOV eax,contadorMensaje ; indica en que línea debe empezar
 
- 00000095  A3 00000270 R	MOV auxCiclos,eax
- 0000009A			CICLO: ; en este ciclo se imprimen las lineas dentro de  las barras
+ 00000095  A3 00000268 R	MOV auxCiclos,eax
+ 0000009A			CICLO: ; en este ciclo se imprimen las líneas dentro de  las barras
 
- 0000009A  A1 00000270 R		MOV eax,auxCiclos
+ 0000009A  A1 00000268 R		MOV eax,auxCiclos
  0000009F  BA 00000004			MOV edx,4
- 000000A4  F7 E2			MUL edx ; multiplica el numero de la linea por 4 para el desplazamiento en memoria
+ 000000A4  F7 E2			MUL edx ; multiplica el numero de la línea por 4 para el desplazamiento en memoria
 
  000000A6  8B 90 00000005 R		MOV edx, [mensaje+eax]
- 000000AC  E8 00000000 E		CALL WriteString ;imprime la linea del mensaje
+ 000000AC  E8 00000000 E		CALL WriteString ;imprime la línea del mensaje
  000000B1  E8 00000000 E		CALL Crlf
 
- 000000B6  83 3D 00000270 R		CMP auxCiclos,8 ; controla que el valor de auxCiclos siempre este entre 0 y 8
+ 000000B6  83 3D 00000268 R		CMP auxCiclos,8 ; controla que el valor de auxCiclos siempre este entre 0 y 8
 	   08
  000000BD  7C 0C			JL MENOR8
- 000000BF  C7 05 00000270 R		MOV auxCiclos,0
+ 000000BF  C7 05 00000268 R		MOV auxCiclos,0
 	   00000000
  000000C9  EB 06			JMP NoMENOR8
  000000CB				MENOR8:
- 000000CB  FF 05 00000270 R		INC auxCiclos
+ 000000CB  FF 05 00000268 R		INC auxCiclos
  000000D1				NoMENOR8:
 
  000000D1  E2 C7		LOOP CICLO
 
  000000D3  E8 00000000 E	CALL Crlf
 
- 000000D8  83 3D 0000026C R	cmp contadorMensaje,8 ; controla que el valor de contadorMensaje siempre este entre 0 y 8
+ 000000D8  83 3D 00000264 R	cmp contadorMensaje,8 ; controla que el valor de contadorMensaje siempre este entre 0 y 8
 	   08
  000000DF  7C 0C		JL MEN8
- 000000E1  C7 05 0000026C R	MOV contadorMensaje,0
+ 000000E1  C7 05 00000264 R	MOV contadorMensaje,0
 	   00000000
  000000EB  EB 06		JMP NoMEN8
  000000ED			MEN8:
- 000000ED  FF 05 0000026C R	INC contadormensaje
+ 000000ED  FF 05 00000264 R	INC contadormensaje
  000000F3			NoMEN8:
 
- 000000F3  E8 00000071		CALL animarBarra
+ 000000F3  E8 0000006B		CALL animarBarra
 
 
- 000000F8  8B 0D 00000285 R		MOV ecx, [tiempoEspera+1] 
+ 000000F8  66| A1			MOV ax, [tiempoEspera+2] 
+	   0000027E R
 					
- 000000FE				Espera:  ; ciclo de espera para la animacion
- 000000FE  E2 FE			LOOP Espera
+ 000000FE  E8 00000000 E		CALL delay
 					
 					
- 00000100  C3			RET
- 00000101			mostrarMensaje ENDP
+ 00000103  C3			RET
+ 00000104			mostrarMensaje ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 00000101			pintarBarras PROC
-				;Pinta las barras superior e inferior en una animacion que pinta de a 4 caracteres (codigo ascii 176) hasta llegar a 80
+ 00000104			pintarBarras PROC
+				;Pinta las barras superior e inferior en una animación que pinta de a 4 caracteres (código ascii 176) hasta llegar a 80
 				;-----------------------------------------------------------------------------------------------------------
- 00000101  E8 0000002E		CALL pintarBarra ; barra superior
+ 00000104  E8 0000002E		CALL pintarBarra ; barra superior
 
-				;8 lineas en las que ira el mensaje de bienvenida
- 00000106  E8 00000000 ECALL Crlf
- 0000010B  E8 00000000 E	CALL Crlf
- 00000110  E8 00000000 E	CALL Crlf
- 00000115  E8 00000000 E	CALL Crlf	;Lineas en blanco durante la entrada de las barras
- 0000011A  E8 00000000 E	CALL Crlf
- 0000011F  E8 00000000 E	CALL Crlf
- 00000124  E8 00000000 E	CALL Crlf
- 00000129  E8 00000000 E	CALL Crlf
+				;8 líneas en las que irá el mensaje de bienvenida
+				;Líneas en blanco durante la entrada de las barras
+ 00000109  E8 00000000 E	CALL Crlf
+ 0000010E  E8 00000000 E	CALL Crlf
+ 00000113  E8 00000000 E	CALL Crlf
+ 00000118  E8 00000000 E	CALL Crlf	
+ 0000011D  E8 00000000 E	CALL Crlf
+ 00000122  E8 00000000 E	CALL Crlf
+ 00000127  E8 00000000 E	CALL Crlf
+ 0000012C  E8 00000000 E	CALL Crlf
 
- 0000012E  E8 00000001		CALL pintarBarra ; barra inferior
+ 00000131  E8 00000001		CALL pintarBarra ; barra inferior
 
- 00000133  C3			RET
- 00000134			pintarBarras ENDP
+ 00000136  C3			RET
+ 00000137			pintarBarras ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 00000134			pintarBarra PROC
+ 00000137			pintarBarra PROC
 				;Procedimiento auxiliar para pintarBarras este pinta cada una de las barras cada que es llamado
 				;-----------------------------------------------------------------------------------------------------------
- 00000134  B9 00000014		MOV	ecx, 20 ; el ciclo se realizara 20 veces para llegar a 80 caracteres
+ 00000137  B9 00000014		MOV	ecx, 20 ; el ciclo se realizará 20 veces para llegar a 80 caracteres
 					
- 00000139			CiloImprimir:
+ 0000013C			CiloImprimir:
 						
- 00000139  BA 00000000 R		MOV edx, OFFSET CuadrosAscii; caracter 176
+ 0000013C  BA 00000000 R		MOV edx, OFFSET CuadrosAscii; caracter 176
 						
- 0000013E  E8 00000000 E		CALL	WriteString
- 00000143  E8 00000000 E		CALL	WriteString
- 00000148  E8 00000000 E		CALL	WriteString
- 0000014D  E8 00000000 E		CALL	WriteString
+ 00000141  E8 00000000 E		CALL	WriteString
+ 00000146  E8 00000000 E		CALL	WriteString
+ 0000014B  E8 00000000 E		CALL	WriteString
+ 00000150  E8 00000000 E		CALL	WriteString
 
- 00000152  89 0D 00000270 R		MOV auxCiclos, ecx 
- 00000158  8B 0D 00000284 R		MOV ecx, tiempoEspera 
+ 00000155  66| A1			MOV ax, tiempoEspera 
+	   0000027C R
 					
- 0000015E				Espera:  ; ciclo de espera para la animacion
- 0000015E  E2 FE			LOOP Espera
+ 0000015B  E8 00000000 E		CALL delay
 					
- 00000160  8B 0D 00000270 R		MOV ecx,auxCiclos
 					
- 00000166  E2 D1		LOOP CiloImprimir
+ 00000160  E2 DA		LOOP CiloImprimir
 
- 00000168  C3			RET
- 00000169			pintarBarra ENDP
+ 00000162  C3			RET
+ 00000163			pintarBarra ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 00000169			animarBarra PROC
+ 00000163			animarBarra PROC
 				;Procedimiento para que la barra de cuadros parpadee intercambiando el simbolo ascii 176 y 177
 				; cambia el caracter con el que se pinta la barra cada que es invocado
 				;-----------------------------------------------------------------------------------------------------------
 
 
- 00000169  66| B9 0028		MOV cx,40 ; hara un ciclo 40 veces pintando de a dos caracteres 176 o 177
- 0000016D			L1:
- 0000016D  80 3D 00000004 R		CMP swich,2 ;escoge que caracter usar para pintar la barra
+ 00000163  66| B9 000A		MOV cx,10 ; hará un ciclo 40 veces pintando de a dos caracteres 176 o 177
+ 00000167			L1:
+ 00000167  80 3D 00000004 R		CMP interruptor,2 ;escoge qué caracter usar para pintar la barra
 	   02
- 00000174  7C 07			JL SINO
- 00000176  BA 00000000 R			MOV edx, OFFSET CuadrosAscii
- 0000017B  EB 08			JMP FINSI
- 0000017D				SINO:
- 0000017D  BA 00000000 R			MOV edx, OFFSET CuadrosAscii
- 00000182  83 C2 02				ADD edx,2
- 00000185				FINSI:
- 00000185  E8 00000000 E			CALL	WriteString
- 0000018A  E8 00000000 E			CALL	WriteString
+ 0000016E  BA 00000000 R		MOV edx, OFFSET CuadrosAscii
+ 00000173  7F 03			JG FINSI
+ 00000175  83 C2 02				ADD edx,2
+ 00000178				FINSI:
+ 00000178  E8 00000000 E			CALL	WriteString
+ 0000017D  E8 00000000 E			CALL	WriteString
+ 00000182  E8 00000000 E			CALL	WriteString
+ 00000187  E8 00000000 E			CALL	WriteString
+ 0000018C  E8 00000000 E			CALL	WriteString
+ 00000191  E8 00000000 E			CALL	WriteString
+ 00000196  E8 00000000 E			CALL	WriteString
+ 0000019B  E8 00000000 E			CALL	WriteString
 
- 0000018F  E2 DC		LOOP L1 ;fin cilo para pintar la barra
+ 000001A0  E2 C5		LOOP L1 ;fin cilo para pintar la barra
 
- 00000191  80 3D 00000004 R	CMP swich,2 ; Cambia el estado de la variable de seleccion del caracter
+ 000001A2  80 3D 00000004 R	CMP interruptor,2 ; Cambia el estado de la variable de seleccion del caracter
 	   02
- 00000198  7C 12		JL SINO2
- 0000019A  80 3D 00000004 R		CMP swich,3
+ 000001A9  7C 12		JL SINO2
+ 000001AB  80 3D 00000004 R		CMP interruptor,3
 	   03
- 000001A1  7E 09			JLE SINO2
- 000001A3  C6 05 00000004 R			MOV swich,0
+ 000001B2  7E 09			JLE SINO2
+ 000001B4  C6 05 00000004 R			MOV interruptor,0
 	   00
 					
- 000001AA  EB 06		JMP FINSI2
- 000001AC			SINO2:
- 000001AC  FE 05 00000004 R			INC swich
- 000001B2			FINSI2:
+ 000001BB  EB 06		JMP FINSI2
+ 000001BD			SINO2:
+ 000001BD  FE 05 00000004 R			INC interruptor
+ 000001C3			FINSI2:
 						
 						
- 000001B2  C3			RET
- 000001B3			animarBarra ENDP
+ 000001C3  C3			RET
+ 000001C4			animarBarra ENDP
 
 				END main
-Microsoft (R) Macro Assembler Version 10.00.30319.01	    05/23/14 21:40:55
-)REGRESION LINEAL Template						(main.asm  Symbols 2 - 1
+Microsoft (R) Macro Assembler Version 10.00.30319.01	    05/27/14 16:09:36
+ESTADÍSTICAS						(main.asm  Symbols 2 - 1
 
 
 
@@ -414,8 +423,8 @@ Segments and Groups:
 
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00000400 Para	  Stack	  'STACK'	 
-_DATA  . . . . . . . . . . . . .	32 Bit	 0000028C Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 000001B3 Para	  Public  'CODE'	
+_DATA  . . . . . . . . . . . . .	32 Bit	 00000280 Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 000001C4 Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -522,25 +531,22 @@ WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-animarBarra  . . . . . . . . . .	P Near	 00000169 _TEXT	Length= 0000004A Public STDCALL
-  L1 . . . . . . . . . . . . . .	L Near	 0000016D _TEXT	
-  SINO . . . . . . . . . . . . .	L Near	 0000017D _TEXT	
-  FINSI  . . . . . . . . . . . .	L Near	 00000185 _TEXT	
-  SINO2  . . . . . . . . . . . .	L Near	 000001AC _TEXT	
-  FINSI2 . . . . . . . . . . . .	L Near	 000001B2 _TEXT	
+animarBarra  . . . . . . . . . .	P Near	 00000163 _TEXT	Length= 00000061 Public STDCALL
+  L1 . . . . . . . . . . . . . .	L Near	 00000167 _TEXT	
+  FINSI  . . . . . . . . . . . .	L Near	 00000178 _TEXT	
+  SINO2  . . . . . . . . . . . .	L Near	 000001BD _TEXT	
+  FINSI2 . . . . . . . . . . . .	L Near	 000001C3 _TEXT	
 main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000022 Public STDCALL
-  INICIO . . . . . . . . . . . .	L Near	 00000014 _TEXT	
-mostrarMensaje . . . . . . . . .	P Near	 00000022 _TEXT	Length= 000000DF Public STDCALL
+  inicio . . . . . . . . . . . .	L Near	 00000014 _TEXT	
+mostrarMensaje . . . . . . . . .	P Near	 00000022 _TEXT	Length= 000000E2 Public STDCALL
   CICLO  . . . . . . . . . . . .	L Near	 0000009A _TEXT	
   MENOR8 . . . . . . . . . . . .	L Near	 000000CB _TEXT	
   NoMENOR8 . . . . . . . . . . .	L Near	 000000D1 _TEXT	
   MEN8 . . . . . . . . . . . . .	L Near	 000000ED _TEXT	
   NoMEN8 . . . . . . . . . . . .	L Near	 000000F3 _TEXT	
-  Espera . . . . . . . . . . . .	L Near	 000000FE _TEXT	
-pintarBarras . . . . . . . . . .	P Near	 00000101 _TEXT	Length= 00000033 Public STDCALL
-pintarBarra  . . . . . . . . . .	P Near	 00000134 _TEXT	Length= 00000035 Public STDCALL
-  CiloImprimir . . . . . . . . .	L Near	 00000139 _TEXT	
-  Espera . . . . . . . . . . . .	L Near	 0000015E _TEXT	
+pintarBarras . . . . . . . . . .	P Near	 00000104 _TEXT	Length= 00000033 Public STDCALL
+pintarBarra  . . . . . . . . . .	P Near	 00000137 _TEXT	Length= 0000002C Public STDCALL
+  CiloImprimir . . . . . . . . .	L Near	 0000013C _TEXT	
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
@@ -760,15 +766,18 @@ VK_UP  . . . . . . . . . . . . .	Number	 00000026h
 WINDOW_BUFFER_SIZE_EVENT . . . .	Number	 00000004h   
 WriteConsoleOutputCharacter  . .	Text   	 WriteConsoleOutputCharacterA
 WriteConsole . . . . . . . . . .	Text   	 WriteConsoleA
-auxCiclos  . . . . . . . . . . .	DWord	 00000270 _DATA	
+auxCiclos  . . . . . . . . . . .	DWord	 00000268 _DATA	
 black  . . . . . . . . . . . . .	Number	 00000000h   
 blue . . . . . . . . . . . . . .	Number	 00000001h   
 brown  . . . . . . . . . . . . .	Number	 00000006h   
-contadorMensaje  . . . . . . . .	DWord	 0000026C _DATA	
+colores1 . . . . . . . . . . . .	Number	 000000F9h   
+colores2 . . . . . . . . . . . .	Number	 00000091h   
+contadorMensaje  . . . . . . . .	DWord	 00000264 _DATA	
 cyan . . . . . . . . . . . . . .	Number	 00000003h   
 exit . . . . . . . . . . . . . .	Text   	 INVOKE ExitProcess,0
 gray . . . . . . . . . . . . . .	Number	 00000008h   
 green  . . . . . . . . . . . . .	Number	 00000002h   
+interruptor  . . . . . . . . . .	Byte	 00000004 _DATA	
 lightBlue  . . . . . . . . . . .	Number	 00000009h   
 lightCyan  . . . . . . . . . . .	Number	 0000000Bh   
 lightGray  . . . . . . . . . . .	Number	 00000007h   
@@ -783,12 +792,11 @@ mensajeBienvenida4 . . . . . . .	Byte	 000000DC _DATA
 mensajeBienvenida5 . . . . . . .	Byte	 0000011B _DATA	
 mensajeBienvenida6 . . . . . . .	Byte	 0000015C _DATA	
 mensajeBienvenida7 . . . . . . .	Byte	 00000199 _DATA	
-mensajeBienvenida8 . . . . . . .	Byte	 000001D4 _DATA	
-mensajeBienvenida9 . . . . . . .	Byte	 0000021B _DATA	
+mensajeBienvenida8 . . . . . . .	Byte	 000001D5 _DATA	
+mensajeBienvenida9 . . . . . . .	Byte	 0000021D _DATA	
 mensaje  . . . . . . . . . . . .	DWord	 00000005 _DATA	
 red  . . . . . . . . . . . . . .	Number	 00000004h   
-swich  . . . . . . . . . . . . .	Byte	 00000004 _DATA	
-tiempoEspera . . . . . . . . . .	DWord	 00000284 _DATA	
+tiempoEspera . . . . . . . . . .	Word	 0000027C _DATA	
 white  . . . . . . . . . . . . .	Number	 0000000Fh   
 wsprintf . . . . . . . . . . . .	Text   	 wsprintfA
 yellow . . . . . . . . . . . . .	Number	 0000000Eh   

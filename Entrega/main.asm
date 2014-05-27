@@ -1,48 +1,52 @@
-TITLE REGRESION LINEAL Template						(main.asm)
+TITLE ESTADÍSTICAS						(main.asm)
 
-; Descripcion:
-; Este software fue desarrollado para la clase de arquitectura del computador 2013-II
-; Esta diseñado para realizar una regresion lineal multiple apartir de los puntos ingresados por el usuario
-; Revision date:
+; Descripción:
+; Este software fue desarrollado para la clase de Arquitectura de Computadores 2014-I
+; Esta diseñado para generar diferentes estadísticas a partir de datos contenidos en un archivo de texto
 
 INCLUDE Irvine32.INC
 .data
 CuadrosAscii BYTE 176,0,177,0
-swich BYTE 0 ; interuptor para animaciones
-mensaje DWORD 9 DUP(0); array que tiene la direccion donde empieza cada una de las lineas del mensaje
-mensajeBienvenida1 BYTE			        17 DUP(" "),"Bienvenido Al Programa De Estudio Estadistico",0 ;lineas del mensaje de bienvenida 
-mensajeBienvenida2 BYTE				   23 DUP(" "),"Arquitectura Del Computador 2012-I",0		    ;con espacios en blanco para que cada mensaje se vea centrado
-mensajeBienvenida3 BYTE				   22 DUP(" "),"Este Software Fue Desarrollado Por:",0
-mensajeBienvenida4 BYTE				   18 DUP(" "),"Gustavo Le",162d,"n Preciado Jiménez C.C 1037635880",0
-mensajeBienvenida5 BYTE				   16 DUP(" "),"Gustavo Andr",130d,"s Angarita Velasquez C.C 1037635327",0
-mensajeBienvenida6 BYTE				   19 DUP(" "),"Este software esta dise",164d,"ado para calcular",0
-mensajeBienvenida7 BYTE				   20 DUP(" "),"distintas medidas estadisticas apartir",0
-mensajeBienvenida8 BYTE				   8 DUP(" "),"de los datos de un archivo y la seleccion de la medida deseada",0
-mensajeBienvenida9 BYTE				   80 DUP("-"),0; indica el final del mensaje.
-contadorMensaje DWORD 0 ;servira para desplazar el mensaje de bienvenida
+interruptor BYTE 0 ; interuptor para animaciones
+mensaje DWORD 9 DUP(0)	; array que tiene la dirección donde empieza cada una de las líneas del mensaje
+mensajeBienvenida1 BYTE			       17 DUP(" "),"Bienvenido al programa de estudio estad",161d,"stico",0 ;líneas del mensaje de bienvenida 
+mensajeBienvenida2 BYTE				   23 DUP(" "),"Arquitectura del Computador 2014-I",0		    ;con espacios en blanco para que cada mensaje se vea centrado
+mensajeBienvenida3 BYTE				   22 DUP(" "),"Este software fue desarrollado por:",0
+mensajeBienvenida4 BYTE				   18 DUP(" "),"Gustavo Le",162d,"n Preciado Jim",130d,"nez C.C 1037635880",0
+mensajeBienvenida5 BYTE				   16 DUP(" "),"Gustavo Andr",130d,"s Angarita Vel",160d,"squez C.C 1037635327",0
+mensajeBienvenida6 BYTE				   19 DUP(" "),"Este software est",160d," dise",164d,"ado para calcular",0
+mensajeBienvenida7 BYTE				   20 DUP(" "),"distintas medidas estad",161d,"sticas a partir",0
+mensajeBienvenida8 BYTE				   9 DUP(" "),"de los datos de un archivo y la selecci",162d,"n de la medida deseada",0
+mensajeBienvenida9 BYTE				   10 DUP(" "), 60 DUP("-"),0; indica el final del mensaje.
+contadorMensaje DWORD 0 ;servirá para desplazar el mensaje de bienvenida
 
-auxCiclos	DWORD 5 DUP(0); array que servira como variables auxiliares y de control para durante los ciclos
+auxCiclos	DWORD 5 DUP(0); array que servirá como variables auxiliares y de control durante los ciclos
 
 
-tiempoEspera DWORD 29999999,50 ; tiempos de espera para las animaciones
+tiempoEspera WORD 100,1000 ; tiempos de espera para las animaciones
+
+;fondos y colores de texto
+colores1 EQU lightBlue + (white * 16); Azul claro sobre blanco
+colores2 EQU blue + (lightBlue * 16)
 .code
 main PROC
-mov eax,lightBlue + (white * 16) ; Azul claro sobre blanco
+mov eax, colores1
 call SetTextColor
-	CALL Clrscr
-	CALL pintarBarras
-INICIO:
-CALL mostrarMensaje
+call Clrscr
+call pintarBarras
+inicio:
+call mostrarMensaje
 JMP INICIO
 	exit
 main ENDP
 
 ;-----------------------------------------------------------------------------------------------------------
 mostrarMensaje PROC
-;Mustra en mensaje de bienvenida en 6 lineas entre dos barras animadas, las 6 lineas se van desplazando para 
+;Muestra el mensaje de bienvenida en 6 líneas entre dos barras animadas, las 6 líneas se van desplazando para 
 ;mostrar todo el mensaje de bienvenida
 ;-----------------------------------------------------------------------------------------------------------
-MOV mensaje,OFFSET mensajeBienvenida1 ; Muevo las direcciones al array
+; Muevo las direcciones al array
+MOV mensaje,OFFSET mensajeBienvenida1 
 MOV [mensaje+4],OFFSET mensajeBienvenida2
 MOV [mensaje+8],OFFSET mensajeBienvenida3
 MOV [mensaje+12],OFFSET mensajeBienvenida4
@@ -59,17 +63,17 @@ CALL animarBarra
 CALL Crlf
 
 MOV ecx,6
-MOV eax,contadorMensaje ; indica en que linea debe empezar
+MOV eax,contadorMensaje ; indica en que línea debe empezar
 
 MOV auxCiclos,eax
-CICLO: ; en este ciclo se imprimen las lineas dentro de  las barras
+CICLO: ; en este ciclo se imprimen las líneas dentro de  las barras
 
 	MOV eax,auxCiclos
 	MOV edx,4
-	MUL edx ; multiplica el numero de la linea por 4 para el desplazamiento en memoria
+	MUL edx ; multiplica el numero de la línea por 4 para el desplazamiento en memoria
 
 	MOV edx, [mensaje+eax]
-	CALL WriteString ;imprime la linea del mensaje
+	CALL WriteString ;imprime la línea del mensaje
 	CALL Crlf
 
 	CMP auxCiclos,8 ; controla que el valor de auxCiclos siempre este entre 0 y 8
@@ -95,10 +99,9 @@ NoMEN8:
 CALL animarBarra
 
 
-	MOV ecx, [tiempoEspera+1] 
+	MOV ax, [tiempoEspera+2] 
 	
-	Espera:  ; ciclo de espera para la animacion
-	LOOP Espera
+	CALL delay
 	
 	
 RET
@@ -106,15 +109,16 @@ mostrarMensaje ENDP
 
 ;-----------------------------------------------------------------------------------------------------------
 pintarBarras PROC
-;Pinta las barras superior e inferior en una animacion que pinta de a 4 caracteres (codigo ascii 176) hasta llegar a 80
+;Pinta las barras superior e inferior en una animación que pinta de a 4 caracteres (código ascii 176) hasta llegar a 80
 ;-----------------------------------------------------------------------------------------------------------
 CALL pintarBarra ; barra superior
 
-;8 lineas en las que ira el mensaje de bienvenida
+;8 líneas en las que irá el mensaje de bienvenida
+;Líneas en blanco durante la entrada de las barras
 CALL Crlf
 CALL Crlf
 CALL Crlf
-CALL Crlf	;Lineas en blanco durante la entrada de las barras
+CALL Crlf	
 CALL Crlf
 CALL Crlf
 CALL Crlf
@@ -129,7 +133,7 @@ pintarBarras ENDP
 pintarBarra PROC
 ;Procedimiento auxiliar para pintarBarras este pinta cada una de las barras cada que es llamado
 ;-----------------------------------------------------------------------------------------------------------
-MOV	ecx, 20 ; el ciclo se realizara 20 veces para llegar a 80 caracteres
+MOV	ecx, 20 ; el ciclo se realizará 20 veces para llegar a 80 caracteres
 	
 CiloImprimir:
 		
@@ -140,13 +144,10 @@ CiloImprimir:
 	CALL	WriteString
 	CALL	WriteString
 
-	MOV auxCiclos, ecx 
-	MOV ecx, tiempoEspera 
+	MOV ax, tiempoEspera 
 	
-	Espera:  ; ciclo de espera para la animacion
-	LOOP Espera
+	CALL delay
 	
-	MOV ecx,auxCiclos
 	
 LOOP CiloImprimir
 
@@ -160,30 +161,33 @@ animarBarra PROC
 ;-----------------------------------------------------------------------------------------------------------
 
 
-MOV cx,40 ; hara un ciclo 40 veces pintando de a dos caracteres 176 o 177
+MOV cx,10 ; hará un ciclo 40 veces pintando de a dos caracteres 176 o 177
 L1:
-	CMP swich,2 ;escoge que caracter usar para pintar la barra
-	JL SINO
-		MOV edx, OFFSET CuadrosAscii
-	JMP FINSI
-	SINO:
-		MOV edx, OFFSET CuadrosAscii
+	CMP interruptor,2 ;escoge qué caracter usar para pintar la barra
+	MOV edx, OFFSET CuadrosAscii
+	JG FINSI
 		ADD edx,2
 	FINSI:
+		CALL	WriteString
+		CALL	WriteString
+		CALL	WriteString
+		CALL	WriteString
+		CALL	WriteString
+		CALL	WriteString
 		CALL	WriteString
 		CALL	WriteString
 
 LOOP L1 ;fin cilo para pintar la barra
 
-CMP swich,2 ; Cambia el estado de la variable de seleccion del caracter
+CMP interruptor,2 ; Cambia el estado de la variable de seleccion del caracter
 JL SINO2
-	CMP swich,3
+	CMP interruptor,3
 	JLE SINO2
-		MOV swich,0
+		MOV interruptor,0
 	
 JMP FINSI2
 SINO2:
-		INC swich
+		INC interruptor
 FINSI2:
 		
 		
