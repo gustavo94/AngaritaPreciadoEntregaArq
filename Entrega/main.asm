@@ -9,7 +9,8 @@ INCLUDE Irvine32.INC
 
 .data
 
-CuadrosAscii BYTE 176,0,177,0,178,0,219,0,219,0,178,0,177,0,176,0
+;CuadrosAscii BYTE 176,0,177,0,178,0,219,0,219,0,178,0,177,0,176,0
+CuadrosAscii BYTE 220,0,219,0,223,0,219,0,220,0,219,0,223,0,220,0
 contadorBarra BYTE 0 ; contador para animaciones
 mensaje DWORD 12 DUP(0)	; array que tiene la dirección donde empieza cada una de las líneas del mensaje
 numLineasMsjBv = 11
@@ -35,7 +36,8 @@ tiempoEspera WORD 100,1000 ; tiempos de espera para las animaciones
 
 ;fondos y colores de texto
 colores1 EQU lightBlue + (white * 16); Azul claro sobre blanco
-colores2 EQU blue + (lightBlue * 16)
+colores2 EQU lightCyan + (lightBlue * 16)
+colores3 EQU white + (lightBlue * 16)
 
 
 
@@ -44,10 +46,10 @@ colores2 EQU blue + (lightBlue * 16)
 ;-----------------------------------------------------------------------------------------------------------
 main PROC
 ;-----------------------------------------------------------------------------------------------------------
-mov eax, colores1
+mov eax, colores2
 call SetTextColor
 call Clrscr
-call pintarBarras
+call pintarBarrasIni
 call cargarMensaje
 inicio:
 call mostrarMensaje
@@ -57,8 +59,7 @@ main ENDP
 
 ;-----------------------------------------------------------------------------------------------------------
 cargarMensaje PROC
-;Muestra el mensaje de bienvenida en 6 líneas entre dos barras animadas, las 6 líneas se van desplazando para 
-;mostrar todo el mensaje de bienvenida
+;Carga los mensajes en el array
 ;-----------------------------------------------------------------------------------------------------------
 MOV mensaje,OFFSET mensajeBienvenida1 
 MOV [mensaje+4],OFFSET mensajeBienvenida2
@@ -72,6 +73,8 @@ MOV [mensaje+32],OFFSET mensajeBienvenida9
 MOV [mensaje+36],OFFSET mensajeBienvenida10
 MOV [mensaje+40],OFFSET mensajeBienvenida11
 MOV [mensaje+44],OFFSET mensajeBienvenida12
+
+RET
 cargarMensaje ENDP
 
 ;-----------------------------------------------------------------------------------------------------------
@@ -134,7 +137,7 @@ RET
 mostrarMensaje ENDP
 
 ;-----------------------------------------------------------------------------------------------------------
-pintarBarras PROC
+pintarBarrasIni PROC
 ;Pinta las barras superior e inferior en una animación que pinta de a 4 caracteres (código ascii 176) hasta llegar a 80
 ;-----------------------------------------------------------------------------------------------------------
 CALL pintarBarra ; barra superior
@@ -153,13 +156,13 @@ CALL Crlf
 CALL pintarBarra ; barra inferior
 
 RET
-pintarBarras ENDP
+pintarBarrasIni ENDP
 
 ;-----------------------------------------------------------------------------------------------------------
 pintarBarra PROC
-;Procedimiento auxiliar para pintarBarras este pinta cada una de las barras cada que es llamado
+;Procedimiento auxiliar para pintarBarrasIni este pinta cada una de las barras cada que es llamado
 ;-----------------------------------------------------------------------------------------------------------
-MOV	ecx, 10 ; el ciclo se realizará 20 veces para llegar a 80 caracteres
+MOV	ecx, 20 ; el ciclo se realizará 20 veces para llegar a 80 caracteres
 	
 CiloImprimir:
 		
@@ -169,19 +172,7 @@ CiloImprimir:
 	CALL	WriteString
 	MOV edx, OFFSET CuadrosAscii[4];
 	CALL	WriteString
-	MOV edx, OFFSET CuadrosAscii[6];
-	CALL	WriteString
-
-	MOV ax, tiempoEspera 
-	CALL delay
-
-	MOV edx, OFFSET CuadrosAscii[8];
-	CALL	WriteString
-	MOV edx, OFFSET CuadrosAscii[10];
-	CALL	WriteString
-	MOV edx, OFFSET CuadrosAscii[12];
-	CALL	WriteString
-	MOV edx, OFFSET CuadrosAscii[14];
+	MOV edx, OFFSET CuadrosAscii[2];
 	CALL	WriteString
 
 	MOV ax, tiempoEspera 
@@ -199,10 +190,10 @@ animarBarra PROC
 ; cambia el caracter con el que se pinta la barra cada que es invocado
 ;-----------------------------------------------------------------------------------------------------------
 
-
+aqui se tuesta
 MOV cx,80 ; hará un ciclo 40 veces pintando de a dos caracteres 176 o 177
 L1:
-	
+
 	MOV eax, DWORD PTR contadorBarra
 	MOV edx, [DWORD PTR CuadrosAscii + eax]
 	CALL	WriteString
