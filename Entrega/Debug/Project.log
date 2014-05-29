@@ -1,17 +1,2 @@
-﻿Build started 28/05/2014 12:05:31 p.m..
-     1>Project "C:\Users\Gustavos\Documents\GitHub\AngaritaPreciadoEntregaArq\Entrega\Project.vcxproj" on node 2 (rebuild target(s)).
-     1>_PrepareForClean:
-         Deleting file "Debug\Entrega.lastbuildstate".
-       InitializeBuildStatus:
-         Creating "Debug\Entrega.unsuccessfulbuild" because "AlwaysCreate" was specified.
-       _MASM:
-         Assembling [Inputs]...
-         cmd.exe /C "C:\Users\Gustavos\AppData\Local\Temp\tmp142ef4aac29e473cb5121dd560dd00d1.cmd"
-         ml.exe /c /nologo /Zi /Fo"Debug\main.obj" /Fl".lst" /W3 /errorReport:prompt  /Tamain.asm
-     1>main.asm(193): error A2008: syntax error : aqui
-     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\BuildCustomizations\masm.targets(49,5): error MSB3721: The command "ml.exe /c /nologo /Zi /Fo"Debug\main.obj" /Fl".lst" /W3 /errorReport:prompt  /Tamain.asm" exited with code 1.
-     1>Done Building Project "C:\Users\Gustavos\Documents\GitHub\AngaritaPreciadoEntregaArq\Entrega\Project.vcxproj" (rebuild target(s)) -- FAILED.
-
-Build FAILED.
-
-Time Elapsed 00:00:00.12
+﻿  Assembling [Inputs]...
+  Project.vcxproj -> C:\Users\Andrés\Documents\GitHub\AngaritaPreciadoEntregaArq\Entrega\Debug\Entrega.exe

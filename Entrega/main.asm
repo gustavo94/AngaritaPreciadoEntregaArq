@@ -9,25 +9,27 @@ INCLUDE Irvine32.INC
 
 .data
 
-;CuadrosAscii BYTE 176,0,177,0,178,0,219,0,219,0,178,0,177,0,176,0
-CuadrosAscii BYTE 220,0,219,0,223,0,219,0,220,0,219,0,223,0,220,0
-contadorBarra BYTE 0 ; contador para animaciones
+CuadrosAscii BYTE 176,0,177,0,178,0,177,0  ;219,0,219,0,178,0,177,0,176,0
+;CuadrosAscii BYTE 220,0,219,0,223,0,219,0,220,0,219,0,223,0,220,0
+contadorBarra DWORD 0 ; contador para animaciones
 mensaje DWORD 12 DUP(0)	; array que tiene la dirección donde empieza cada una de las líneas del mensaje
-numLineasMsjBv = 11
+numLineasMsjBv = 13
 ;líneas del mensaje de bienvenida 
 ;con espacios en blanco para que cada mensaje se vea centrado
-mensajeBienvenida1 BYTE			       17 DUP(" "),"Bienvenido al programa de estudio estad",161d,"stico",0						;45 caracteres
-mensajeBienvenida2 BYTE			       " ",0																					;1 caracter
-mensajeBienvenida3 BYTE				   23 DUP(" "),"Arquitectura del Computador 2014-I",0										;34 caracteres 
-mensajeBienvenida4 BYTE			       " ",0																					;1 caracter   
-mensajeBienvenida5 BYTE				   22 DUP(" "),"Este software fue desarrollado por:",0										;35 caracteres
-mensajeBienvenida6 BYTE				   17 DUP(" "),"Gustavo Le",162d,"n Preciado Jim",130d,"nez C.C. 1037635880",0				;45 caracteres
-mensajeBienvenida7 BYTE				   16 DUP(" "),"Gustavo Andr",130d,"s Angarita Vel",160d,"squez C.C. 1037635327",0			;48 caracteres
-mensajeBienvenida8 BYTE			       " ",0																					;1 caracter
-mensajeBienvenida9 BYTE				   24 DUP(" "),"Este software est",160d," dise",164d,"ado para calcular",0					;31 caracteres
-mensajeBienvenida10 BYTE			   20 DUP(" "),"distintas medidas estad",161d,"sticas a partir",0							;39 caracteres
-mensajeBienvenida11 BYTE			   27 DUP(" "),"de los datos de un archivo",0												;26 caracteres
-mensajeBienvenida12 BYTE			   10 DUP(" "), 60 DUP("-"),0; indica el final del mensaje.									;60 caracteres
+mensajeBienvenida1 BYTE			       " ",0																					;1 caracter
+mensajeBienvenida2 BYTE			       17 DUP(" "),"Bienvenido al programa de estudio estad",161d,"stico",0						;45 caracteres
+mensajeBienvenida3 BYTE			       " ",0																					;1 caracter
+mensajeBienvenida4 BYTE				   23 DUP(" "),"Arquitectura del Computador 2014-I",0										;34 caracteres 
+mensajeBienvenida5 BYTE			       " ",0																					;1 caracter   
+mensajeBienvenida6 BYTE				   22 DUP(" "),"Este software fue desarrollado por:",0										;35 caracteres
+mensajeBienvenida7 BYTE				   17 DUP(" "),"Gustavo Le",162d,"n Preciado Jim",130d,"nez C.C. 1037635880",0				;45 caracteres
+mensajeBienvenida8 BYTE				   16 DUP(" "),"Gustavo Andr",130d,"s Angarita Vel",160d,"squez C.C. 1037635327",0			;48 caracteres
+mensajeBienvenida9 BYTE			       " ",0																					;1 caracter
+mensajeBienvenida10 BYTE			   19 DUP(" "),"Este software est",160d," dise",164d,"ado para calcular",0					;41 caracteres
+mensajeBienvenida11 BYTE			   20 DUP(" "),"distintas medidas estad",161d,"sticas a partir",0							;39 caracteres
+mensajeBienvenida12 BYTE			   27 DUP(" "),"de los datos de un archivo",0												;26 caracteres
+mensajeBienvenida13 BYTE			   10 DUP(" "), 60 DUP("-"),0; indica el final del mensaje.									;60 caracteres
+mensajeBienvenida14 BYTE			   " ",0																					;1 caracter
 contadorMensaje DWORD 0 ;servirá para desplazar el mensaje de bienvenida
 
 auxCiclos	DWORD 5 DUP(0); array que servirá como variables auxiliares y de control durante los ciclos
@@ -73,6 +75,8 @@ MOV [mensaje+32],OFFSET mensajeBienvenida9
 MOV [mensaje+36],OFFSET mensajeBienvenida10
 MOV [mensaje+40],OFFSET mensajeBienvenida11
 MOV [mensaje+44],OFFSET mensajeBienvenida12
+MOV [mensaje+48],OFFSET mensajeBienvenida13
+MOV [mensaje+52],OFFSET mensajeBienvenida14
 
 RET
 cargarMensaje ENDP
@@ -91,8 +95,11 @@ CALL animarBarra
 
 CALL Crlf
 
+mov eax, colores3
+call SetTextColor
+
 MOV ecx,6
-MOV eax,contadorMensaje ; indica en que línea debe empezar
+MOV eax,contadorMensaje ; indica en qué línea debe empezar
 
 MOV auxCiclos,eax
 CICLO: ; en este ciclo se imprimen las líneas dentro de  las barras
@@ -125,6 +132,9 @@ MEN:
 INC contadormensaje
 NoMEN:
 
+mov eax, colores2
+call SetTextColor
+
 CALL animarBarra
 
 
@@ -132,6 +142,14 @@ CALL animarBarra
 	
 	CALL delay
 	
+	CMP contadorBarra, 6
+	JL menor6
+		MOV contadorBarra, 0
+		JMP finsi
+	menor6:
+		INC contadorBarra
+		INC contadorBarra
+	finsi:
 	
 RET
 mostrarMensaje ENDP
@@ -172,7 +190,7 @@ CiloImprimir:
 	CALL	WriteString
 	MOV edx, OFFSET CuadrosAscii[4];
 	CALL	WriteString
-	MOV edx, OFFSET CuadrosAscii[2];
+	MOV edx, OFFSET CuadrosAscii[6];
 	CALL	WriteString
 
 	MOV ax, tiempoEspera 
@@ -190,18 +208,17 @@ animarBarra PROC
 ; cambia el caracter con el que se pinta la barra cada que es invocado
 ;-----------------------------------------------------------------------------------------------------------
 
-aqui se tuesta
 MOV cx,80 ; hará un ciclo 40 veces pintando de a dos caracteres 176 o 177
 L1:
 
-	MOV eax, DWORD PTR contadorBarra
-	MOV edx, [DWORD PTR CuadrosAscii + eax]
+	MOV edx, OFFSET CuadrosAscii
+	ADD edx, contadorBarra
 	CALL	WriteString
-	CMP contadorBarra, 14
-	JL menor14
+	CMP contadorBarra, 6
+	JL menor6
 		MOV contadorBarra, 0
 		JMP finsi
-	menor14:
+	menor6:
 		INC contadorBarra
 		INC contadorBarra
 	finsi:
