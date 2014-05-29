@@ -9,10 +9,10 @@ INCLUDE Irvine32.INC
 
 .data
 
-CuadrosAscii BYTE 176,0,177,0,178,0,177,0  ;219,0,219,0,178,0,177,0,176,0
+CuadrosAscii BYTE 220,0,219,0,223,0,219,0;176,0,177,0,178,0,219,0  ;219,0,219,0,178,0,177,0,176,0
 ;CuadrosAscii BYTE 220,0,219,0,223,0,219,0,220,0,219,0,223,0,220,0
 contadorBarra DWORD 0 ; contador para animaciones
-mensaje DWORD 12 DUP(0)	; array que tiene la dirección donde empieza cada una de las líneas del mensaje
+mensaje DWORD 14 DUP(0)	; array que tiene la dirección donde empieza cada una de las líneas del mensaje
 numLineasMsjBv = 13
 ;líneas del mensaje de bienvenida 
 ;con espacios en blanco para que cada mensaje se vea centrado
@@ -41,7 +41,7 @@ colores1 EQU lightBlue + (white * 16); Azul claro sobre blanco
 colores2 EQU lightCyan + (lightBlue * 16)
 colores3 EQU white + (lightBlue * 16)
 
-
+contMensaje BYTE 0
 
 .code
 
@@ -55,7 +55,9 @@ call pintarBarrasIni
 call cargarMensaje
 inicio:
 call mostrarMensaje
-JMP INICIO
+INC contMensaje
+CMP contMensaje, 23
+JL inicio
 	exit
 main ENDP
 
@@ -92,8 +94,9 @@ mostrarMensaje PROC
 CALL Clrscr ; limpiar la pantalla
 
 CALL animarBarra
+CALL animarBarra
 
-CALL Crlf
+;CALL Crlf
 
 mov eax, colores3
 call SetTextColor
@@ -122,7 +125,7 @@ CICLO: ; en este ciclo se imprimen las líneas dentro de  las barras
 
 LOOP CICLO
 
-CALL Crlf
+;CALL Crlf
 
 cmp contadorMensaje,numLineasMsjBv ; controla que el valor de contadorMensaje siempre este entre 0 y el número de líneas del mensaje
 JL MEN
@@ -135,6 +138,7 @@ NoMEN:
 mov eax, colores2
 call SetTextColor
 
+CALL animarBarra
 CALL animarBarra
 
 
@@ -159,18 +163,20 @@ pintarBarrasIni PROC
 ;Pinta las barras superior e inferior en una animación que pinta de a 4 caracteres (código ascii 176) hasta llegar a 80
 ;-----------------------------------------------------------------------------------------------------------
 CALL pintarBarra ; barra superior
+CALL pintarBarra ; barra superior
 
 ;8 líneas en las que irá el mensaje de bienvenida
 ;Líneas en blanco durante la entrada de las barras
-CALL Crlf
+;CALL Crlf
 CALL Crlf
 CALL Crlf
 CALL Crlf	
 CALL Crlf
 CALL Crlf
 CALL Crlf
-CALL Crlf
+;CALL Crlf
 
+CALL pintarBarra ; barra inferior
 CALL pintarBarra ; barra inferior
 
 RET
