@@ -4,12 +4,14 @@ TITLE ESTADÍSTICAS						(main.asm)
 ; Este software fue desarrollado para la clase de Arquitectura de Computadores 2014-I
 ; Esta diseñado para generar diferentes estadísticas a partir de datos contenidos en un archivo de texto
 
-INCLUDE Irvine32.INC
+INCLUDE Irvine32.inc
+INCLUDE Macros.inc
 
 
 .data
 
-CuadrosAscii BYTE 220,0,219,0,223,0,219,0;176,0,177,0,178,0,219,0  ;219,0,219,0,178,0,177,0,176,0
+CuadrosAscii BYTE 219,0,178,0,177,0," ",0;176,0,177,0,178,0,219,0
+;CuadrosAscii BYTE 220,0,219,0,223,0,219,0;176,0,177,0,178,0,219,0  ;219,0,219,0,178,0,177,0,176,0
 ;CuadrosAscii BYTE 220,0,219,0,223,0,219,0,220,0,219,0,223,0,220,0
 contadorBarra DWORD 0 ; contador para animaciones
 mensaje DWORD 14 DUP(0)	; array que tiene la dirección donde empieza cada una de las líneas del mensaje
@@ -30,34 +32,68 @@ mensajeBienvenida11 BYTE			   20 DUP(" "),"distintas medidas estad",161d,"sticas
 mensajeBienvenida12 BYTE			   27 DUP(" "),"de los datos de un archivo",0												;26 caracteres
 mensajeBienvenida13 BYTE			   10 DUP(" "), 60 DUP("-"),0; indica el final del mensaje.									;60 caracteres
 mensajeBienvenida14 BYTE			   " ",0																					;1 caracter
-contadorMensaje DWORD 0 ;servirá para desplazar el mensaje de bienvenida
+
+mensajeD DWORD 14 DUP(0)	; array que tiene la dirección donde empieza cada una de las líneas del mensaje
+numLineasMsjDp = 4
+;líneas del mensaje de bienvenida 
+;con espacios en blanco para que cada mensaje se vea centrado
+mensajeDespedida1 BYTE			       " ",0																					;1 caracter
+mensajeDespedida2 BYTE			       23 DUP(" "),"Gracias por usar nuestro software.",0										;34 caracteres
+mensajeDespedida3 BYTE			       " ",0																					;1 caracter
+mensajeDespedida4 BYTE				   22 DUP(" "),"Esperamos que haya sido de utilidad.",0										;36 caracteres 
+mensajeDespedida5 BYTE			       " ",0																					;1 caracter																				;1 caracter
+
+contadorMensaje DWORD 0 ;servirá para desplazar el mensaje de bienvenida/despedida
+contMensaje BYTE 0
+
+;cuenta cuántas veces ha sido ejecutado el programa
+contEjecuciones DWORD 0
 
 auxCiclos	DWORD 5 DUP(0); array que servirá como variables auxiliares y de control durante los ciclos
 
-tiempoEspera WORD 100,1000 ; tiempos de espera para las animaciones
+tiempoEspera WORD 10,100 ; tiempos de espera para las animaciones
 
 ;fondos y colores de texto
 colores1 EQU lightBlue + (white * 16); Azul claro sobre blanco
 colores2 EQU lightCyan + (lightBlue * 16)
 colores3 EQU white + (lightBlue * 16)
 
-contMensaje BYTE 0
+
 
 .code
 
 ;-----------------------------------------------------------------------------------------------------------
 main PROC
 ;-----------------------------------------------------------------------------------------------------------
-mov eax, colores2
-call SetTextColor
+MOV eax, colores2
+CALL SetTextColor
 call Clrscr
 call pintarBarrasIni
 call cargarMensaje
 inicio:
 call mostrarMensaje
 INC contMensaje
-CMP contMensaje, 23
+CMP contMensaje, 5 ;23
 JL inicio
+
+call Clrscr
+
+ejec:
+mov eax, colores3
+call SetTextColor
+call Clrscr
+call contadorEjec
+
+
+mWrite "Desea ejecutar nuevamente el programa? 1=si, 0=no"
+CALL Crlf
+CALL readInt
+CMP eax, 0 
+JNE ejec
+
+call mostrarDespedida
+
+call waitMsg
 	exit
 main ENDP
 
@@ -80,6 +116,12 @@ MOV [mensaje+44],OFFSET mensajeBienvenida12
 MOV [mensaje+48],OFFSET mensajeBienvenida13
 MOV [mensaje+52],OFFSET mensajeBienvenida14
 
+MOV mensajeD,OFFSET mensajeDespedida1
+MOV [mensajeD+4],OFFSET mensajeDespedida2
+MOV [mensajeD+8],OFFSET mensajeDespedida3
+MOV [mensajeD+12],OFFSET mensajeDespedida4
+MOV [mensajeD+16],OFFSET mensajeDespedida5
+
 RET
 cargarMensaje ENDP
 
@@ -88,8 +130,6 @@ mostrarMensaje PROC
 ;Muestra el mensaje de bienvenida en 6 líneas entre dos barras animadas, las 6 líneas se van desplazando para 
 ;mostrar todo el mensaje de bienvenida
 ;-----------------------------------------------------------------------------------------------------------
-; Muevo las direcciones al array
-
 
 CALL Clrscr ; limpiar la pantalla
 
@@ -134,9 +174,6 @@ JMP NoMEN
 MEN:
 INC contadormensaje
 NoMEN:
-
-mov eax, colores2
-call SetTextColor
 
 CALL animarBarra
 CALL animarBarra
@@ -186,6 +223,9 @@ pintarBarrasIni ENDP
 pintarBarra PROC
 ;Procedimiento auxiliar para pintarBarrasIni este pinta cada una de las barras cada que es llamado
 ;-----------------------------------------------------------------------------------------------------------
+MOV eax, colores2
+CALL SetTextColor
+
 MOV	ecx, 20 ; el ciclo se realizará 20 veces para llegar a 80 caracteres
 	
 CiloImprimir:
@@ -213,6 +253,8 @@ animarBarra PROC
 ;Procedimiento para que la barra de cuadros parpadee intercambiando el simbolo ascii 176 y 177
 ; cambia el caracter con el que se pinta la barra cada que es invocado
 ;-----------------------------------------------------------------------------------------------------------
+MOV eax, colores2
+CALL SetTextColor
 
 MOV cx,80 ; hará un ciclo 40 veces pintando de a dos caracteres 176 o 177
 L1:
@@ -233,5 +275,81 @@ LOOP L1 ;fin cilo para pintar la barra
 		
 RET
 animarBarra ENDP
+
+
+;-----------------------------------------------------------------------------------------------------------
+contadorEjec PROC
+;Muestra el número de veces que se ha ejecutado el programa
+;Solo se muestra después de la primera ejecución
+;-----------------------------------------------------------------------------------------------------------
+
+CMP contEjecuciones, 0
+JE ceroEjec
+
+mWrite "El programa se ha ejecutado "
+mov eax, contEjecuciones
+call writeDec
+CMP contEjecuciones, 1
+JNE noUno
+mWrite " vez"
+JMP todos
+noUno:
+mWrite " veces"
+todos:
+call Crlf
+
+ceroEjec:
+
+INC contEjecuciones
+
+RET
+contadorEjec ENDP
+
+
+;-----------------------------------------------------------------------------------------------------------
+mostrarDespedida PROC
+;Muestra el mensaje de despedida
+;-----------------------------------------------------------------------------------------------------------
+CALL Clrscr ; limpiar la pantalla
+
+call pintarBarrasIni
+
+CALL Clrscr
+
+CALL animarBarra
+CALL animarBarra
+
+;CALL Crlf
+
+mov eax, colores3
+call SetTextColor
+
+MOV ecx, numLineasMsjDp
+INC ecx
+
+MOV auxCiclos, 0
+
+CICLOFIN: ; en este ciclo se imprimen las líneas dentro de  las barras
+
+	MOV eax, auxCiclos
+
+	MOV edx,4
+	MUL edx ; multiplica el numero de la línea por 4 para el desplazamiento en memoria
+
+	MOV edx, [mensajeD+eax]
+	CALL WriteString ;imprime la línea del mensaje
+	CALL Crlf
+	
+	INC auxCiclos
+
+LOOP CICLOFIN
+
+CALL Crlf
+
+CALL animarBarra
+CALL animarBarra
+
+RET
+mostrarDespedida ENDP
 
 END main
