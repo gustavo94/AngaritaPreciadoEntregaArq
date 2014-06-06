@@ -9,15 +9,18 @@ INCLUDE Macros.inc
 
 
 .data
+;tilde: a=160, e=130, i=161, o=162, u=163
 
+;decoración del mensaje de bienvenida
 CuadrosAscii BYTE 219,0,178,0,177,0," ",0;176,0,177,0,178,0,219,0
 ;CuadrosAscii BYTE 220,0,219,0,223,0,219,0;176,0,177,0,178,0,219,0  ;219,0,219,0,178,0,177,0,176,0
 ;CuadrosAscii BYTE 220,0,219,0,223,0,219,0,220,0,219,0,223,0,220,0
 contadorBarra DWORD 0 ; contador para animaciones
-mensaje DWORD 14 DUP(0)	; array que tiene la dirección donde empieza cada una de las líneas del mensaje
-numLineasMsjBv = 13
+
 ;líneas del mensaje de bienvenida 
 ;con espacios en blanco para que cada mensaje se vea centrado
+mensaje DWORD 14 DUP(0)	; array que tiene la dirección donde empieza cada una de las líneas del mensaje
+numLineasMsjBv = 13
 mensajeBienvenida1 BYTE			       " ",0																					;1 caracter
 mensajeBienvenida2 BYTE			       17 DUP(" "),"Bienvenido al programa de estudio estad",161d,"stico",0						;45 caracteres
 mensajeBienvenida3 BYTE			       " ",0																					;1 caracter
@@ -33,10 +36,10 @@ mensajeBienvenida12 BYTE			   27 DUP(" "),"de los datos de un archivo",0								
 mensajeBienvenida13 BYTE			   10 DUP(" "), 60 DUP("-"),0; indica el final del mensaje.									;60 caracteres
 mensajeBienvenida14 BYTE			   " ",0																					;1 caracter
 
+;líneas del mensaje de despedida 
+;con espacios en blanco para que cada mensaje se vea centrado
 mensajeD DWORD 14 DUP(0)	; array que tiene la dirección donde empieza cada una de las líneas del mensaje
 numLineasMsjDp = 4
-;líneas del mensaje de bienvenida 
-;con espacios en blanco para que cada mensaje se vea centrado
 mensajeDespedida1 BYTE			       " ",0																					;1 caracter
 mensajeDespedida2 BYTE			       23 DUP(" "),"Gracias por usar nuestro software.",0										;34 caracteres
 mensajeDespedida3 BYTE			       " ",0																					;1 caracter
@@ -59,6 +62,30 @@ colores2 EQU lightCyan + (lightBlue * 16)
 colores3 EQU white + (lightBlue * 16)
 
 
+stringEstadisticos BYTE "1. Media aritm",130,"tica",0dh,0ah
+				   BYTE	"2. Mediana",0dh,0ah
+				   BYTE	"3. Moda",0dh,0ah
+				   BYTE "4. Media geom",130,"trica",0dh,0ah
+				   BYTE	"5. Media arm",162,"nica",0dh,0ah
+				   BYTE	"6. Percentiles",0dh,0ah
+				   BYTE	"7. Cuartiles",0dh,0ah
+				   BYTE	"8. Deciles",0dh,0ah
+				   BYTE	"9. Momentos respecto al origen",0dh,0ah
+				   BYTE	"10. Momentos centrales o respecto a la media",0dh,0ah
+				   BYTE	"11. Varianza",0dh,0ah
+				   BYTE	"12. Desviaci",162,"n t",161,"pica",0dh,0ah
+				   BYTE	"13. Cuasi-varianza",0dh,0ah
+				   BYTE	"14. Desviaci",162,"n media respecto a la media",0dh,0ah
+				   BYTE	"15. Desviaci",162,"n media respecto a la mediana",0dh,0ah,0
+
+urlDatos BYTE 260 DUP(0)
+
+prueba BYTE 80 DUP(0)
+
+
+
+
+
 
 .code
 
@@ -78,12 +105,16 @@ JL inicio
 
 call Clrscr
 
+CALL calcularEstadisticos
+
 ejec:
 mov eax, colores3
 call SetTextColor
 call Clrscr
 call contadorEjec
 
+CALL pedirEstadisticos
+CALL mostrarEstadisticosSelec
 
 mWrite "Desea ejecutar nuevamente el programa? 1=si, 0=no"
 CALL Crlf
@@ -250,7 +281,7 @@ pintarBarra ENDP
 
 ;-----------------------------------------------------------------------------------------------------------
 animarBarra PROC
-;Procedimiento para que la barra de cuadros parpadee intercambiando el simbolo ascii 176 y 177
+; Procedimiento para que la barra de cuadros parpadee intercambiando el simbolo ascii 176 y 177
 ; cambia el caracter con el que se pinta la barra cada que es invocado
 ;-----------------------------------------------------------------------------------------------------------
 MOV eax, colores2
@@ -352,4 +383,38 @@ CALL animarBarra
 RET
 mostrarDespedida ENDP
 
+
+;-----------------------------------------------------------------------------------------------------------
+calcularEstadisticos PROC
+;Carga el archivo y calcula los estadísticos
+;-----------------------------------------------------------------------------------------------------------
+mov eax, colores3
+call SetTextColor
+
+mWrite "Por favor ingrese la ruta del archivo que contiene los datos"
+
+
+
+
+RET
+calcularEstadisticos ENDP
+
+;-----------------------------------------------------------------------------------------------------------
+pedirEstadisticos PROC
+;Pide al usuario ingresar los estadísticos que desea
+;-----------------------------------------------------------------------------------------------------------
+
+RET
+pedirEstadisticos ENDP
+
+;-----------------------------------------------------------------------------------------------------------
+mostrarEstadisticosSelec PROC
+;Muestra los estadísticos seleccionados por el usuario
+;-----------------------------------------------------------------------------------------------------------
+
+RET
+mostrarEstadisticosSelec ENDP
+
+
+;fin del programa
 END main
