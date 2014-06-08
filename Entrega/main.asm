@@ -84,26 +84,32 @@ stringEstadisticos BYTE "1. Media aritm",130,"tica",0dh,0ah
 urlDatos BYTE 260 DUP(0)
 fileHandle  HANDLE ?
 
-;auxiliar para leer los datos
-tamanoBufer = 5000
-buferArchivo BYTE tamanoBufer DUP(?), 0
-
 ;arreglos con los datos, los datos sin repetir y las frecuencias de los datos sin repetir
-maxDatos = 601
-numeros REAL8 maxDatos DUP(-1.)
-numerosDistintos REAL8 maxDatos DUP(-1.)
+maxDatos = 600
+numeros REAL8 maxDatos DUP(-1.), -1.
+numerosDistintos REAL8 maxDatos DUP(-1.), -1.
 frecuencias REAL8 maxDatos DUP(-1.)
 cantDatos DWORD 0
 cantDatosDistintos DWORD 0
 frecuenciaMax DWORD 0 ;para la moda
 
-;auxiliar para las sumatorias
+;auxiliar para leer los datos
+tamanoBufer = 5000
+buferArchivo BYTE tamanoBufer DUP(?), 0
+datoActual BYTE ?
+realActual REAL8 ?
+coma DWORD 0
+realesLeidos DWORD 0
+
+;auxiliares para las sumatorias
 auxSumatoria REAL8 0.
+diez REAL8 10.
+unDecimo REAL8 0.1
 
 ;estadisticos
 media REAL8 ?
 mediana REAL8 ?
-;moda REAL8 maxDatos DUP(-1.)
+;moda REAL8 maxDatos DUP(-1.), -1.
 mediageometrica REAL8 ?
 mediaarmonica REAL8 ?
 percentiles REAL8 101 DUP(-1.)
@@ -119,6 +125,7 @@ desvMediana REAL8 ?
 
 
 ;contiene booleanos que indican si el usuario solicitó el estadístico n
+buferUsuario BYTE 40 DUP(0)
 boolEstadisticos DWORD 15 DUP(0)
 
 ;apunta a los diferentes estadisticos
@@ -350,7 +357,8 @@ L1:
 		INC contadorBarra
 	finsi:
 
-LOOP L1 ;fin cilo para pintar la barra
+DEC cx
+JNZ L1 ;fin cilo para pintar la barra
 		
 RET
 animarBarra ENDP
@@ -484,8 +492,90 @@ MOV	buferArchivo[eax],0 ;terminación nula para el archivo
 MOV	eax,fileHandle
 CALL CloseFile
 
-;empieza los cálculos.
-;
+;se leen los números y se meten en el arreglo
+
+leerNum:
+	;carga el cero
+	FLDZ
+
+	;inicializa el valor de coma en 0 (falso)
+	MOV coma, 0
+
+	;ciclo de lectura de caracteres
+	MOV ecx, tamanoBufer
+	MOV esi, 0
+	leerChar:
+
+		;guarda el valor actual del real en el auxiliar
+		FSTP realActual
+
+		MOV eax, 0
+		MOV al, buferArchivo[esi]
+		INC esi
+
+		;si el archivo terminó, sale del ciclo
+		CMP al, 0
+		JE finLectura
+
+		;si hay cr o lf, pasa al siguiente numero
+		CMP al, 13
+		JE finNumero
+		CMP al, 10
+		JE finNumero
+	
+		;si hay una coma o un punto, empieza a poner los decimales
+		CMP al, 44
+		JNE noEsComa
+		MOV coma, 1
+		noEsComa:
+		CMP al, 46
+		JNE noEsPunto
+		MOV coma, 1
+		noEsPunto:
+
+		;convierte el caracter en el número que representa
+		SUB eax, 48
+
+		;guarda el valor en el auxiliar
+		MOV datoActual, al
+		FILD DWORD PTR datoActual ;el valor actual del real total está en st(1)
+
+		;si coma es 0 (falso), multiplica por 10
+		CMP coma, 0
+		JNE decimales
+		FLD realActual
+		FMUL diez
+		FADD
+		FSTP realActual
+		JMP finChar
+
+		;si coma es 1 (verdadero), divide por 10
+		decimales:
+		FMUL unDecimo
+		FLD realActual
+		FADD
+		FSTP realActual
+
+		finChar:
+	DEC ecx
+	JNZ leerChar
+	finNumero:
+	
+	FLD realActual
+	CALL writeFloat
+	CALL waitmsg
+
+	;guarda el número en el array
+	FLD realActual
+	MOV eax, realesLeidos
+	FSTP numeros[eax]
+
+	INC realesLeidos
+	CMP realesLeidos, maxDatos
+	JL leerNum
+finLectura:
+
+
 
 RET
 calcularEstadisticos ENDP
