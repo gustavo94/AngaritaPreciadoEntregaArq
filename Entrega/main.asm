@@ -7,9 +7,11 @@ TITLE ESTADÍSTICAS						(main.asm)
 INCLUDE Irvine32.inc
 INCLUDE Macros.inc
 
+PTRREAL8 TYPEDEF PTR REAL8 ;tipo de datos para punteros a real8
 
-.data
-;tilde: a=160, e=130, i=161, o=162, u=163
+.DATA
+
+;código de la tilde: a=160, e=130, i=161, o=162, u=163
 
 ;decoración del mensaje de bienvenida
 CuadrosAscii BYTE 219,0,178,0,177,0," ",0;176,0,177,0,178,0,219,0
@@ -78,40 +80,86 @@ stringEstadisticos BYTE "1. Media aritm",130,"tica",0dh,0ah
 				   BYTE	"14. Desviaci",162,"n media respecto a la media",0dh,0ah
 				   BYTE	"15. Desviaci",162,"n media respecto a la mediana",0dh,0ah,0
 
+;direccion del archivo
 urlDatos BYTE 260 DUP(0)
+fileHandle  HANDLE ?
 
-prueba BYTE 80 DUP(0)
+;auxiliar para leer los datos
+tamanoBufer = 5000
+buferArchivo BYTE tamanoBufer DUP(?), 0
+
+;arreglos con los datos, los datos sin repetir y las frecuencias de los datos sin repetir
+maxDatos = 601
+numeros REAL8 maxDatos DUP(-1.)
+numerosDistintos REAL8 maxDatos DUP(-1.)
+frecuencias REAL8 maxDatos DUP(-1.)
+cantDatos DWORD 0
+cantDatosDistintos DWORD 0
+frecuenciaMax DWORD 0 ;para la moda
+
+;auxiliar para las sumatorias
+auxSumatoria REAL8 0.
+
+;estadisticos
+media REAL8 ?
+mediana REAL8 ?
+;moda REAL8 maxDatos DUP(-1.)
+mediageometrica REAL8 ?
+mediaarmonica REAL8 ?
+percentiles REAL8 101 DUP(-1.)
+cuartiles REAL8 5 DUP(-1.)
+deciles REAL8 11 DUP(-1.)
+momentosOrigen REAL8 ?
+momentosCentrales REAL8 ?
+varianza REAL8 ?
+desvEstandar REAL8 ?
+cuasiVarianza REAL8 ?
+desvMedia REAL8 ?
+desvMediana REAL8 ?
+
+
+;contiene booleanos que indican si el usuario solicitó el estadístico n
+boolEstadisticos DWORD 15 DUP(0)
+
+;apunta a los diferentes estadisticos
+ptrEstaadisticos PTRREAL8 15 DUP(?)
 
 
 
 
 
 
-.code
+.CODE
 
 ;-----------------------------------------------------------------------------------------------------------
 main PROC
 ;-----------------------------------------------------------------------------------------------------------
+FINIT
+
+;prepara la consola
 MOV eax, colores2
 CALL SetTextColor
-call Clrscr
-call pintarBarrasIni
-call cargarMensaje
+CALL Clrscr
+
+;mensaje de bienvenida
+CALL pintarBarrasIni
+CALL cargarMensaje
 inicio:
-call mostrarMensaje
+CALL mostrarMensaje
 INC contMensaje
 CMP contMensaje, 5 ;23
 JL inicio
+CALL waitMsg
+CALL Clrscr
 
-call Clrscr
-
+;hace todos los cálculos
 CALL calcularEstadisticos
 
 ejec:
-mov eax, colores3
-call SetTextColor
-call Clrscr
-call contadorEjec
+MOV eax, colores3
+CALL SetTextColor
+CALL Clrscr
+CALL contadorEjec
 
 CALL pedirEstadisticos
 CALL mostrarEstadisticosSelec
@@ -122,9 +170,9 @@ CALL readInt
 CMP eax, 0 
 JNE ejec
 
-call mostrarDespedida
+CALL mostrarDespedida
 
-call waitMsg
+CALL waitMsg
 	exit
 main ENDP
 
@@ -169,7 +217,7 @@ CALL animarBarra
 
 ;CALL Crlf
 
-mov eax, colores3
+MOV eax, colores3
 call SetTextColor
 
 MOV ecx,6
@@ -317,9 +365,10 @@ contadorEjec PROC
 CMP contEjecuciones, 0
 JE ceroEjec
 
+;muestra el número de veces que se ha ejecutado el programa
 mWrite "El programa se ha ejecutado "
-mov eax, contEjecuciones
-call writeDec
+MOV eax, contEjecuciones
+CALL writeDec
 CMP contEjecuciones, 1
 JNE noUno
 mWrite " vez"
@@ -327,7 +376,7 @@ JMP todos
 noUno:
 mWrite " veces"
 todos:
-call Crlf
+CALL Crlf
 
 ceroEjec:
 
@@ -344,6 +393,8 @@ mostrarDespedida PROC
 CALL Clrscr ; limpiar la pantalla
 
 call pintarBarrasIni
+DEC contadorBarra
+DEC contadorBarra
 
 CALL Clrscr
 
@@ -391,10 +442,50 @@ calcularEstadisticos PROC
 mov eax, colores3
 call SetTextColor
 
-mWrite "Por favor ingrese la ruta del archivo que contiene los datos"
+;pide la ubicación del archivo y lo abre
+mWrite "Por favor ingrese la ruta del archivo que contiene los datos: "
+CALL crlf
 
+preguntaRuta:
+MOV edx, OFFSET urlDatos
+MOV ecx, SIZEOF urlDatos
+CALL readString
 
+MOV	edx,OFFSET urlDatos
+CALL OpenInputFile
+MOV	fileHandle, eax
 
+;revisa que se haya abierto correctamente el archivo
+CMP	eax, INVALID_HANDLE_VALUE
+JNE	file_ok
+mWrite <"No se pudo abrir el archivo. Por favor ingrese una direcci",162,"n v",160,"lida",0dh,0ah>
+JMP	preguntaRuta
+file_ok:
+
+;lee el archivo o sale si hay un error leyendo
+MOV	edx, OFFSET buferArchivo
+MOV	ecx, tamanoBufer
+CALL ReadFromFile
+JNC	check_buffer_size
+mWrite <"Error leyendo el archivo. Por favor ingrese una direcci",162,"n v",160,"lida",0dh,0ah>
+CALL	WriteWindowsMsg
+JMP	preguntaRuta
+	
+check_buffer_size:
+CMP	eax, tamanoBufer
+JB	buf_size_ok
+mWrite <"El archivo es demasiado extenso. Ingrese la direcci",162,"n de un archivo m",160,"s corto",0dh,0ah>
+JMP	preguntaRuta
+	
+buf_size_ok:	
+MOV	buferArchivo[eax],0 ;terminación nula para el archivo
+
+;cierra el handle
+MOV	eax,fileHandle
+CALL CloseFile
+
+;empieza los cálculos.
+;
 
 RET
 calcularEstadisticos ENDP
@@ -415,6 +506,21 @@ mostrarEstadisticosSelec PROC
 RET
 mostrarEstadisticosSelec ENDP
 
+;-----------------------------------------------------------------------------------------------------------
+imprimirDato PROC
+;Muestra un único dato
+;-----------------------------------------------------------------------------------------------------------
+
+RET
+imprimirDato ENDP
+
+;-----------------------------------------------------------------------------------------------------------
+imprimirArreglo PROC
+;Muestra un arreglo de datos
+;-----------------------------------------------------------------------------------------------------------
+
+RET
+imprimirArreglo ENDP
 
 ;fin del programa
 END main
