@@ -56,7 +56,7 @@ contEjecuciones DWORD 0
 
 auxCiclos	DWORD 5 DUP(0); array que servirá como variables auxiliares y de control durante los ciclos
 
-tiempoEspera WORD 10,100 ; tiempos de espera para las animaciones
+tiempoEspera WORD 10,10 ; tiempos de espera para las animaciones
 
 ;fondos y colores de texto
 colores1 EQU lightBlue + (white * 16); Azul claro sobre blanco
@@ -97,9 +97,13 @@ frecuenciaMax DWORD 0 ;para la moda
 tamanoBufer = 5000
 buferArchivo BYTE tamanoBufer DUP(?), 0
 datoActual BYTE ?
+relleno DWORD 0 ;se debe poner para que el valor de realactual no interfiera en la lectura
 realActual REAL8 ?
 coma DWORD 0
+contCicloDecimales DWORD 0
 realesLeidos DWORD 0
+saltoDeLinea DWORD 0
+finArchivo DWORD 0
 
 ;auxiliares para las sumatorias
 auxSumatoria REAL8 0.
@@ -154,7 +158,7 @@ CALL cargarMensaje
 inicio:
 CALL mostrarMensaje
 INC contMensaje
-CMP contMensaje, 5 ;23
+CMP contMensaje, 23
 JL inicio
 CALL waitMsg
 CALL Clrscr
@@ -493,21 +497,22 @@ MOV	eax,fileHandle
 CALL CloseFile
 
 ;se leen los números y se meten en el arreglo
-
+MOV esi, 0
 leerNum:
+
+	;reinicializa los valores de los auxiliares
+	MOV saltoDeLinea, 0
+	MOV coma, 0
+	MOV contCicloDecimales, 0
+
 	;carga el cero
 	FLDZ
-
-	;inicializa el valor de coma en 0 (falso)
-	MOV coma, 0
+	FSTP realActual
 
 	;ciclo de lectura de caracteres
-	MOV ecx, tamanoBufer
-	MOV esi, 0
+	MOV ecx, 80
+	
 	leerChar:
-
-		;guarda el valor actual del real en el auxiliar
-		FSTP realActual
 
 		MOV eax, 0
 		MOV al, buferArchivo[esi]
@@ -515,22 +520,40 @@ leerNum:
 
 		;si el archivo terminó, sale del ciclo
 		CMP al, 0
-		JE finLectura
+		JNE noFinArchivo
+		MOV finArchivo, 1
+		JMP finNumero
+		noFinArchivo:
 
-		;si hay cr o lf, pasa al siguiente numero
+		;si hay cr o lf, aumenta saltoDeLinea y pasa al siguiente caracter
 		CMP al, 13
+		JNE noCr
+		INC saltoDeLinea
+		;si ya se leyeron los dos, se pasa al siguiente número
+		CMP saltoDeLinea, 2
 		JE finNumero
+		JMP finChar
+		noCr:
 		CMP al, 10
+		JNE noLf
+		INC saltoDeLinea
+		;si ya se leyeron los dos, se pasa al siguiente número
+		CMP saltoDeLinea, 2
 		JE finNumero
+		JMP finChar
+		noLf:
+		
 	
-		;si hay una coma o un punto, empieza a poner los decimales
+		;si hay una coma o un punto, activa el booleano para empezar a poner los decimales
 		CMP al, 44
 		JNE noEsComa
 		MOV coma, 1
+		JMP finChar
 		noEsComa:
 		CMP al, 46
 		JNE noEsPunto
 		MOV coma, 1
+		JMP finChar
 		noEsPunto:
 
 		;convierte el caracter en el número que representa
@@ -538,7 +561,7 @@ leerNum:
 
 		;guarda el valor en el auxiliar
 		MOV datoActual, al
-		FILD DWORD PTR datoActual ;el valor actual del real total está en st(1)
+		FILD DWORD PTR datoActual
 
 		;si coma es 0 (falso), multiplica por 10
 		CMP coma, 0
@@ -551,30 +574,48 @@ leerNum:
 
 		;si coma es 1 (verdadero), divide por 10
 		decimales:
-		FMUL unDecimo
+		INC contCicloDecimales
+		MOV ebx, contCicloDecimales
+		;ciclo de división por 10 para llegar al valor correcto
+		cicloDiv:
+			FDIV diez
+		DEC ebx
+		CMP ebx, 0
+		JNE cicloDiv
 		FLD realActual
 		FADD
 		FSTP realActual
-
+		
 		finChar:
 	DEC ecx
-	JNZ leerChar
+	CMP ecx, 0
+	JNE leerChar
 	finNumero:
 	
+	
+	;;;;;;;;;;;;;;
+	mwrite "final"
 	FLD realActual
 	CALL writeFloat
-	CALL waitmsg
-
+	fstp realactual
+	CALL crlf
+	;;;;;;;;;;;;;;;;
 	;guarda el número en el array
 	FLD realActual
 	MOV eax, realesLeidos
 	FSTP numeros[eax]
 
 	INC realesLeidos
+
+	;si llegó al final del archivo, sale
+	CMP finArchivo, 1
+	JE finLectura
+
+	;si no ha llegado al número máximo de reales que puede almacenar, sigue leyendo
 	CMP realesLeidos, maxDatos
 	JL leerNum
 finLectura:
-
+call waitmsg
 
 
 RET
