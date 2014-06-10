@@ -88,7 +88,7 @@ fileHandle  HANDLE ?
 maxDatos = 600
 numeros REAL8 maxDatos DUP(-1.), -1.
 numerosDistintos REAL8 maxDatos DUP(-1.), -1.
-frecuencias REAL8 maxDatos DUP(-1.)
+frecuencias QWORD maxDatos DUP(-1.), -1.
 cantDatos DWORD 0
 cantDatosDistintos DWORD 0
 frecuenciaMax DWORD 0 ;para la moda
@@ -127,6 +127,9 @@ cuasiVarianza REAL8 ?
 desvMedia REAL8 ?
 desvMediana REAL8 ?
 
+;orden de los momentos
+ordenMomOrig DWORD ?
+ordenMomCent DWORD ?
 
 ;contiene booleanos que indican si el usuario solicitó el estadístico n
 buferUsuario BYTE 40 DUP(0)
@@ -171,10 +174,17 @@ MOV eax, colores3
 CALL SetTextColor
 CALL Clrscr
 CALL contadorEjec
+mWrite <"Por favor indique el orden que se usar",160," para calcular el momento ",0dh,0ah,"con respecto al origen:",0dh,0ah>
+CALL readInt
+MOV ordenMomOrig, eax
+mWrite <"Por favor indique el orden que se usar",160," para calcular el momento ",0dh,0ah,"con respecto a la media",0dh,0ah>
+CALL readInt
+MOV ordenMomCent, eax
 
 CALL pedirEstadisticos
 CALL mostrarEstadisticosSelec
 
+CALL Crlf
 mWrite "Desea ejecutar nuevamente el programa? 1=si, 0=no"
 CALL Crlf
 CALL readInt
@@ -405,8 +415,7 @@ mostrarDespedida PROC
 CALL Clrscr ; limpiar la pantalla
 
 call pintarBarrasIni
-DEC contadorBarra
-DEC contadorBarra
+MOV contadorBarra, 0
 
 CALL Clrscr
 
@@ -490,7 +499,7 @@ mWrite <"El archivo es demasiado extenso. Ingrese la direcci",162,"n de un archi
 JMP	preguntaRuta
 	
 buf_size_ok:	
-MOV	buferArchivo[eax],0 ;terminación nula para el archivo
+MOV	buferArchivo[eax],0 ;terminación nula para el archivo. eax contiene la cantidad de caracteres leídos
 
 ;cierra el handle
 MOV	eax,fileHandle
@@ -592,19 +601,18 @@ leerNum:
 	JNE leerChar
 	finNumero:
 	
-	
-	;;;;;;;;;;;;;;
-	mwrite "final"
-	FLD realActual
-	CALL writeFloat
-	fstp realactual
-	CALL crlf
+	;;;;;;;;;;;;;;para comprobar que lee bien
+	;mwrite "final"
+	;FLD realActual
+	;CALL writeFloat
+	;fstp realactual
+	;CALL crlf
 	;;;;;;;;;;;;;;;;
+
 	;guarda el número en el array
 	FLD realActual
 	MOV eax, realesLeidos
 	FSTP numeros[eax]
-
 	INC realesLeidos
 
 	;si llegó al final del archivo, sale
@@ -615,7 +623,25 @@ leerNum:
 	CMP realesLeidos, maxDatos
 	JL leerNum
 finLectura:
-call waitmsg
+
+CALL ordenar
+
+
+CALL calcMedia
+CALL calcMediana
+;CALL calcModa
+CALL calcMediageometrica
+CALL calcMediaarmonica
+CALL calcPercentiles
+CALL calcCuartiles
+CALL calcDeciles
+CALL calcMomentosOrigen
+CALL calcMomentosCentrales
+CALL calcVarianza
+CALL calcDesvEstandar
+CALL calcCuasiVarianza
+CALL calcDesvMedia
+CALL calcDesvMediana
 
 
 RET
@@ -625,6 +651,55 @@ calcularEstadisticos ENDP
 pedirEstadisticos PROC
 ;Pide al usuario ingresar los estadísticos que desea
 ;-----------------------------------------------------------------------------------------------------------
+mWrite <"Seleccione los estad",161,"sticos que desea calcular.",0dh,0ah>
+MOV edx, OFFSET stringEstadisticos
+CALL writeString
+mWrite <"Escriba una lista separada por comas y presione enter. Ejemplo: 1,2,3.",0dh,0ah>
+
+MOV edx, OFFSET buferUsuario
+MOV ecx, LENGTHOF buferUsuario
+DEC ecx ;se deja el último caracter en 0 siempre
+CALL readString
+
+MOV ecx, eax
+INC ecx
+
+;interpreta la cadena ingresada (en ecx está el tamaño de la cadena + 1)
+MOV esi, 0
+MOV eax, 0
+cicloUsuario:
+	;si el caracter leido es una coma o se llegó al final del búfer, 
+	;mueve 1 a la posición correspondiente del array de booleanos
+	CMP buferUsuario[esi], 44
+	JNE noComaUsu
+		comaUsu:
+		DEC eax
+		MOV edx, 4
+		MUL edx
+		MOV boolEstadisticos[eax], 1
+		;;;;;;;;
+		call writeDec
+		mwrite "-"
+		;;;;;;;;;;;;
+		MOV eax, 0
+		JMP continueUsu
+	noComaUsu:
+	CMP buferUsuario[esi], 0
+	JE comaUsu
+
+	;el número puede tener dos cifras. multiplica la primera por 10 y suma la siguiente
+	MOV ebx, 0
+	MOV bl, buferUsuario[esi]
+	SUB ebx, 48
+	MOV edx, 10
+	MUL edx
+	ADD eax, ebx
+
+	continueUsu:
+	INC esi
+LOOP cicloUsuario
+;;;;;;;;;
+call crlf
 
 RET
 pedirEstadisticos ENDP
@@ -634,6 +709,75 @@ mostrarEstadisticosSelec PROC
 ;Muestra los estadísticos seleccionados por el usuario
 ;-----------------------------------------------------------------------------------------------------------
 
+;si el estadístico n fue marcado (está en 1), lo imprime. De lo contrario, pasa al siguiente
+CMP boolEstadisticos, 1
+JNE pasa2
+	mwrite "1-"
+pasa2:
+CMP boolEstadisticos[4], 1
+JNE pasa3
+	mwrite "2-"
+pasa3:
+CMP boolEstadisticos[8], 1
+JNE pasa4
+	mwrite "3-"
+pasa4:
+CMP boolEstadisticos[12], 1
+JNE pasa5
+	mwrite "4-"
+pasa5:
+CMP boolEstadisticos[16], 1
+JNE pasa6
+	mwrite "5-"
+pasa6:
+CMP boolEstadisticos[20], 1
+JNE pasa7
+	mwrite "6-"
+pasa7:
+CMP boolEstadisticos[24], 1
+JNE pasa8
+	mwrite "7-"
+pasa8:
+CMP boolEstadisticos[28], 1
+JNE pasa9
+	mwrite "8-"
+pasa9:
+CMP boolEstadisticos[32], 1
+JNE pasa10
+	mwrite "9-"
+pasa10:
+CMP boolEstadisticos[36], 1
+JNE pasa11
+	mwrite "10-"
+pasa11:
+CMP boolEstadisticos[40], 1
+JNE pasa12
+	mwrite "11-"
+pasa12:
+CMP boolEstadisticos[44], 1
+JNE pasa13
+	mwrite "12-"
+pasa13:
+CMP boolEstadisticos[48], 1
+JNE pasa14
+	mwrite "13-"
+pasa14:
+CMP boolEstadisticos[52], 1
+JNE pasa15
+	mwrite "14-"
+pasa15:
+CMP boolEstadisticos[56], 1
+JNE pasaFin
+	mwrite "15-"
+pasaFin:
+
+;reinicializa el vector de booleanos
+MOV ecx, 15
+MOV esi, 0
+ponerCeroSiguiente:
+	MOV boolEstadisticos[esi], 0
+	ADD esi, 4
+LOOP ponerCeroSiguiente
 RET
 mostrarEstadisticosSelec ENDP
 
@@ -652,6 +796,126 @@ imprimirArreglo PROC
 
 RET
 imprimirArreglo ENDP
+
+;-----------------------------------------------------------------------------------------------------------
+ordenar PROC
+;Ordena el vector y calcula las frecuencias
+;-----------------------------------------------------------------------------------------------------------
+
+RET
+ordenar ENDP
+
+;-----------------------------------------------------------------------------------------------------------
+calcMedia PROC
+;Calcula el estadístico
+;-----------------------------------------------------------------------------------------------------------
+
+RET
+calcMedia ENDP
+
+;-----------------------------------------------------------------------------------------------------------
+calcMediana PROC
+;Calcula el estadístico
+;-----------------------------------------------------------------------------------------------------------
+
+RET
+calcMediana ENDP
+
+;-----------------------------------------------------------------------------------------------------------
+calcMediageometrica PROC
+;Calcula el estadístico
+;-----------------------------------------------------------------------------------------------------------
+
+RET
+calcMediageometrica ENDP
+
+;-----------------------------------------------------------------------------------------------------------
+calcMediaarmonica PROC
+;Calcula el estadístico
+;-----------------------------------------------------------------------------------------------------------
+
+RET
+calcMediaarmonica ENDP
+
+;-----------------------------------------------------------------------------------------------------------
+calcPercentiles PROC
+;Calcula el estadístico
+;-----------------------------------------------------------------------------------------------------------
+
+RET
+calcPercentiles ENDP
+
+;-----------------------------------------------------------------------------------------------------------
+calcCuartiles PROC
+;Calcula el estadístico
+;-----------------------------------------------------------------------------------------------------------
+
+RET
+calcCuartiles ENDP
+
+;-----------------------------------------------------------------------------------------------------------
+calcDeciles PROC
+;Calcula el estadístico
+;-----------------------------------------------------------------------------------------------------------
+
+RET
+calcDeciles ENDP
+
+;-----------------------------------------------------------------------------------------------------------
+calcMomentosOrigen PROC
+;Calcula el estadístico
+;-----------------------------------------------------------------------------------------------------------
+
+RET
+calcMomentosOrigen ENDP
+
+;-----------------------------------------------------------------------------------------------------------
+calcMomentosCentrales PROC
+;Calcula el estadístico
+;-----------------------------------------------------------------------------------------------------------
+
+RET
+calcMomentosCentrales ENDP
+
+;-----------------------------------------------------------------------------------------------------------
+calcVarianza PROC
+;Calcula el estadístico
+;-----------------------------------------------------------------------------------------------------------
+
+RET
+calcVarianza ENDP
+
+;-----------------------------------------------------------------------------------------------------------
+calcDesvEstandar PROC
+;Calcula el estadístico
+;-----------------------------------------------------------------------------------------------------------
+
+RET
+calcDesvEstandar ENDP
+
+;-----------------------------------------------------------------------------------------------------------
+calcCuasiVarianza PROC
+;Calcula el estadístico
+;-----------------------------------------------------------------------------------------------------------
+
+RET
+calcCuasiVarianza ENDP
+
+;-----------------------------------------------------------------------------------------------------------
+calcDesvMedia PROC
+;Calcula el estadístico
+;-----------------------------------------------------------------------------------------------------------
+
+RET
+calcDesvMedia ENDP
+
+;-----------------------------------------------------------------------------------------------------------
+calcDesvMediana PROC
+;Calcula el estadístico
+;-----------------------------------------------------------------------------------------------------------
+
+RET
+calcDesvMediana ENDP
 
 ;fin del programa
 END main
