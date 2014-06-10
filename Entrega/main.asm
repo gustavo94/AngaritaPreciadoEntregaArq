@@ -174,6 +174,7 @@ MOV eax, colores3
 CALL SetTextColor
 CALL Clrscr
 CALL contadorEjec
+CALL crlf
 mWrite <"Por favor indique el orden que se usar",160," para calcular el momento ",0dh,0ah,"con respecto al origen:",0dh,0ah>
 CALL readInt
 MOV ordenMomOrig, eax
@@ -651,9 +652,14 @@ calcularEstadisticos ENDP
 pedirEstadisticos PROC
 ;Pide al usuario ingresar los estadísticos que desea
 ;-----------------------------------------------------------------------------------------------------------
+
+CALL clrscr
 mWrite <"Seleccione los estad",161,"sticos que desea calcular.",0dh,0ah>
 MOV edx, OFFSET stringEstadisticos
 CALL writeString
+
+seleccionEstad:
+CALL crlf
 mWrite <"Escriba una lista separada por comas y presione enter. Ejemplo: 1,2,3.",0dh,0ah>
 
 MOV edx, OFFSET buferUsuario
@@ -676,11 +682,7 @@ cicloUsuario:
 		DEC eax
 		MOV edx, 4
 		MUL edx
-		MOV boolEstadisticos[eax], 1
-		;;;;;;;;
-		call writeDec
-		mwrite "-"
-		;;;;;;;;;;;;
+		NOT boolEstadisticos[eax]
 		MOV eax, 0
 		JMP continueUsu
 	noComaUsu:
@@ -698,8 +700,16 @@ cicloUsuario:
 	continueUsu:
 	INC esi
 LOOP cicloUsuario
-;;;;;;;;;
-call crlf
+
+CALL crlf
+mWrite <"Por favor confirme su selecci",162,"n. 1=si, 0=cambiar",0dh,0ah>
+CALL readInt
+CMP eax, 0
+JNE finSeleccion
+mWrite <"Indique los estad",161,"sticos que desea agregar o escriba nuevamente ",0dh,0ah,"los que desea quitar de la lista",0dh,0ah>
+JMP seleccionEstad
+
+finSeleccion:
 
 RET
 pedirEstadisticos ENDP
@@ -710,65 +720,65 @@ mostrarEstadisticosSelec PROC
 ;-----------------------------------------------------------------------------------------------------------
 
 ;si el estadístico n fue marcado (está en 1), lo imprime. De lo contrario, pasa al siguiente
-CMP boolEstadisticos, 1
+CMP boolEstadisticos, -1
 JNE pasa2
 	mwrite "1-"
 pasa2:
-CMP boolEstadisticos[4], 1
+CMP boolEstadisticos[4], -1
 JNE pasa3
 	mwrite "2-"
 pasa3:
-CMP boolEstadisticos[8], 1
+CMP boolEstadisticos[8], -1
 JNE pasa4
 	mwrite "3-"
 pasa4:
-CMP boolEstadisticos[12], 1
+CMP boolEstadisticos[12], -1
 JNE pasa5
 	mwrite "4-"
 pasa5:
-CMP boolEstadisticos[16], 1
+CMP boolEstadisticos[16], -1
 JNE pasa6
 	mwrite "5-"
 pasa6:
-CMP boolEstadisticos[20], 1
+CMP boolEstadisticos[20], -1
 JNE pasa7
 	mwrite "6-"
 pasa7:
-CMP boolEstadisticos[24], 1
+CMP boolEstadisticos[24], -1
 JNE pasa8
 	mwrite "7-"
 pasa8:
-CMP boolEstadisticos[28], 1
+CMP boolEstadisticos[28], -1
 JNE pasa9
 	mwrite "8-"
 pasa9:
-CMP boolEstadisticos[32], 1
+CMP boolEstadisticos[32], -1
 JNE pasa10
 	mwrite "9-"
 pasa10:
-CMP boolEstadisticos[36], 1
+CMP boolEstadisticos[36], -1
 JNE pasa11
 	mwrite "10-"
 pasa11:
-CMP boolEstadisticos[40], 1
+CMP boolEstadisticos[40], -1
 JNE pasa12
 	mwrite "11-"
 pasa12:
-CMP boolEstadisticos[44], 1
+CMP boolEstadisticos[44], -1
 JNE pasa13
 	mwrite "12-"
 pasa13:
-CMP boolEstadisticos[48], 1
+CMP boolEstadisticos[48], -1
 JNE pasa14
 	mwrite "13-"
 pasa14:
-CMP boolEstadisticos[52], 1
+CMP boolEstadisticos[52], -1
 JNE pasa15
 	mwrite "14-"
 pasa15:
-CMP boolEstadisticos[56], 1
+CMP boolEstadisticos[56], -1
 JNE pasaFin
-	mwrite "15-"
+	mwrite "15"
 pasaFin:
 
 ;reinicializa el vector de booleanos
