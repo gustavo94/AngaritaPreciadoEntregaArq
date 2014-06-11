@@ -176,8 +176,9 @@ JL inicio
 CALL waitMsg
 CALL Clrscr
 
-;hace todos los cálculos
+;hace todos los cálculos excepto los momentos
 CALL leerArchivo
+CALL calcularEstadisticos
 
 ejec:
 	MOV eax, colores3
@@ -192,7 +193,7 @@ ejec:
 	mWrite <"Por favor indique el orden que se usar",160," para calcular el momento ",0dh,0ah,"con respecto a la media",0dh,0ah>
 	CALL readInt
 	MOV ordenMomCent, eax
-	CALL calcularEstadisticos
+	CALL calcularMomentos
 	CALL pedirEstadisticos
 	CALL imprimirEstadisticosSelec
 
@@ -648,7 +649,7 @@ leerArchivo ENDP
 
 ;-----------------------------------------------------------------------------------------------------------
 calcularEstadisticos PROC
-; Calcula los estadísticos
+; Calcula los estadísticos excepto los momentos, que pueden ser calculados con diferentes órdenes
 ;-----------------------------------------------------------------------------------------------------------
 
 
@@ -660,8 +661,8 @@ CALL calcMediaarmonica
 CALL calcPercentiles
 CALL calcCuartiles
 CALL calcDeciles
-CALL calcMomentosOrigen
-CALL calcMomentosCentrales
+;CALL calcMomentosOrigen
+;CALL calcMomentosCentrales
 CALL calcVarianza
 CALL calcDesvEstandar
 CALL calcCuasiVarianza
@@ -671,6 +672,17 @@ CALL calcDesvMediana
 
 RET
 calcularEstadisticos ENDP
+
+;-----------------------------------------------------------------------------------------------------------
+calcularMomentos PROC
+; Calcula los momentos según los datos que ingresó el usuario
+;-----------------------------------------------------------------------------------------------------------
+
+CALL calcMomentosOrigen
+CALL calcMomentosCentrales
+
+RET
+calcularMomentos ENDP
 
 ;-----------------------------------------------------------------------------------------------------------
 pedirEstadisticos PROC
@@ -878,13 +890,19 @@ JNE pasa9
 pasa9:
 CMP boolEstadisticos[32], -1
 JNE pasa10
-	mwrite <"9. Momentos respecto al origen",0dh,0ah>
+	mwrite <"9. Momento respecto al origen de orden ">
+	MOV eax, ordenMomOrig
+	CALL writeDec
+	CALL crlf
 	MOV edx, OFFSET momentosOrigen    
 	CALL imprimirDato
 pasa10:
 CMP boolEstadisticos[36], -1
 JNE pasa11
-	mwrite <"10. Momentos centrales o respecto a la media",0dh,0ah>
+	mwrite <"10. Momento central o respecto a la media de orden ">
+	MOV eax, ordenMomCent
+	CALL writeDec
+	CALL crlf
 	MOV edx, OFFSET momentosCentrales     
 	CALL imprimirDato
 pasa11:
