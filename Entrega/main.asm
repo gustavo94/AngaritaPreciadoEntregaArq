@@ -105,6 +105,7 @@ finArchivo DWORD 0
 ;auxiliares para las sumatorias
 auxSumatoria REAL8 0.
 diez REAL8 10.
+numDos REAL8 2.
 unDecimo REAL8 0.1
 menosUno REAL8 -1.
 
@@ -137,7 +138,7 @@ cuasiVarianza REAL8 0.
 desvMedia REAL8 0.
 desvMediana REAL8 0.
 
-;auxiliares para los 
+;auxiliares para los estadísticos
 ordenMomOrig DWORD ?
 ordenMomCent DWORD ?
 posModa DWORD 0
@@ -611,15 +612,6 @@ leerNum:
 	CMP ecx, 0
 	JG leerChar
 	finNumero:
-	
-	;;;;;;;;;;;;;;para comprobar que lee bien
-	;mwrite "final"
-	;FLD realActual
-	;CALL writeFloat
-	;fstp realactual
-	;CALL crlf
-	;CALL WaitMsg
-	;;;;;;;;;;;;;;;;
 
 	;guarda el número en el array
 	FLD realActual
@@ -627,12 +619,6 @@ leerNum:
 	MUL realesLeidos
 	FSTP numeros[eax]
 	INC realesLeidos
-	;;;;;;; para comprobar el desplazamiento
-	;MOV eax, realesLeidos
-	;CALL WriteInt
-	;CALL Waitmsg
-	;CALL Crlf
-	;;;;;;;;;;;;;;;;
 	
 	;si llegó al final del archivo, sale
 	CMP finArchivo, 1
@@ -644,17 +630,17 @@ leerNum:
 finLectura:
 
 ;;;;;;;;;;;comprobar que se haya llenado correctamente el array
-MOV edx, OFFSET numeros; para el metodo imprimirArregloReales
-CALL imprimirArregloReales; para comprobar que leyo correctamente
-call crlf
+;MOV edx, OFFSET numeros; para el metodo imprimirArregloReales
+;CALL imprimirArregloReales; para comprobar que leyo correctamente
+;CALL crlf
 ;;;;;;;;;;;;;;;
 
 CALL ordenar
 
 ;;;;;;;;;;;;;;;;;;comprobar ordenamiento
-MOV edx, OFFSET numeros; para el metodo imprimirArregloReales
-CALL imprimirArregloReales; para comprobar que ordeno correctamente 
-call waitmsg
+;MOV edx, OFFSET numeros; para el metodo imprimirArregloReales
+;CALL imprimirArregloReales; para comprobar que ordeno correctamente 
+;CALL waitmsg
 ;;;;;;;;;;;;;;;
 
 RET
@@ -1002,6 +988,7 @@ ordenar PROC
 ;menorValor REAL8 0.
 ;-----------------------------------------------------------------------------------------------------------
 
+MOV posActual, 0
 CicloOrdenar:
 	MOV eax, posActual
 	MOV posMenor, eax ;establece la posición del menor en la actual
@@ -1062,7 +1049,24 @@ ordenar ENDP
 ;-----------------------------------------------------------------------------------------------------------
 calcMedia PROC
 ;Calcula el estadístico
+;auxSumatoria REAL8 0.
 ;-----------------------------------------------------------------------------------------------------------
+
+MOV posActual, 0
+FLDZ
+;sumatoria
+cicloMedia:
+	MOV esi, posActual
+	FLD numeros[esi*8]
+	FADD
+INC posActual
+MOV esi, realesLeidos
+CMP posActual, esi
+JL cicloMedia
+;división
+FILD realesLeidos
+FDIV
+FSTP media
 
 RET
 calcMedia ENDP
@@ -1071,6 +1075,29 @@ calcMedia ENDP
 calcMediana PROC
 ;Calcula el estadístico
 ;-----------------------------------------------------------------------------------------------------------
+
+;ve si la cantidad de datos es par o impar
+MOV ebx, 2
+MOV eax, realesLeidos
+DIV ebx
+CMP edx, 0
+JNE noEsPar
+	;la mediana es el promedio entre los datos en las posiciones (realesleidos/2) y (realesleidos/2)+1
+	FLD numeros[eax*8] ;(realesleidos/2)+1
+	FLD numeros[eax*8-8] ;(realesleidos/2)
+	FADD
+	FLD numDos
+	FDIV
+	FSTP mediana
+	JMP  finMediana
+noEsPar:
+
+;la mediana es el dato en la posición roof(realesleidos/2)=eax+1
+FLD numeros[eax*8]
+FSTP mediana
+
+
+finMediana:
 
 RET
 calcMediana ENDP
@@ -1127,29 +1154,6 @@ INC posActual
 MOV ebx, realesLeidos
 CMP posActual, ebx
 JL cicloFrecu
-;;;;;;;;;;;;;;;comprobación de vector y frecuencias
-;mov edx, offset numerosdistintos
-;call imprimirArregloReales
-;call crlf
-;call waitmsg
-;mov ecx, cantDatosDistintos
-;ciclopruebaa:
-;	mov ebx, cantDatosDistintos
-;	sub ebx, ecx
-;	mov eax, 4
-;	mul ebx
-;	mov ebx,eax
-;	mov eax, frecuencias[ebx]
-;	call writedec
-;	call crlf
-;loop ciclopruebaa
-;call crlf
-;call waitmsg
-;mov eax, frecuenciaMax
-;call writedec
-;call crlf
-;call waitmsg
-;;;;;;;;;;;;;;
 
 ;pasa los datos con frecuencia==frecuenciaMax al vector moda
 MOV posActual, 0
