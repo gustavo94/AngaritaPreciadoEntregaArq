@@ -1,3 +1,17 @@
-﻿  Assembling [Inputs]...
-  LINK : no se encontró C:\Users\Andrés\Documents\GitHub\AngaritaPreciadoEntregaArq\Entrega\Debug\Entrega.exe o no lo generó el último vínculo incremental; ejecutando vínculo completo
-  Project.vcxproj -> C:\Users\Andrés\Documents\GitHub\AngaritaPreciadoEntregaArq\Entrega\Debug\Entrega.exe
+﻿Compilación iniciada a las 6/11/2014 6:52:22 AM.
+     1>Proyecto "C:\Users\Tavo\Documents\GitHub\AngaritaPreciadoEntregaArq\Entrega\Project.vcxproj" en el nodo 2 (build destinos).
+     1>InitializeBuildStatus:
+         Se creará "Debug\Entrega.unsuccessfulbuild" porque se especificó "AlwaysCreate".
+       _MASM:
+       Se omitirá el destino "_MASM" porque todos los archivos de salida están actualizados respecto a los archivos de entrada.
+       Link:
+         Todas las salidas están actualizadas.
+         Project.vcxproj -> C:\Users\Tavo\Documents\GitHub\AngaritaPreciadoEntregaArq\Entrega\Debug\Entrega.exe
+       FinalizeBuildStatus:
+         Se eliminará el archivo "Debug\Entrega.unsuccessfulbuild".
+         Aplicando tarea Touch a "Debug\Entrega.lastbuildstate".
+     1>Compilación del proyecto terminada "C:\Users\Tavo\Documents\GitHub\AngaritaPreciadoEntregaArq\Entrega\Project.vcxproj" (build destinos).
+
+Compilación correcta.
+
+Tiempo transcurrido 00:00:00.24
