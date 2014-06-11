@@ -1003,18 +1003,20 @@ ordenar PROC
 ;-----------------------------------------------------------------------------------------------------------
 
 CicloOrdenar:
+	MOV eax, posActual
+	MOV posMenor, eax ;establece la posición del menor en la actual
 	MOV eax,8
 	MUL posActual
 	FLD numeros[eax]
 	FSTP menorValor;inicia menorValor en el valor de la posicion actual
 	MOV esi,posActual
-	MOV indiceCicloComparar,esi
-	INC indiceCicloComparar; este ciclo inicia en posActual+1
+	INC esi
+	MOV indiceCicloComparar,esi; este ciclo inicia en posActual+1
 	CicloComparar:
 		MOV eax,8
 		MUL indiceCicloComparar
 		FLD numeros[eax] ; ST(0) = numeros[eax]
-		FCOMP menorValor ; compara ST(0) con menorValor
+		FCOMP menorValor ; compara ST(0) con menorValor y desapila
 		FNSTSW ax ; mueve la palabra de estado hacia AX
 		SAHF ; copia AH a EFLAGS
 		JA esMayor
