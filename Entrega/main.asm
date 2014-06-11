@@ -736,6 +736,9 @@ cicloUsuario:
 LOOP cicloUsuario
 
 CALL crlf
+mWrite <"Los indices no validos han sido ignorados",0dh,0ah>
+mWrite <"Estadisticos Seleccionados:",0dh,0ah>
+CALL mostrarEstadisticosSelec
 mWrite <"Por favor confirme su selecci",162,"n. 1=si, 0=cambiar",0dh,0ah>
 CALL readInt
 CMP eax, 0
@@ -756,63 +759,63 @@ mostrarEstadisticosSelec PROC
 ;si el estadístico n fue marcado (está en 1), lo imprime. De lo contrario, pasa al siguiente
 CMP boolEstadisticos, -1
 JNE pasa2
-	mwrite "1-"
+	mwrite <"1. Media aritm",130,"tica",0dh,0ah>
 pasa2:
 CMP boolEstadisticos[4], -1
 JNE pasa3
-	mwrite "2-"
-pasa3:
+	mwrite <"2. Mediana",0dh,0ah>
+	pasa3:
 CMP boolEstadisticos[8], -1
 JNE pasa4
-	mwrite "3-"
-pasa4:
+	mwrite <"3. Moda",0dh,0ah>
+	pasa4:
 CMP boolEstadisticos[12], -1
 JNE pasa5
-	mwrite "4-"
+	mwrite <"4. Media geom",130,"trica",0dh,0ah>
 pasa5:
 CMP boolEstadisticos[16], -1
 JNE pasa6
-	mwrite "5-"
+	mwrite <"5. Media arm",162,"nica",0dh,0ah>
 pasa6:
 CMP boolEstadisticos[20], -1
 JNE pasa7
-	mwrite "6-"
+	mwrite <"6. Percentiles",0dh,0ah>
 pasa7:
 CMP boolEstadisticos[24], -1
 JNE pasa8
-	mwrite "7-"
+	mwrite <"7. Cuartiles",0dh,0ah>
 pasa8:
 CMP boolEstadisticos[28], -1
 JNE pasa9
-	mwrite "8-"
+	mwrite <"8. Deciles",0dh,0ah>
 pasa9:
 CMP boolEstadisticos[32], -1
 JNE pasa10
-	mwrite "9-"
+	mwrite <"9. Momentos respecto al origen",0dh,0ah>
 pasa10:
 CMP boolEstadisticos[36], -1
 JNE pasa11
-	mwrite "10-"
+	mwrite <"10. Momentos centrales o respecto a la media",0dh,0ah>
 pasa11:
 CMP boolEstadisticos[40], -1
 JNE pasa12
-	mwrite "11-"
+	mwrite <"11. Varianza",0dh,0ah>
 pasa12:
 CMP boolEstadisticos[44], -1
 JNE pasa13
-	mwrite "12-"
+	mwrite <"12. Desviaci",162,"n t",161,"pica",0dh,0ah>
 pasa13:
 CMP boolEstadisticos[48], -1
 JNE pasa14
-	mwrite "13-"
+	mwrite <"13. Cuasi-varianza",0dh,0ah>
 pasa14:
 CMP boolEstadisticos[52], -1
 JNE pasa15
-	mwrite "14-"
+	mwrite <"14. Desviaci",162,"n media respecto a la media",0dh,0ah>
 pasa15:
 CMP boolEstadisticos[56], -1
 JNE pasaFin
-	mwrite "15"
+	mwrite <"15. Desviaci",162,"n media respecto a la mediana",0dh,0ah>
 pasaFin:
 
 ;Se reinicializan en imprimirEstadisticos
@@ -978,7 +981,6 @@ FLD numeroReal
 FCOMP ceroReal ; compara ST(0) con cero
 FNSTSW ax ; mueve la palabra de estado hacia AX
 SAHF ; copia AH a EFLAGS
-
 JNB ImprimirReal
 ;CALL waitMsg
 RET

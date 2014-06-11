@@ -1,10 +1,10 @@
-﻿Compilación iniciada a las 6/10/2014 7:57:55 PM.
+﻿Compilación iniciada a las 6/10/2014 8:16:23 PM.
      1>Proyecto "C:\Users\Tavo\Documents\GitHub\AngaritaPreciadoEntregaArq\Entrega\Project.vcxproj" en el nodo 2 (build destinos).
      1>InitializeBuildStatus:
          Se creará "Debug\Entrega.unsuccessfulbuild" porque se especificó "AlwaysCreate".
        _MASM:
          Assembling [Inputs]...
-         cmd.exe /C "C:\Users\Tavo\AppData\Local\Temp\tmpef93fa09fc5945969c7c46786b967157.cmd"
+         cmd.exe /C "C:\Users\Tavo\AppData\Local\Temp\tmp8c88d1fdf24343e5819c207fd417059f.cmd"
          ml.exe /c /nologo /Zi /Fo"Debug\main.obj" /Fl".lst" /W3 /errorReport:prompt  /Tamain.asm
        Link:
          c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Tavo\Documents\GitHub\AngaritaPreciadoEntregaArq\Entrega\Debug\Entrega.exe" /NOLOGO /LIBPATH:"C:\Users\Tavo\Downloads\Universidad\Arquitectura\MATERIAL ENSAMBLADOR\IrvineExamplesVS2010a" user32.lib irvine32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\Entrega.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\Tavo\Documents\GitHub\AngaritaPreciadoEntregaArq\Entrega\Debug\Entrega.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE:NO /IMPLIB:"C:\Users\Tavo\Documents\GitHub\AngaritaPreciadoEntregaArq\Entrega\Debug\Entrega.lib" /MACHINE:X86 Debug\main.obj
@@ -19,4 +19,4 @@
 
 Compilación correcta.
 
-Tiempo transcurrido 00:00:01.31
+Tiempo transcurrido 00:00:01.21
