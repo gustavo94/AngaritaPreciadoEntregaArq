@@ -110,6 +110,15 @@ auxSumatoria REAL8 0.
 diez REAL8 10.
 unDecimo REAL8 0.1
 
+;Auxiliares para ordenar
+posActual DWORD 0
+indiceCicloOrdenar DWORD 0
+indiceCicloComparar DWORD 0
+menorValor REAL8 0.
+epsilon REAL8 1.0E-12
+posMenor DWORD 0
+
+
 ;estadisticos
 media REAL8 ?
 mediana REAL8 ?
@@ -614,6 +623,8 @@ leerNum:
 	;guarda el número en el array
 	FLD realActual
 	MOV eax, realesLeidos
+	MOV esi,8
+	MUL esi
 	FSTP numeros[eax]
 	INC realesLeidos
 
@@ -818,7 +829,62 @@ imprimirArreglo ENDP
 ;-----------------------------------------------------------------------------------------------------------
 ordenar PROC
 ;Ordena el vector y calcula las frecuencias
+;posActual DWORD 0
+;indiceCicloOrdenar DWORD 0
+;indiceCicloComparar DWORD 0
+;posMenor DWORD 0
+;menorValor REAL8 0.
 ;-----------------------------------------------------------------------------------------------------------
+
+CicloOrdenar:
+	MOV eax,8
+	MUL posActual
+	FLD numeros[eax]
+	FSTP menorValor;inicia menorValor en el valor de la posicion actual
+	MOV esi,posActual
+	MOV indiceCicloComparar,esi
+	INC indiceCicloComparar; este ciclo inicia en posActual+1
+	CicloComparar:
+		MOV eax,8
+		MUL indiceCicloComparar
+		FLD numeros[eax] ; ST(0) = numeros[eax]
+		FCOMP menorValor ; compara ST(0) con menorValor
+		FNSTSW ax ; mueve la palabra de estado hacia AX
+		SAHF ; copia AH a EFLAGS
+		JA esMayor
+			MOV eax,8
+			MUL indiceCicloComparar
+			FLD numeros[eax]
+			FSTP menorValor
+			MOV esi, indiceCicloComparar
+			MOV posMenor,esi
+		esMayor:
+
+	INC indiceCicloComparar
+	MOV esi,realesLeidos
+	CMP indiceCicloComparar,esi
+	JL CicloComparar; el ciclo termina en la ultima posicion del vector
+	;FinCicloComparar
+
+	;Intercambio de posiciones
+	
+	FLD menorValor ;st(0) = menor
+	MOV eax,8
+	MUL posActual
+	FLD numeros[eax] ;st(0) = numPosActual, st(1) = menor
+	MOV eax,8
+	MUL posMenor
+	FSTP numeros[eax]; desapila la posicion actual, st(0)= menorValor
+	MOV eax,8
+	MUL posActual
+	FSTP numeros[eax];desapila menorValor
+	;Fin intercambio
+
+	INC posActual
+INC indiceCicloOrdenar
+MOV esi,realesLeidos
+CMP indiceCicloOrdenar,esi
+JL CicloOrdenar
 
 RET
 ordenar ENDP
