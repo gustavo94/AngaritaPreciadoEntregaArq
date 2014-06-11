@@ -7,7 +7,6 @@ TITLE ESTADÍSTICAS						(main.asm)
 INCLUDE Irvine32.inc
 INCLUDE Macros.inc
 
-PTRREAL8 TYPEDEF PTR REAL8 ;tipo de datos para punteros a real8
 
 .DATA
 
@@ -146,11 +145,8 @@ ordenMomOrig DWORD ?
 ordenMomCent DWORD ?
 
 ;contiene booleanos que indican si el usuario solicitó el estadístico n
-buferUsuario BYTE 40 DUP(0)
+buferUsuario BYTE 80 DUP(0)
 boolEstadisticos DWORD 15 DUP(0)
-
-;apunta a los diferentes estadisticos
-ptrEstaadisticos PTRREAL8 15 DUP(?)
 
 
 
@@ -614,7 +610,7 @@ leerNum:
 		finChar:
 	DEC ecx
 	CMP ecx, 0
-	JNE leerChar
+	JG leerChar
 	finNumero:
 	
 	;;;;;;;;;;;;;;para comprobar que lee bien
@@ -648,12 +644,21 @@ leerNum:
 	JL leerNum
 finLectura:
 
+;;;;;;;;;;;comprobar que se haya llenado correctamente el array
 ;MOV edx, OFFSET numeros; para el metodo imprimirArregloReales
 ;CALL imprimirArregloReales; para comprobar que leyo correctamente
+;call crlf
+;;;;;;;;;;;;;;;
+
 CALL ordenar
+
+;;;;;;;;;;;;;;;;;;comprobar ordenamiento
 ;MOV edx, OFFSET numeros; para el metodo imprimirArregloReales
 ;CALL imprimirArregloReales; para comprobar que ordeno correctamente 
+;call waitmsg
+;;;;;;;;;;;;;;;
 
+RET
 leerArchivo ENDP
 
 ;-----------------------------------------------------------------------------------------------------------
@@ -736,11 +741,12 @@ cicloUsuario:
 LOOP cicloUsuario
 
 CALL crlf
-mWrite <"Los indices no validos han sido ignorados",0dh,0ah>
+mWrite <"Los ",161,"ndices no v",160,"lidos han sido ignorados",0dh,0ah>
 mWrite <"Estadisticos Seleccionados:",0dh,0ah>
 CALL mostrarEstadisticosSelec
 mWrite <"Por favor confirme su selecci",162,"n. 1=si, 0=cambiar",0dh,0ah>
 CALL readInt
+CALL crlf
 CMP eax, 0
 JNE finSeleccion
 mWrite <"Indique los estad",161,"sticos que desea agregar o escriba nuevamente ",0dh,0ah,"los que desea quitar de la lista",0dh,0ah>
@@ -755,6 +761,7 @@ pedirEstadisticos ENDP
 mostrarEstadisticosSelec PROC
 ;Muestra los estadísticos seleccionados por el usuario
 ;-----------------------------------------------------------------------------------------------------------
+CALL crlf
 
 ;si el estadístico n fue marcado (está en 1), lo imprime. De lo contrario, pasa al siguiente
 CMP boolEstadisticos, -1
@@ -1044,6 +1051,7 @@ CicloOrdenar:
 
 INC indiceCicloOrdenar
 MOV esi,realesLeidos
+DEC esi ;llega hasta el número de reales leídos - 1
 CMP indiceCicloOrdenar,esi
 JL CicloOrdenar
 
