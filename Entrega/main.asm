@@ -62,7 +62,6 @@ colores1 EQU lightBlue + (white * 16); Azul claro sobre blanco
 colores2 EQU lightCyan + (lightBlue * 16)
 colores3 EQU white + (lightBlue * 16)
 
-
 stringEstadisticos     BYTE "1. Media aritm",130,"tica",0dh,0ah
 				   BYTE	"2. Mediana",0dh,0ah
 				   BYTE	"3. Moda",0dh,0ah
@@ -87,8 +86,7 @@ fileHandle  HANDLE ?
 maxDatos = 600
 numeros REAL8 maxDatos DUP(-1.), -1.
 numerosDistintos REAL8 maxDatos DUP(-1.), -1.
-frecuencias QWORD maxDatos DUP(-1.), -1.
-cantDatos DWORD 0
+frecuencias DWORD maxDatos DUP(0), 0
 cantDatosDistintos DWORD 0
 frecuenciaMax DWORD 0 ;para la moda
 
@@ -122,7 +120,6 @@ posMenor DWORD 0
 ceroReal REAL8 0.
 numeroReal REAL8 0.
 
-
 ;estadisticos
 media REAL8 0.
 mediana REAL8 0.
@@ -140,16 +137,18 @@ cuasiVarianza REAL8 0.
 desvMedia REAL8 0.
 desvMediana REAL8 0.
 
-;orden de los momentos
+;auxiliares para los 
 ordenMomOrig DWORD ?
 ordenMomCent DWORD ?
+posModa DWORD 0
 
 ;contiene booleanos que indican si el usuario solicitó el estadístico n
 buferUsuario BYTE 80 DUP(0)
 boolEstadisticos DWORD 15 DUP(0)
 
 
-
+;para evitar problemas
+relleno2 DWORD 100 DUP(0)
 
 
 
@@ -645,17 +644,17 @@ leerNum:
 finLectura:
 
 ;;;;;;;;;;;comprobar que se haya llenado correctamente el array
-;MOV edx, OFFSET numeros; para el metodo imprimirArregloReales
-;CALL imprimirArregloReales; para comprobar que leyo correctamente
-;call crlf
+MOV edx, OFFSET numeros; para el metodo imprimirArregloReales
+CALL imprimirArregloReales; para comprobar que leyo correctamente
+call crlf
 ;;;;;;;;;;;;;;;
 
 CALL ordenar
 
 ;;;;;;;;;;;;;;;;;;comprobar ordenamiento
-;MOV edx, OFFSET numeros; para el metodo imprimirArregloReales
-;CALL imprimirArregloReales; para comprobar que ordeno correctamente 
-;call waitmsg
+MOV edx, OFFSET numeros; para el metodo imprimirArregloReales
+CALL imprimirArregloReales; para comprobar que ordeno correctamente 
+call waitmsg
 ;;;;;;;;;;;;;;;
 
 RET
@@ -669,7 +668,7 @@ calcularEstadisticos PROC
 
 CALL calcMedia
 CALL calcMediana
-;CALL calcModa
+CALL calcModa
 CALL calcMediageometrica
 CALL calcMediaarmonica
 CALL calcPercentiles
@@ -740,9 +739,6 @@ cicloUsuario:
 	INC esi
 LOOP cicloUsuario
 
-CALL crlf
-mWrite <"Los ",161,"ndices no v",160,"lidos han sido ignorados",0dh,0ah>
-mWrite <"Estadisticos Seleccionados:",0dh,0ah>
 CALL mostrarEstadisticosSelec
 mWrite <"Por favor confirme su selecci",162,"n. 1=si, 0=cambiar",0dh,0ah>
 CALL readInt
@@ -762,8 +758,11 @@ mostrarEstadisticosSelec PROC
 ;Muestra los estadísticos seleccionados por el usuario
 ;-----------------------------------------------------------------------------------------------------------
 CALL crlf
+mWrite <"Los ",161,"ndices no v",160,"lidos han sido ignorados",0dh,0ah>
+mWrite <"Estadisticos Seleccionados:",0dh,0ah>
+CALL crlf
 
-;si el estadístico n fue marcado (está en 1), lo imprime. De lo contrario, pasa al siguiente
+;si el estadístico n fue marcado (está en -1), lo imprime. De lo contrario, pasa al siguiente
 CMP boolEstadisticos, -1
 JNE pasa2
 	mwrite <"1. Media aritm",130,"tica",0dh,0ah>
@@ -842,7 +841,7 @@ mostrarEstadisticosSelec ENDP
 imprimirEstadisticosSelec PROC
 ;Imprime el valor o arreglo correspondiente al estadistico seleccionado
 ;-----------------------------------------------------------------------------------------------------------
-;si el estadístico n fue marcado (está en 1), lo imprime. De lo contrario, pasa al siguiente
+;si el estadístico n fue marcado (está en -1), lo imprime. De lo contrario, pasa al siguiente
 CMP boolEstadisticos, -1
 JNE pasa2
 	mwrite <"1. Media aritm",130,"tica",0dh,0ah>
@@ -1073,6 +1072,86 @@ calcMediana PROC
 
 RET
 calcMediana ENDP
+
+;-----------------------------------------------------------------------------------------------------------
+calcModa PROC
+;Calcula el estadístico
+;numeros REAL8 maxDatos DUP(-1.), -1.
+;numerosDistintos REAL8 maxDatos DUP(-1.), -1.
+;frecuencias DWORD maxDatos DUP(-1.), -1.
+;cantDatosDistintos DWORD 0
+;frecuenciaMax DWORD 0 ;para la moda
+;posActual DWORD
+;posModa DWORD 0
+;-----------------------------------------------------------------------------------------------------------
+
+;carga el primero
+FLD numeros
+FST realActual
+FSTP numerosDistintos
+INC frecuenciaMax
+INC frecuencias
+INC cantDatosDistintos
+MOV posActual, 1
+MOV posModa, 0
+
+cicloFrecu:
+	
+	MOV esi, posActual
+	FLD numeros[esi*8]
+	FCOMP realActual
+	FNSTSW ax ; mueve la palabra de estado hacia AX
+	SAHF ; copia AH a EFLAGS
+	JNE diferente
+		;si el dato siguiente es igual al dato actual del array sin repetidos:
+		MOV esi, posModa
+		INC frecuencias[esi*4]
+		MOV eax, frecuencias[esi*4]
+		CMP frecuenciaMax, eax
+		JGE finCompFrec ;si la frecuencia máxima es mayor o igual a la del dato actual, no cambia
+			INC frecuenciaMax
+		JMP finCompFrec
+	diferente:
+		FLD numeros[esi*8]
+		FST realActual
+		INC posModa
+		MOV esi, posModa
+		FSTP numerosDistintos[esi*8]
+		INC frecuencias[esi*4]
+		INC cantDatosDistintos
+	finCompFrec:
+
+INC posActual
+MOV ebx, realesLeidos
+CMP posActual, ebx
+JL cicloFrecu
+;_______________________________________________________________________________________________________;
+;;;;;;;;;;;;,,lo de arriba como que esta bueno pero el metodo que ordena hace lo que quiere
+;;;;;;;;;;;;;;;comprobación
+mov edx, offset numerosdistintos
+call imprimirArregloReales
+call crlf
+call waitmsg
+mov ecx, cantDatosDistintos
+ciclopruebaa:
+	mov ebx, cantDatosDistintos
+	sub ebx, ecx
+	mov eax, 4
+	mul ebx
+	mov ebx,eax
+	mov eax, frecuencias[ebx]
+	call writedec
+	call crlf
+loop ciclopruebaa
+call crlf
+call waitmsg
+mov eax, frecuenciaMax
+call writedec
+call crlf
+call waitmsg
+;;;;;;;;;;;;;;
+RET
+calcModa ENDP
 
 ;-----------------------------------------------------------------------------------------------------------
 calcMediageometrica PROC
