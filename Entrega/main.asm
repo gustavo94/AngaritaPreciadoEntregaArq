@@ -1127,31 +1127,48 @@ INC posActual
 MOV ebx, realesLeidos
 CMP posActual, ebx
 JL cicloFrecu
-;_______________________________________________________________________________________________________;
-;;;;;;;;;;;;,,lo de arriba como que esta bueno pero el metodo que ordena hace lo que quiere
-;;;;;;;;;;;;;;;comprobación
-mov edx, offset numerosdistintos
-call imprimirArregloReales
-call crlf
-call waitmsg
-mov ecx, cantDatosDistintos
-ciclopruebaa:
-	mov ebx, cantDatosDistintos
-	sub ebx, ecx
-	mov eax, 4
-	mul ebx
-	mov ebx,eax
-	mov eax, frecuencias[ebx]
-	call writedec
-	call crlf
-loop ciclopruebaa
-call crlf
-call waitmsg
-mov eax, frecuenciaMax
-call writedec
-call crlf
-call waitmsg
+;;;;;;;;;;;;;;;comprobación de vector y frecuencias
+;mov edx, offset numerosdistintos
+;call imprimirArregloReales
+;call crlf
+;call waitmsg
+;mov ecx, cantDatosDistintos
+;ciclopruebaa:
+;	mov ebx, cantDatosDistintos
+;	sub ebx, ecx
+;	mov eax, 4
+;	mul ebx
+;	mov ebx,eax
+;	mov eax, frecuencias[ebx]
+;	call writedec
+;	call crlf
+;loop ciclopruebaa
+;call crlf
+;call waitmsg
+;mov eax, frecuenciaMax
+;call writedec
+;call crlf
+;call waitmsg
 ;;;;;;;;;;;;;;
+
+;pasa los datos con frecuencia==frecuenciaMax al vector moda
+MOV posActual, 0
+MOV posModa, 0
+cicloModa:
+	MOV esi, posActual
+	MOV eax, frecuencias[esi*4]
+	CMP frecuenciaMax, eax
+	JNE noEsModa
+		MOV ebx, posModa
+		FLD numerosDistintos[esi*8]
+		FSTP moda[ebx*8]
+		INC posModa
+	noEsModa:
+INC posActual
+MOV esi, cantDatosDistintos
+CMP posActual, esi
+JL cicloModa
+
 RET
 calcModa ENDP
 

@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 10:08:08
+Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 10:55:29
 ESTADÍSTICAS						(main.asm  Page 1 - 1
 
 
@@ -1160,18 +1160,18 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 10:08:08
  000005AA  E8 000005A4		CALL calcMedia
  000005AF  E8 000005A0		CALL calcMediana
  000005B4  E8 0000059C		CALL calcModa
- 000005B9  E8 000006A8		CALL calcMediageometrica
- 000005BE  E8 000006A4		CALL calcMediaarmonica
- 000005C3  E8 000006A0		CALL calcPercentiles
- 000005C8  E8 0000069C		CALL calcCuartiles
- 000005CD  E8 00000698		CALL calcDeciles
- 000005D2  E8 00000694		CALL calcMomentosOrigen
- 000005D7  E8 00000690		CALL calcMomentosCentrales
- 000005DC  E8 0000068C		CALL calcVarianza
- 000005E1  E8 00000688		CALL calcDesvEstandar
- 000005E6  E8 00000684		CALL calcCuasiVarianza
- 000005EB  E8 00000680		CALL calcDesvMedia
- 000005F0  E8 0000067C		CALL calcDesvMediana
+ 000005B9  E8 000006B3		CALL calcMediageometrica
+ 000005BE  E8 000006AF		CALL calcMediaarmonica
+ 000005C3  E8 000006AB		CALL calcPercentiles
+ 000005C8  E8 000006A7		CALL calcCuartiles
+ 000005CD  E8 000006A3		CALL calcDeciles
+ 000005D2  E8 0000069F		CALL calcMomentosOrigen
+ 000005D7  E8 0000069B		CALL calcMomentosCentrales
+ 000005DC  E8 00000697		CALL calcVarianza
+ 000005E1  E8 00000693		CALL calcDesvEstandar
+ 000005E6  E8 0000068F		CALL calcCuasiVarianza
+ 000005EB  E8 0000068B		CALL calcDesvMedia
+ 000005F0  E8 00000687		CALL calcDesvMediana
 
 
  000005F5  C3			RET
@@ -2101,133 +2101,160 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 10:08:08
  00000BFC  8B 1D 00004848 R	MOV ebx, realesLeidos
  00000C02  39 1D 00004874 R	CMP posActual, ebx
  00000C08  7C 83		JL cicloFrecu
-				;_______________________________________________________________________________________________________;
-				;;;;;;;;;;;;,,lo de arriba como que esta bueno pero el metodo que ordena hace lo que quiere
-				;;;;;;;;;;;;;;;comprobación
- 00000C0A  BA 00001876 R	mov edx, offset numerosdistintos
- 00000C0F  E8 FFFFFE0F		call imprimirArregloReales
- 00000C14  E8 00000000 E	call crlf
- 00000C19  E8 00000000 E	call waitmsg
- 00000C1E  8B 0D 000034A2 R	mov ecx, cantDatosDistintos
- 00000C24			ciclopruebaa:
- 00000C24  8B 1D 000034A2 R		mov ebx, cantDatosDistintos
- 00000C2A  2B D9			sub ebx, ecx
- 00000C2C  B8 00000004			mov eax, 4
- 00000C31  F7 E3			mul ebx
- 00000C33  8B D8			mov ebx,eax
- 00000C35  8B 83 00002B3E R		mov eax, frecuencias[ebx]
- 00000C3B  E8 00000000 E		call writedec
- 00000C40  E8 00000000 E		call crlf
- 00000C45  E2 DD		loop ciclopruebaa
- 00000C47  E8 00000000 E	call crlf
- 00000C4C  E8 00000000 E	call waitmsg
- 00000C51  A1 000034A6 R	mov eax, frecuenciaMax
- 00000C56  E8 00000000 E	call writedec
- 00000C5B  E8 00000000 E	call crlf
- 00000C60  E8 00000000 E	call waitmsg
+				;;;;;;;;;;;;;;;comprobación de vector y frecuencias
+				;mov edx, offset numerosdistintos
+				;call imprimirArregloReales
+				;call crlf
+				;call waitmsg
+				;mov ecx, cantDatosDistintos
+				;ciclopruebaa:
+				;	mov ebx, cantDatosDistintos
+				;	sub ebx, ecx
+				;	mov eax, 4
+				;	mul ebx
+				;	mov ebx,eax
+				;	mov eax, frecuencias[ebx]
+				;	call writedec
+				;	call crlf
+				;loop ciclopruebaa
+				;call crlf
+				;call waitmsg
+				;mov eax, frecuenciaMax
+				;call writedec
+				;call crlf
+				;call waitmsg
 				;;;;;;;;;;;;;;
- 00000C65  C3			RET
- 00000C66			calcModa ENDP
 
-				;-----------------------------------------------------------------------------------------------------------
- 00000C66			calcMediageometrica PROC
-				;Calcula el estadístico
-				;-----------------------------------------------------------------------------------------------------------
-
- 00000C66  C3			RET
- 00000C67			calcMediageometrica ENDP
-
-				;-----------------------------------------------------------------------------------------------------------
- 00000C67			calcMediaarmonica PROC
-				;Calcula el estadístico
-				;-----------------------------------------------------------------------------------------------------------
-
- 00000C67  C3			RET
- 00000C68			calcMediaarmonica ENDP
-
-				;-----------------------------------------------------------------------------------------------------------
- 00000C68			calcPercentiles PROC
-				;Calcula el estadístico
-				;-----------------------------------------------------------------------------------------------------------
-
- 00000C68  C3			RET
- 00000C69			calcPercentiles ENDP
-
-				;-----------------------------------------------------------------------------------------------------------
- 00000C69			calcCuartiles PROC
-				;Calcula el estadístico
-				;-----------------------------------------------------------------------------------------------------------
-
- 00000C69  C3			RET
- 00000C6A			calcCuartiles ENDP
-
-				;-----------------------------------------------------------------------------------------------------------
- 00000C6A			calcDeciles PROC
-				;Calcula el estadístico
-				;-----------------------------------------------------------------------------------------------------------
-
- 00000C6A  C3			RET
- 00000C6B			calcDeciles ENDP
-
-				;-----------------------------------------------------------------------------------------------------------
- 00000C6B			calcMomentosOrigen PROC
-				;Calcula el estadístico
-				;-----------------------------------------------------------------------------------------------------------
-
- 00000C6B  C3			RET
- 00000C6C			calcMomentosOrigen ENDP
-
-				;-----------------------------------------------------------------------------------------------------------
- 00000C6C			calcMomentosCentrales PROC
-				;Calcula el estadístico
-				;-----------------------------------------------------------------------------------------------------------
-
- 00000C6C  C3			RET
- 00000C6D			calcMomentosCentrales ENDP
-
-				;-----------------------------------------------------------------------------------------------------------
- 00000C6D			calcVarianza PROC
-				;Calcula el estadístico
-				;-----------------------------------------------------------------------------------------------------------
-
- 00000C6D  C3			RET
- 00000C6E			calcVarianza ENDP
-
-				;-----------------------------------------------------------------------------------------------------------
- 00000C6E			calcDesvEstandar PROC
-				;Calcula el estadístico
-				;-----------------------------------------------------------------------------------------------------------
-
- 00000C6E  C3			RET
- 00000C6F			calcDesvEstandar ENDP
-
-				;-----------------------------------------------------------------------------------------------------------
- 00000C6F			calcCuasiVarianza PROC
-				;Calcula el estadístico
-				;-----------------------------------------------------------------------------------------------------------
-
- 00000C6F  C3			RET
- 00000C70			calcCuasiVarianza ENDP
-
-				;-----------------------------------------------------------------------------------------------------------
- 00000C70			calcDesvMedia PROC
-				;Calcula el estadístico
-				;-----------------------------------------------------------------------------------------------------------
+				;pasa los datos con frecuencia==frecuenciaMax al vector moda
+ 00000C0A  C7 05 00004874 R	MOV posActual, 0
+	   00000000
+ 00000C14  C7 05 00005F74 R	MOV posModa, 0
+	   00000000
+ 00000C1E			cicloModa:
+ 00000C1E  8B 35 00004874 R		MOV esi, posActual
+ 00000C24  8B 04 B5			MOV eax, frecuencias[esi*4]
+	   00002B3E R
+ 00000C2B  39 05 000034A6 R		CMP frecuenciaMax, eax
+ 00000C31  75 1A			JNE noEsModa
+ 00000C33  8B 1D 00005F74 R			MOV ebx, posModa
+ 00000C39  DD 04 F5				FLD numerosDistintos[esi*8]
+	   00001876 R
+ 00000C40  DD 1C DD				FSTP moda[ebx*8]
+	   000048B4 R
+ 00000C47  FF 05 00005F74 R			INC posModa
+ 00000C4D				noEsModa:
+ 00000C4D  FF 05 00004874 R	INC posActual
+ 00000C53  8B 35 000034A2 R	MOV esi, cantDatosDistintos
+ 00000C59  39 35 00004874 R	CMP posActual, esi
+ 00000C5F  7C BD		JL cicloModa
+				;;;;
+ 00000C61  BA 000048B4 R	mov edx, offset moda
+ 00000C66  E8 FFFFFDB8		call imprimirArregloReales
+ 00000C6B  E8 00000000 E	call waitmsg
+				;;;;;;
 
  00000C70  C3			RET
- 00000C71			calcDesvMedia ENDP
+ 00000C71			calcModa ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 00000C71			calcDesvMediana PROC
+ 00000C71			calcMediageometrica PROC
 				;Calcula el estadístico
 				;-----------------------------------------------------------------------------------------------------------
 
  00000C71  C3			RET
- 00000C72			calcDesvMediana ENDP
+ 00000C72			calcMediageometrica ENDP
+
+				;-----------------------------------------------------------------------------------------------------------
+ 00000C72			calcMediaarmonica PROC
+				;Calcula el estadístico
+				;-----------------------------------------------------------------------------------------------------------
+
+ 00000C72  C3			RET
+ 00000C73			calcMediaarmonica ENDP
+
+				;-----------------------------------------------------------------------------------------------------------
+ 00000C73			calcPercentiles PROC
+				;Calcula el estadístico
+				;-----------------------------------------------------------------------------------------------------------
+
+ 00000C73  C3			RET
+ 00000C74			calcPercentiles ENDP
+
+				;-----------------------------------------------------------------------------------------------------------
+ 00000C74			calcCuartiles PROC
+				;Calcula el estadístico
+				;-----------------------------------------------------------------------------------------------------------
+
+ 00000C74  C3			RET
+ 00000C75			calcCuartiles ENDP
+
+				;-----------------------------------------------------------------------------------------------------------
+ 00000C75			calcDeciles PROC
+				;Calcula el estadístico
+				;-----------------------------------------------------------------------------------------------------------
+
+ 00000C75  C3			RET
+ 00000C76			calcDeciles ENDP
+
+				;-----------------------------------------------------------------------------------------------------------
+ 00000C76			calcMomentosOrigen PROC
+				;Calcula el estadístico
+				;-----------------------------------------------------------------------------------------------------------
+
+ 00000C76  C3			RET
+ 00000C77			calcMomentosOrigen ENDP
+
+				;-----------------------------------------------------------------------------------------------------------
+ 00000C77			calcMomentosCentrales PROC
+				;Calcula el estadístico
+				;-----------------------------------------------------------------------------------------------------------
+
+ 00000C77  C3			RET
+ 00000C78			calcMomentosCentrales ENDP
+
+				;-----------------------------------------------------------------------------------------------------------
+ 00000C78			calcVarianza PROC
+				;Calcula el estadístico
+				;-----------------------------------------------------------------------------------------------------------
+
+ 00000C78  C3			RET
+ 00000C79			calcVarianza ENDP
+
+				;-----------------------------------------------------------------------------------------------------------
+ 00000C79			calcDesvEstandar PROC
+				;Calcula el estadístico
+				;-----------------------------------------------------------------------------------------------------------
+
+ 00000C79  C3			RET
+ 00000C7A			calcDesvEstandar ENDP
+
+				;-----------------------------------------------------------------------------------------------------------
+ 00000C7A			calcCuasiVarianza PROC
+				;Calcula el estadístico
+				;-----------------------------------------------------------------------------------------------------------
+
+ 00000C7A  C3			RET
+ 00000C7B			calcCuasiVarianza ENDP
+
+				;-----------------------------------------------------------------------------------------------------------
+ 00000C7B			calcDesvMedia PROC
+				;Calcula el estadístico
+				;-----------------------------------------------------------------------------------------------------------
+
+ 00000C7B  C3			RET
+ 00000C7C			calcDesvMedia ENDP
+
+				;-----------------------------------------------------------------------------------------------------------
+ 00000C7C			calcDesvMediana PROC
+				;Calcula el estadístico
+				;-----------------------------------------------------------------------------------------------------------
+
+ 00000C7C  C3			RET
+ 00000C7D			calcDesvMediana ENDP
 
 				;fin del programa
 				END main
-Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 10:08:08
+Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 10:55:29
 ESTADÍSTICAS						(main.asm  Symbols 2 - 1
 
 
@@ -2340,7 +2367,7 @@ Segments and Groups:
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00000400 Para	  Stack	  'STACK'	 
 _DATA  . . . . . . . . . . . . .	32 Bit	 00006862 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 00000C72 Para	  Public  'CODE'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000C7D Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -2451,25 +2478,26 @@ animarBarra  . . . . . . . . . .	P Near	 000002BA _TEXT	Length= 00000044 Public 
   L1 . . . . . . . . . . . . . .	L Near	 000002C8 _TEXT	
   menor6 . . . . . . . . . . . .	L Near	 000002ED _TEXT	
   finsi  . . . . . . . . . . . .	L Near	 000002F9 _TEXT	
-calcCuartiles  . . . . . . . . .	P Near	 00000C69 _TEXT	Length= 00000001 Public STDCALL
-calcCuasiVarianza  . . . . . . .	P Near	 00000C6F _TEXT	Length= 00000001 Public STDCALL
-calcDeciles  . . . . . . . . . .	P Near	 00000C6A _TEXT	Length= 00000001 Public STDCALL
-calcDesvEstandar . . . . . . . .	P Near	 00000C6E _TEXT	Length= 00000001 Public STDCALL
-calcDesvMediana  . . . . . . . .	P Near	 00000C71 _TEXT	Length= 00000001 Public STDCALL
-calcDesvMedia  . . . . . . . . .	P Near	 00000C70 _TEXT	Length= 00000001 Public STDCALL
-calcMediaarmonica  . . . . . . .	P Near	 00000C67 _TEXT	Length= 00000001 Public STDCALL
-calcMediageometrica  . . . . . .	P Near	 00000C66 _TEXT	Length= 00000001 Public STDCALL
+calcCuartiles  . . . . . . . . .	P Near	 00000C74 _TEXT	Length= 00000001 Public STDCALL
+calcCuasiVarianza  . . . . . . .	P Near	 00000C7A _TEXT	Length= 00000001 Public STDCALL
+calcDeciles  . . . . . . . . . .	P Near	 00000C75 _TEXT	Length= 00000001 Public STDCALL
+calcDesvEstandar . . . . . . . .	P Near	 00000C79 _TEXT	Length= 00000001 Public STDCALL
+calcDesvMediana  . . . . . . . .	P Near	 00000C7C _TEXT	Length= 00000001 Public STDCALL
+calcDesvMedia  . . . . . . . . .	P Near	 00000C7B _TEXT	Length= 00000001 Public STDCALL
+calcMediaarmonica  . . . . . . .	P Near	 00000C72 _TEXT	Length= 00000001 Public STDCALL
+calcMediageometrica  . . . . . .	P Near	 00000C71 _TEXT	Length= 00000001 Public STDCALL
 calcMediana  . . . . . . . . . .	P Near	 00000B54 _TEXT	Length= 00000001 Public STDCALL
 calcMedia  . . . . . . . . . . .	P Near	 00000B53 _TEXT	Length= 00000001 Public STDCALL
-calcModa . . . . . . . . . . . .	P Near	 00000B55 _TEXT	Length= 00000111 Public STDCALL
+calcModa . . . . . . . . . . . .	P Near	 00000B55 _TEXT	Length= 0000011C Public STDCALL
   cicloFrecu . . . . . . . . . .	L Near	 00000B8D _TEXT	
   diferente  . . . . . . . . . .	L Near	 00000BC9 _TEXT	
   finCompFrec  . . . . . . . . .	L Near	 00000BF6 _TEXT	
-  ciclopruebaa . . . . . . . . .	L Near	 00000C24 _TEXT	
-calcMomentosCentrales  . . . . .	P Near	 00000C6C _TEXT	Length= 00000001 Public STDCALL
-calcMomentosOrigen . . . . . . .	P Near	 00000C6B _TEXT	Length= 00000001 Public STDCALL
-calcPercentiles  . . . . . . . .	P Near	 00000C68 _TEXT	Length= 00000001 Public STDCALL
-calcVarianza . . . . . . . . . .	P Near	 00000C6D _TEXT	Length= 00000001 Public STDCALL
+  cicloModa  . . . . . . . . . .	L Near	 00000C1E _TEXT	
+  noEsModa . . . . . . . . . . .	L Near	 00000C4D _TEXT	
+calcMomentosCentrales  . . . . .	P Near	 00000C77 _TEXT	Length= 00000001 Public STDCALL
+calcMomentosOrigen . . . . . . .	P Near	 00000C76 _TEXT	Length= 00000001 Public STDCALL
+calcPercentiles  . . . . . . . .	P Near	 00000C73 _TEXT	Length= 00000001 Public STDCALL
+calcVarianza . . . . . . . . . .	P Near	 00000C78 _TEXT	Length= 00000001 Public STDCALL
 calcularEstadisticos . . . . . .	P Near	 000005AA _TEXT	Length= 0000004C Public STDCALL
 cargarMensaje  . . . . . . . . .	P Near	 000000D0 _TEXT	Length= 000000BF Public STDCALL
 contadorEjec . . . . . . . . . .	P Near	 000002FE _TEXT	Length= 0000004E Public STDCALL
