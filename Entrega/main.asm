@@ -167,13 +167,14 @@ CALL waitMsg
 CALL Clrscr
 
 ;hace todos los cálculos
-CALL calcularEstadisticos
+CALL leerArchivo
 
 ejec:
 MOV eax, colores3
 CALL SetTextColor
 CALL Clrscr
 CALL contadorEjec
+mWrite <"Para cada ejecuci",162,"n usted puede utilizar un orden diferente para los momentos",0dh,0ah,"Por favor ingr",130,"selos a continuaci",162,"n",0dh,0ah>
 CALL crlf
 mWrite <"Por favor indique el orden que se usar",160," para calcular el momento ",0dh,0ah,"con respecto al origen:",0dh,0ah>
 CALL readInt
@@ -181,7 +182,7 @@ MOV ordenMomOrig, eax
 mWrite <"Por favor indique el orden que se usar",160," para calcular el momento ",0dh,0ah,"con respecto a la media",0dh,0ah>
 CALL readInt
 MOV ordenMomCent, eax
-
+CALL calcularEstadisticos
 CALL pedirEstadisticos
 CALL mostrarEstadisticosSelec
 
@@ -458,8 +459,8 @@ mostrarDespedida ENDP
 
 
 ;-----------------------------------------------------------------------------------------------------------
-calcularEstadisticos PROC
-;Carga el archivo y calcula los estadísticos
+leerArchivo PROC
+;Carga el archivo y llama al metodo que ordena el vector
 ;-----------------------------------------------------------------------------------------------------------
 mov eax, colores3
 call SetTextColor
@@ -627,6 +628,13 @@ finLectura:
 
 CALL ordenar
 
+leerArchivo ENDP
+
+;-----------------------------------------------------------------------------------------------------------
+calcularEstadisticos PROC
+; Calcula los estadísticos
+;-----------------------------------------------------------------------------------------------------------
+
 
 CALL calcMedia
 CALL calcMediana
@@ -660,7 +668,7 @@ CALL writeString
 
 seleccionEstad:
 CALL crlf
-mWrite <"Escriba una lista separada por comas y presione enter. Ejemplo: 1,2,3.",0dh,0ah>
+mWrite <"Escriba una lista separada por comas y presione enter. Ejemplo: 1,2,3",0dh,0ah>
 
 MOV edx, OFFSET buferUsuario
 MOV ecx, LENGTHOF buferUsuario
