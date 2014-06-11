@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/10/14 20:45:00
+Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/10/14 23:04:07
 ESTADÍSTICAS						(main.asm  Page 1 - 1
 
 
@@ -320,66 +320,74 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/10/14 20:45:00
 	   4024000000000000
  000051CC			unDecimo REAL8 0.1
 	   3FB999999999999A
+ 000051D4			menosUno REAL8 -1.
+	   BFF0000000000000
 
 				;Auxiliares para ordenar
- 000051D4 00000000		posActual DWORD 0
- 000051D8 00000000		indiceCicloOrdenar DWORD 0
- 000051DC 00000000		indiceCicloComparar DWORD 0
- 000051E0			menorValor REAL8 0.
+ 000051DC 00000000		posActual DWORD 0
+ 000051E0 00000000		indiceCicloOrdenar DWORD 0
+ 000051E4 00000000		indiceCicloComparar DWORD 0
+ 000051E8			menorValor REAL8 0.
 	   0000000000000000
- 000051E8			epsilon REAL8 1.0E-12
+ 000051F0			epsilon REAL8 1.0E-12
 	   3D719799812DEA11
- 000051F0 00000000		posMenor DWORD 0
+ 000051F8 00000000		posMenor DWORD 0
+
+				;Auxiliares para imprimir
+ 000051FC			ceroReal REAL8 0.
+	   0000000000000000
+ 00005204			numeroReal REAL8 0.
+	   0000000000000000
 
 
 				;estadisticos
- 000051F4			media REAL8 ?
+ 0000520C			media REAL8 ?
 	   0000000000000000
- 000051FC			mediana REAL8 ?
+ 00005214			mediana REAL8 ?
 	   0000000000000000
 				;moda REAL8 maxDatos DUP(-1.), -1.
- 00005204			mediageometrica REAL8 ?
+ 0000521C			mediageometrica REAL8 ?
 	   0000000000000000
- 0000520C			mediaarmonica REAL8 ?
+ 00005224			mediaarmonica REAL8 ?
 	   0000000000000000
- 00005214  00000065 [		percentiles REAL8 101 DUP(-1.)
+ 0000522C  00000065 [		percentiles REAL8 101 DUP(-1.)
 	    BFF0000000000000
 	   ]
- 0000553C  00000005 [		cuartiles REAL8 5 DUP(-1.)
+ 00005554  00000005 [		cuartiles REAL8 5 DUP(-1.)
 	    BFF0000000000000
 	   ]
- 00005564  0000000B [		deciles REAL8 11 DUP(-1.)
+ 0000557C  0000000B [		deciles REAL8 11 DUP(-1.)
 	    BFF0000000000000
 	   ]
- 000055BC			momentosOrigen REAL8 ?
+ 000055D4			momentosOrigen REAL8 ?
 	   0000000000000000
- 000055C4			momentosCentrales REAL8 ?
+ 000055DC			momentosCentrales REAL8 ?
 	   0000000000000000
- 000055CC			varianza REAL8 ?
+ 000055E4			varianza REAL8 ?
 	   0000000000000000
- 000055D4			desvEstandar REAL8 ?
+ 000055EC			desvEstandar REAL8 ?
 	   0000000000000000
- 000055DC			cuasiVarianza REAL8 ?
+ 000055F4			cuasiVarianza REAL8 ?
 	   0000000000000000
- 000055E4			desvMedia REAL8 ?
+ 000055FC			desvMedia REAL8 ?
 	   0000000000000000
- 000055EC			desvMediana REAL8 ?
+ 00005604			desvMediana REAL8 ?
 	   0000000000000000
 
 				;orden de los momentos
- 000055F4 00000000		ordenMomOrig DWORD ?
- 000055F8 00000000		ordenMomCent DWORD ?
+ 0000560C 00000000		ordenMomOrig DWORD ?
+ 00005610 00000000		ordenMomCent DWORD ?
 
 				;contiene booleanos que indican si el usuario solicitó el estadístico n
- 000055FC  00000028 [		buferUsuario BYTE 40 DUP(0)
+ 00005614  00000028 [		buferUsuario BYTE 40 DUP(0)
 	    00
 	   ]
- 00005624  0000000F [		boolEstadisticos DWORD 15 DUP(0)
+ 0000563C  0000000F [		boolEstadisticos DWORD 15 DUP(0)
 	    00000000
 	   ]
 
 				;apunta a los diferentes estadisticos
- 00005660  0000000F [		ptrEstaadisticos PTRREAL8 15 DUP(?)
+ 00005678  0000000F [		ptrEstaadisticos PTRREAL8 15 DUP(?)
 	    00000000
 	   ]
 
@@ -421,8 +429,8 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/10/14 20:45:00
  00000049  E8 00000000 E	CALL Clrscr
  0000004E  E8 000002AB		CALL contadorEjec
 				mWrite <"Para cada ejecuci",162,"n usted puede utilizar un orden diferente para los momentos",0dh,0ah,"Por favor ingr",130,"selos a continuaci",162,"n",0dh,0ah>
- 0000569C		     1		.data		
- 0000569C 50 61 72 61 20     1		??0000 BYTE "Para cada ejecuci",162,"n usted puede utilizar un orden diferente para los momentos",0dh,0ah,"Por favor ingr",130,"selos a continuaci",162,"n",0dh,0ah,0	
+ 000056B4		     1		.data		
+ 000056B4 50 61 72 61 20     1		??0000 BYTE "Para cada ejecuci",162,"n usted puede utilizar un orden diferente para los momentos",0dh,0ah,"Por favor ingr",130,"selos a continuaci",162,"n",0dh,0ah,0	
 	   63 61 64 61 20
 	   65 6A 65 63 75
 	   63 69 A2 6E 20
@@ -448,13 +456,13 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/10/14 20:45:00
 	   0A 00
  00000053		     1		.code
  00000053  52		     1		push	edx
- 00000054  BA 0000569C R     1		mov	edx,OFFSET ??0000
+ 00000054  BA 000056B4 R     1		mov	edx,OFFSET ??0000
  00000059  E8 00000000 E     1		call	WriteString
  0000005E  5A		     1		pop	edx
  0000005F  E8 00000000 E	CALL crlf
 				mWrite <"Por favor indique el orden que se usar",160," para calcular el momento ",0dh,0ah,"con respecto al origen:",0dh,0ah>
- 00005711		     1		.data		
- 00005711 50 6F 72 20 66     1		??0001 BYTE "Por favor indique el orden que se usar",160," para calcular el momento ",0dh,0ah,"con respecto al origen:",0dh,0ah,0	
+ 00005729		     1		.data		
+ 00005729 50 6F 72 20 66     1		??0001 BYTE "Por favor indique el orden que se usar",160," para calcular el momento ",0dh,0ah,"con respecto al origen:",0dh,0ah,0	
 	   61 76 6F 72 20
 	   69 6E 64 69 71
 	   75 65 20 65 6C
@@ -475,14 +483,14 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/10/14 20:45:00
 	   0D 0A 00
  00000064		     1		.code
  00000064  52		     1		push	edx
- 00000065  BA 00005711 R     1		mov	edx,OFFSET ??0001
+ 00000065  BA 00005729 R     1		mov	edx,OFFSET ??0001
  0000006A  E8 00000000 E     1		call	WriteString
  0000006F  5A		     1		pop	edx
  00000070  E8 00000000 E	CALL readInt
- 00000075  A3 000055F4 R	MOV ordenMomOrig, eax
+ 00000075  A3 0000560C R	MOV ordenMomOrig, eax
 				mWrite <"Por favor indique el orden que se usar",160," para calcular el momento ",0dh,0ah,"con respecto a la media",0dh,0ah>
- 0000576E		     1		.data		
- 0000576E 50 6F 72 20 66     1		??0002 BYTE "Por favor indique el orden que se usar",160," para calcular el momento ",0dh,0ah,"con respecto a la media",0dh,0ah,0	
+ 00005786		     1		.data		
+ 00005786 50 6F 72 20 66     1		??0002 BYTE "Por favor indique el orden que se usar",160," para calcular el momento ",0dh,0ah,"con respecto a la media",0dh,0ah,0	
 	   61 76 6F 72 20
 	   69 6E 64 69 71
 	   75 65 20 65 6C
@@ -503,19 +511,19 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/10/14 20:45:00
 	   0D 0A 00
  0000007A		     1		.code
  0000007A  52		     1		push	edx
- 0000007B  BA 0000576E R     1		mov	edx,OFFSET ??0002
+ 0000007B  BA 00005786 R     1		mov	edx,OFFSET ??0002
  00000080  E8 00000000 E     1		call	WriteString
  00000085  5A		     1		pop	edx
  00000086  E8 00000000 E	CALL readInt
- 0000008B  A3 000055F8 R	MOV ordenMomCent, eax
- 00000090  E8 000004F7		CALL calcularEstadisticos
- 00000095  E8 00000539		CALL pedirEstadisticos
- 0000009A  E8 000005EB		CALL mostrarEstadisticosSelec
+ 0000008B  A3 00005610 R	MOV ordenMomCent, eax
+ 00000090  E8 000004F6		CALL calcularEstadisticos
+ 00000095  E8 00000538		CALL pedirEstadisticos
+ 0000009A  E8 000005EA		CALL mostrarEstadisticosSelec
 
  0000009F  E8 00000000 E	CALL Crlf
 				mWrite "Desea ejecutar nuevamente el programa? 1=si, 0=no"
- 000057CB		     1		.data		
- 000057CB 44 65 73 65 61     1		??0003 BYTE "Desea ejecutar nuevamente el programa? 1=si, 0=no",0	
+ 000057E3		     1		.data		
+ 000057E3 44 65 73 65 61     1		??0003 BYTE "Desea ejecutar nuevamente el programa? 1=si, 0=no",0	
 	   20 65 6A 65 63
 	   75 74 61 72 20
 	   6E 75 65 76 61
@@ -527,7 +535,7 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/10/14 20:45:00
 	   30 3D 6E 6F 00
  000000A4		     1		.code
  000000A4  52		     1		push	edx
- 000000A5  BA 000057CB R     1		mov	edx,OFFSET ??0003
+ 000000A5  BA 000057E3 R     1		mov	edx,OFFSET ??0003
  000000AA  E8 00000000 E     1		call	WriteString
  000000AF  5A		     1		pop	edx
  000000B0  E8 00000000 E	CALL Crlf
@@ -763,8 +771,8 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/10/14 20:45:00
 
 				;muestra el número de veces que se ha ejecutado el programa
 				mWrite "El programa se ha ejecutado "
- 000057FD		     1		.data		
- 000057FD 45 6C 20 70 72     1		??0004 BYTE "El programa se ha ejecutado ",0	
+ 00005815		     1		.data		
+ 00005815 45 6C 20 70 72     1		??0004 BYTE "El programa se ha ejecutado ",0	
 	   6F 67 72 61 6D
 	   61 20 73 65 20
 	   68 61 20 65 6A
@@ -772,7 +780,7 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/10/14 20:45:00
 	   64 6F 20 00
  00000307		     1		.code
  00000307  52		     1		push	edx
- 00000308  BA 000057FD R     1		mov	edx,OFFSET ??0004
+ 00000308  BA 00005815 R     1		mov	edx,OFFSET ??0004
  0000030D  E8 00000000 E     1		call	WriteString
  00000312  5A		     1		pop	edx
  00000313  A1 00000330 R	MOV eax, contEjecuciones
@@ -781,22 +789,22 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/10/14 20:45:00
 	   01
  00000324  75 0E		JNE noUno
 				mWrite " vez"
- 0000581A		     1		.data		
- 0000581A 20 76 65 7A 00     1		??0005 BYTE " vez",0	
+ 00005832		     1		.data		
+ 00005832 20 76 65 7A 00     1		??0005 BYTE " vez",0	
  00000326		     1		.code
  00000326  52		     1		push	edx
- 00000327  BA 0000581A R     1		mov	edx,OFFSET ??0005
+ 00000327  BA 00005832 R     1		mov	edx,OFFSET ??0005
  0000032C  E8 00000000 E     1		call	WriteString
  00000331  5A		     1		pop	edx
  00000332  EB 0C		JMP todos
  00000334			noUno:
 				mWrite " veces"
- 0000581F		     1		.data		
- 0000581F 20 76 65 63 65     1		??0006 BYTE " veces",0	
+ 00005837		     1		.data		
+ 00005837 20 76 65 63 65     1		??0006 BYTE " veces",0	
 	   73 00
  00000334		     1		.code
  00000334  52		     1		push	edx
- 00000335  BA 0000581F R     1		mov	edx,OFFSET ??0006
+ 00000335  BA 00005837 R     1		mov	edx,OFFSET ??0006
  0000033A  E8 00000000 E     1		call	WriteString
  0000033F  5A		     1		pop	edx
  00000340			todos:
@@ -869,8 +877,8 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/10/14 20:45:00
 
 				;pide la ubicación del archivo y lo abre
 				mWrite "Por favor ingrese la ruta del archivo que contiene los datos: "
- 00005826		     1		.data		
- 00005826 50 6F 72 20 66     1		??0007 BYTE "Por favor ingrese la ruta del archivo que contiene los datos: ",0	
+ 0000583E		     1		.data		
+ 0000583E 50 6F 72 20 66     1		??0007 BYTE "Por favor ingrese la ruta del archivo que contiene los datos: ",0	
 	   61 76 6F 72 20
 	   69 6E 67 72 65
 	   73 65 20 6C 61
@@ -885,7 +893,7 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/10/14 20:45:00
 	   3A 20 00
  000003C7		     1		.code
  000003C7  52		     1		push	edx
- 000003C8  BA 00005826 R     1		mov	edx,OFFSET ??0007
+ 000003C8  BA 0000583E R     1		mov	edx,OFFSET ??0007
  000003CD  E8 00000000 E     1		call	WriteString
  000003D2  5A		     1		pop	edx
  000003D3  E8 00000000 E	CALL crlf
@@ -903,8 +911,8 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/10/14 20:45:00
  000003F6  83 F8 FF		CMP	eax, INVALID_HANDLE_VALUE
  000003F9  75 0E		JNE	file_ok
 				mWrite <"No se pudo abrir el archivo. Por favor ingrese una direcci",162,"n v",160,"lida",0dh,0ah>
- 00005865		     1		.data		
- 00005865 4E 6F 20 73 65     1		??0008 BYTE "No se pudo abrir el archivo. Por favor ingrese una direcci",162,"n v",160,"lida",0dh,0ah,0	
+ 0000587D		     1		.data		
+ 0000587D 4E 6F 20 73 65     1		??0008 BYTE "No se pudo abrir el archivo. Por favor ingrese una direcci",162,"n v",160,"lida",0dh,0ah,0	
 	   20 70 75 64 6F
 	   20 61 62 72 69
 	   72 20 65 6C 20
@@ -920,7 +928,7 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/10/14 20:45:00
 	   64 61 0D 0A 00
  000003FB		     1		.code
  000003FB  52		     1		push	edx
- 000003FC  BA 00005865 R     1		mov	edx,OFFSET ??0008
+ 000003FC  BA 0000587D R     1		mov	edx,OFFSET ??0008
  00000401  E8 00000000 E     1		call	WriteString
  00000406  5A		     1		pop	edx
  00000407  EB CF		JMP	preguntaRuta
@@ -932,8 +940,8 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/10/14 20:45:00
  00000413  E8 00000000 E	CALL ReadFromFile
  00000418  73 13		JNC	check_buffer_size
 				mWrite <"Error leyendo el archivo. Por favor ingrese una direcci",162,"n v",160,"lida",0dh,0ah>
- 000058AB		     1		.data		
- 000058AB 45 72 72 6F 72     1		??0009 BYTE "Error leyendo el archivo. Por favor ingrese una direcci",162,"n v",160,"lida",0dh,0ah,0	
+ 000058C3		     1		.data		
+ 000058C3 45 72 72 6F 72     1		??0009 BYTE "Error leyendo el archivo. Por favor ingrese una direcci",162,"n v",160,"lida",0dh,0ah,0	
 	   20 6C 65 79 65
 	   6E 64 6F 20 65
 	   6C 20 61 72 63
@@ -949,7 +957,7 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/10/14 20:45:00
 	   0A 00
  0000041A		     1		.code
  0000041A  52		     1		push	edx
- 0000041B  BA 000058AB R     1		mov	edx,OFFSET ??0009
+ 0000041B  BA 000058C3 R     1		mov	edx,OFFSET ??0009
  00000420  E8 00000000 E     1		call	WriteString
  00000425  5A		     1		pop	edx
  00000426  E8 00000000 E	CALL	WriteWindowsMsg
@@ -959,8 +967,8 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/10/14 20:45:00
  0000042D  3D 00001388		CMP	eax, tamanoBufer
  00000432  72 0E		JB	buf_size_ok
 				mWrite <"El archivo es demasiado extenso. Ingrese la direcci",162,"n de un archivo m",160,"s corto",0dh,0ah>
- 000058EE		     1		.data		
- 000058EE 45 6C 20 61 72     1		??000A BYTE "El archivo es demasiado extenso. Ingrese la direcci",162,"n de un archivo m",160,"s corto",0dh,0ah,0	
+ 00005906		     1		.data		
+ 00005906 45 6C 20 61 72     1		??000A BYTE "El archivo es demasiado extenso. Ingrese la direcci",162,"n de un archivo m",160,"s corto",0dh,0ah,0	
 	   63 68 69 76 6F
 	   20 65 73 20 64
 	   65 6D 61 73 69
@@ -978,7 +986,7 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/10/14 20:45:00
 	   74 6F 0D 0A 00
  00000434		     1		.code
  00000434  52		     1		push	edx
- 00000435  BA 000058EE R     1		mov	edx,OFFSET ??000A
+ 00000435  BA 00005906 R     1		mov	edx,OFFSET ??000A
  0000043A  E8 00000000 E     1		call	WriteString
  0000043F  5A		     1		pop	edx
  00000440  EB 96		JMP	preguntaRuta
@@ -1021,7 +1029,7 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/10/14 20:45:00
  00000491  75 0F				JNE noFinArchivo
  00000493  C7 05 000051B8 R			MOV finArchivo, 1
 	   00000001
- 0000049D  E9 000000AE				JMP finNumero
+ 0000049D  E9 000000E4				JMP finLectura
  000004A2					noFinArchivo:
 
 						;si hay cr o lf, aumenta saltoDeLinea y pasa al siguiente caracter
@@ -1102,66 +1110,76 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/10/14 20:45:00
 					;CALL writeFloat
 					;fstp realactual
 					;CALL crlf
+					;CALL WaitMsg
 					;;;;;;;;;;;;;;;;
 
 					;guarda el número en el array
  00000550  DD 05 000051A0 R		FLD realActual
- 00000556  A1 000051B0 R		MOV eax, realesLeidos
- 0000055B  BE 00000008			MOV esi,8
- 00000560  F7 E6			MUL esi
- 00000562  DD 98 000005AE R		FSTP numeros[eax]
- 00000568  FF 05 000051B0 R		INC realesLeidos
-
+ 00000556  B8 00000008			MOV eax, 8
+ 0000055B  F7 25 000051B0 R		MUL realesLeidos
+ 00000561  DD 98 000005AE R		FSTP numeros[eax]
+ 00000567  FF 05 000051B0 R		INC realesLeidos
+					;;;;;;; para comprobar el desplazamiento
+					;MOV eax, realesLeidos
+					;CALL WriteInt
+					;CALL Waitmsg
+					;CALL Crlf
+					;;;;;;;;;;;;;;;;
+					
 					;si llegó al final del archivo, sale
- 0000056E  83 3D 000051B8 R		CMP finArchivo, 1
+ 0000056D  83 3D 000051B8 R		CMP finArchivo, 1
 	   01
- 00000575  74 10			JE finLectura
+ 00000574  74 10			JE finLectura
 
 					;si no ha llegado al número máximo de reales que puede almacenar, sigue leyendo
- 00000577  81 3D 000051B0 R		CMP realesLeidos, maxDatos
+ 00000576  81 3D 000051B0 R		CMP realesLeidos, maxDatos
 	   00000258
- 00000581  0F 8C FFFFFED1		JL leerNum
- 00000587			finLectura:
+ 00000580  0F 8C FFFFFED2		JL leerNum
+ 00000586			finLectura:
 
- 00000587  E8 00000255		CALL ordenar
+				;MOV edx, OFFSET numeros; para el metodo imprimirArregloReales
+				;CALL imprimirArregloReales; para comprobar que leyo correctamente
+ 00000586  E8 000002AF		CALL ordenar
+				;MOV edx, OFFSET numeros; para el metodo imprimirArregloReales
+				;CALL imprimirArregloReales; para comprobar que ordeno correctamente correctamente
 
- 0000058C			leerArchivo ENDP
+ 0000058B			leerArchivo ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 0000058C			calcularEstadisticos PROC
+ 0000058B			calcularEstadisticos PROC
 				; Calcula los estadísticos
 				;-----------------------------------------------------------------------------------------------------------
 
 
- 0000058C  E8 00000324		CALL calcMedia
- 00000591  E8 00000320		CALL calcMediana
+ 0000058B  E8 0000038D		CALL calcMedia
+ 00000590  E8 00000389		CALL calcMediana
 				;CALL calcModa
- 00000596  E8 0000031C		CALL calcMediageometrica
- 0000059B  E8 00000318		CALL calcMediaarmonica
- 000005A0  E8 00000314		CALL calcPercentiles
- 000005A5  E8 00000310		CALL calcCuartiles
- 000005AA  E8 0000030C		CALL calcDeciles
- 000005AF  E8 00000308		CALL calcMomentosOrigen
- 000005B4  E8 00000304		CALL calcMomentosCentrales
- 000005B9  E8 00000300		CALL calcVarianza
- 000005BE  E8 000002FC		CALL calcDesvEstandar
- 000005C3  E8 000002F8		CALL calcCuasiVarianza
- 000005C8  E8 000002F4		CALL calcDesvMedia
- 000005CD  E8 000002F0		CALL calcDesvMediana
+ 00000595  E8 00000385		CALL calcMediageometrica
+ 0000059A  E8 00000381		CALL calcMediaarmonica
+ 0000059F  E8 0000037D		CALL calcPercentiles
+ 000005A4  E8 00000379		CALL calcCuartiles
+ 000005A9  E8 00000375		CALL calcDeciles
+ 000005AE  E8 00000371		CALL calcMomentosOrigen
+ 000005B3  E8 0000036D		CALL calcMomentosCentrales
+ 000005B8  E8 00000369		CALL calcVarianza
+ 000005BD  E8 00000365		CALL calcDesvEstandar
+ 000005C2  E8 00000361		CALL calcCuasiVarianza
+ 000005C7  E8 0000035D		CALL calcDesvMedia
+ 000005CC  E8 00000359		CALL calcDesvMediana
 
 
- 000005D2  C3			RET
- 000005D3			calcularEstadisticos ENDP
+ 000005D1  C3			RET
+ 000005D2			calcularEstadisticos ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 000005D3			pedirEstadisticos PROC
+ 000005D2			pedirEstadisticos PROC
 				;Pide al usuario ingresar los estadísticos que desea
 				;-----------------------------------------------------------------------------------------------------------
 
- 000005D3  E8 00000000 E	CALL clrscr
+ 000005D2  E8 00000000 E	CALL clrscr
 				mWrite <"Seleccione los estad",161,"sticos que desea calcular.",0dh,0ah>
- 0000593E		     1		.data		
- 0000593E 53 65 6C 65 63     1		??000B BYTE "Seleccione los estad",161,"sticos que desea calcular.",0dh,0ah,0	
+ 00005956		     1		.data		
+ 00005956 53 65 6C 65 63     1		??000B BYTE "Seleccione los estad",161,"sticos que desea calcular.",0dh,0ah,0	
 	   63 69 6F 6E 65
 	   20 6C 6F 73 20
 	   65 73 74 61 64
@@ -1171,19 +1189,19 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/10/14 20:45:00
 	   65 61 20 63 61
 	   6C 63 75 6C 61
 	   72 2E 0D 0A 00
- 000005D8		     1		.code
- 000005D8  52		     1		push	edx
- 000005D9  BA 0000593E R     1		mov	edx,OFFSET ??000B
- 000005DE  E8 00000000 E     1		call	WriteString
- 000005E3  5A		     1		pop	edx
- 000005E4  BA 0000034C R	MOV edx, OFFSET stringEstadisticos
- 000005E9  E8 00000000 E	CALL writeString
+ 000005D7		     1		.code
+ 000005D7  52		     1		push	edx
+ 000005D8  BA 00005956 R     1		mov	edx,OFFSET ??000B
+ 000005DD  E8 00000000 E     1		call	WriteString
+ 000005E2  5A		     1		pop	edx
+ 000005E3  BA 0000034C R	MOV edx, OFFSET stringEstadisticos
+ 000005E8  E8 00000000 E	CALL writeString
 
- 000005EE			seleccionEstad:
- 000005EE  E8 00000000 E	CALL crlf
+ 000005ED			seleccionEstad:
+ 000005ED  E8 00000000 E	CALL crlf
 				mWrite <"Escriba una lista separada por comas y presione enter. Ejemplo: 1,2,3",0dh,0ah>
- 00005970		     1		.data		
- 00005970 45 73 63 72 69     1		??000C BYTE "Escriba una lista separada por comas y presione enter. Ejemplo: 1,2,3",0dh,0ah,0	
+ 00005988		     1		.data		
+ 00005988 45 73 63 72 69     1		??000C BYTE "Escriba una lista separada por comas y presione enter. Ejemplo: 1,2,3",0dh,0ah,0	
 	   62 61 20 75 6E
 	   61 20 6C 69 73
 	   74 61 20 73 65
@@ -1198,57 +1216,57 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/10/14 20:45:00
 	   6C 6F 3A 20 31
 	   2C 32 2C 33 0D
 	   0A 00
- 000005F3		     1		.code
- 000005F3  52		     1		push	edx
- 000005F4  BA 00005970 R     1		mov	edx,OFFSET ??000C
- 000005F9  E8 00000000 E     1		call	WriteString
- 000005FE  5A		     1		pop	edx
+ 000005F2		     1		.code
+ 000005F2  52		     1		push	edx
+ 000005F3  BA 00005988 R     1		mov	edx,OFFSET ??000C
+ 000005F8  E8 00000000 E     1		call	WriteString
+ 000005FD  5A		     1		pop	edx
 
- 000005FF  BA 000055FC R	MOV edx, OFFSET buferUsuario
- 00000604  B9 00000028		MOV ecx, LENGTHOF buferUsuario
- 00000609  49			DEC ecx ;se deja el último caracter en 0 siempre
- 0000060A  E8 00000000 E	CALL readString
+ 000005FE  BA 00005614 R	MOV edx, OFFSET buferUsuario
+ 00000603  B9 00000028		MOV ecx, LENGTHOF buferUsuario
+ 00000608  49			DEC ecx ;se deja el último caracter en 0 siempre
+ 00000609  E8 00000000 E	CALL readString
 
- 0000060F  8B C8		MOV ecx, eax
- 00000611  41			INC ecx
+ 0000060E  8B C8		MOV ecx, eax
+ 00000610  41			INC ecx
 
 				;interpreta la cadena ingresada (en ecx está el tamaño de la cadena + 1)
- 00000612  BE 00000000		MOV esi, 0
- 00000617  B8 00000000		MOV eax, 0
- 0000061C			cicloUsuario:
+ 00000611  BE 00000000		MOV esi, 0
+ 00000616  B8 00000000		MOV eax, 0
+ 0000061B			cicloUsuario:
 					;si el caracter leido es una coma o se llegó al final del búfer, 
 					;mueve 1 a la posición correspondiente del array de booleanos
- 0000061C  80 BE 000055FC R		CMP buferUsuario[esi], 44
+ 0000061B  80 BE 00005614 R		CMP buferUsuario[esi], 44
 	   2C
- 00000623  75 15			JNE noComaUsu
- 00000625					comaUsu:
- 00000625  48					DEC eax
- 00000626  BA 00000004				MOV edx, 4
- 0000062B  F7 E2				MUL edx
- 0000062D  F7 90 00005624 R			NOT boolEstadisticos[eax]
- 00000633  B8 00000000				MOV eax, 0
- 00000638  EB 20				JMP continueUsu
- 0000063A				noComaUsu:
- 0000063A  80 BE 000055FC R		CMP buferUsuario[esi], 0
+ 00000622  75 15			JNE noComaUsu
+ 00000624					comaUsu:
+ 00000624  48					DEC eax
+ 00000625  BA 00000004				MOV edx, 4
+ 0000062A  F7 E2				MUL edx
+ 0000062C  F7 90 0000563C R			NOT boolEstadisticos[eax]
+ 00000632  B8 00000000				MOV eax, 0
+ 00000637  EB 20				JMP continueUsu
+ 00000639				noComaUsu:
+ 00000639  80 BE 00005614 R		CMP buferUsuario[esi], 0
 	   00
- 00000641  74 E2			JE comaUsu
+ 00000640  74 E2			JE comaUsu
 
 					;el número puede tener dos cifras. multiplica la primera por 10 y suma la siguiente
- 00000643  BB 00000000			MOV ebx, 0
- 00000648  8A 9E 000055FC R		MOV bl, buferUsuario[esi]
- 0000064E  83 EB 30			SUB ebx, 48
- 00000651  BA 0000000A			MOV edx, 10
- 00000656  F7 E2			MUL edx
- 00000658  03 C3			ADD eax, ebx
+ 00000642  BB 00000000			MOV ebx, 0
+ 00000647  8A 9E 00005614 R		MOV bl, buferUsuario[esi]
+ 0000064D  83 EB 30			SUB ebx, 48
+ 00000650  BA 0000000A			MOV edx, 10
+ 00000655  F7 E2			MUL edx
+ 00000657  03 C3			ADD eax, ebx
 
- 0000065A				continueUsu:
- 0000065A  46				INC esi
- 0000065B  E2 BF		LOOP cicloUsuario
+ 00000659				continueUsu:
+ 00000659  46				INC esi
+ 0000065A  E2 BF		LOOP cicloUsuario
 
- 0000065D  E8 00000000 E	CALL crlf
+ 0000065C  E8 00000000 E	CALL crlf
 				mWrite <"Por favor confirme su selecci",162,"n. 1=si, 0=cambiar",0dh,0ah>
- 000059B8		     1		.data		
- 000059B8 50 6F 72 20 66     1		??000D BYTE "Por favor confirme su selecci",162,"n. 1=si, 0=cambiar",0dh,0ah,0	
+ 000059D0		     1		.data		
+ 000059D0 50 6F 72 20 66     1		??000D BYTE "Por favor confirme su selecci",162,"n. 1=si, 0=cambiar",0dh,0ah,0	
 	   61 76 6F 72 20
 	   63 6F 6E 66 69
 	   72 6D 65 20 73
@@ -1259,17 +1277,17 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/10/14 20:45:00
 	   3D 63 61 6D 62
 	   69 61 72 0D 0A
 	   00
- 00000662		     1		.code
- 00000662  52		     1		push	edx
- 00000663  BA 000059B8 R     1		mov	edx,OFFSET ??000D
- 00000668  E8 00000000 E     1		call	WriteString
- 0000066D  5A		     1		pop	edx
- 0000066E  E8 00000000 E	CALL readInt
- 00000673  83 F8 00		CMP eax, 0
- 00000676  75 11		JNE finSeleccion
+ 00000661		     1		.code
+ 00000661  52		     1		push	edx
+ 00000662  BA 000059D0 R     1		mov	edx,OFFSET ??000D
+ 00000667  E8 00000000 E     1		call	WriteString
+ 0000066C  5A		     1		pop	edx
+ 0000066D  E8 00000000 E	CALL readInt
+ 00000672  83 F8 00		CMP eax, 0
+ 00000675  75 11		JNE finSeleccion
 				mWrite <"Indique los estad",161,"sticos que desea agregar o escriba nuevamente ",0dh,0ah,"los que desea quitar de la lista",0dh,0ah>
- 000059EB		     1		.data		
- 000059EB 49 6E 64 69 71     1		??000E BYTE "Indique los estad",161,"sticos que desea agregar o escriba nuevamente ",0dh,0ah,"los que desea quitar de la lista",0dh,0ah,0	
+ 00005A03		     1		.data		
+ 00005A03 49 6E 64 69 71     1		??000E BYTE "Indique los estad",161,"sticos que desea agregar o escriba nuevamente ",0dh,0ah,"los que desea quitar de la lista",0dh,0ah,0	
 	   75 65 20 6C 6F
 	   73 20 65 73 74
 	   61 64 A1 73 74
@@ -1290,234 +1308,258 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/10/14 20:45:00
 	   6C 61 20 6C 69
 	   73 74 61 0D 0A
 	   00
- 00000678		     1		.code
- 00000678  52		     1		push	edx
- 00000679  BA 000059EB R     1		mov	edx,OFFSET ??000E
- 0000067E  E8 00000000 E     1		call	WriteString
- 00000683  5A		     1		pop	edx
- 00000684  E9 FFFFFF65		JMP seleccionEstad
+ 00000677		     1		.code
+ 00000677  52		     1		push	edx
+ 00000678  BA 00005A03 R     1		mov	edx,OFFSET ??000E
+ 0000067D  E8 00000000 E     1		call	WriteString
+ 00000682  5A		     1		pop	edx
+ 00000683  E9 FFFFFF65		JMP seleccionEstad
 
- 00000689			finSeleccion:
+ 00000688			finSeleccion:
 
- 00000689  C3			RET
- 0000068A			pedirEstadisticos ENDP
+ 00000688  C3			RET
+ 00000689			pedirEstadisticos ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 0000068A			mostrarEstadisticosSelec PROC
+ 00000689			mostrarEstadisticosSelec PROC
 				;Muestra los estadísticos seleccionados por el usuario
 				;-----------------------------------------------------------------------------------------------------------
 
 				;si el estadístico n fue marcado (está en 1), lo imprime. De lo contrario, pasa al siguiente
- 0000068A  83 3D 00005624 R	CMP boolEstadisticos, -1
+ 00000689  83 3D 0000563C R	CMP boolEstadisticos, -1
 	   FF
- 00000691  75 0C		JNE pasa2
+ 00000690  75 0C		JNE pasa2
 					mwrite "1-"
- 00005A50		     1		.data		
- 00005A50 31 2D 00	     1		??000F BYTE "1-",0	
- 00000693		     1		.code
- 00000693  52		     1		push	edx
- 00000694  BA 00005A50 R     1		mov	edx,OFFSET ??000F
- 00000699  E8 00000000 E     1		call	WriteString
- 0000069E  5A		     1		pop	edx
- 0000069F			pasa2:
- 0000069F  83 3D 00005628 R	CMP boolEstadisticos[4], -1
-	   FF
- 000006A6  75 0C		JNE pasa3
-					mwrite "2-"
- 00005A53		     1		.data		
- 00005A53 32 2D 00	     1		??0010 BYTE "2-",0	
- 000006A8		     1		.code
- 000006A8  52		     1		push	edx
- 000006A9  BA 00005A53 R     1		mov	edx,OFFSET ??0010
- 000006AE  E8 00000000 E     1		call	WriteString
- 000006B3  5A		     1		pop	edx
- 000006B4			pasa3:
- 000006B4  83 3D 0000562C R	CMP boolEstadisticos[8], -1
-	   FF
- 000006BB  75 0C		JNE pasa4
-					mwrite "3-"
- 00005A56		     1		.data		
- 00005A56 33 2D 00	     1		??0011 BYTE "3-",0	
- 000006BD		     1		.code
- 000006BD  52		     1		push	edx
- 000006BE  BA 00005A56 R     1		mov	edx,OFFSET ??0011
- 000006C3  E8 00000000 E     1		call	WriteString
- 000006C8  5A		     1		pop	edx
- 000006C9			pasa4:
- 000006C9  83 3D 00005630 R	CMP boolEstadisticos[12], -1
-	   FF
- 000006D0  75 0C		JNE pasa5
-					mwrite "4-"
- 00005A59		     1		.data		
- 00005A59 34 2D 00	     1		??0012 BYTE "4-",0	
- 000006D2		     1		.code
- 000006D2  52		     1		push	edx
- 000006D3  BA 00005A59 R     1		mov	edx,OFFSET ??0012
- 000006D8  E8 00000000 E     1		call	WriteString
- 000006DD  5A		     1		pop	edx
- 000006DE			pasa5:
- 000006DE  83 3D 00005634 R	CMP boolEstadisticos[16], -1
-	   FF
- 000006E5  75 0C		JNE pasa6
-					mwrite "5-"
- 00005A5C		     1		.data		
- 00005A5C 35 2D 00	     1		??0013 BYTE "5-",0	
- 000006E7		     1		.code
- 000006E7  52		     1		push	edx
- 000006E8  BA 00005A5C R     1		mov	edx,OFFSET ??0013
- 000006ED  E8 00000000 E     1		call	WriteString
- 000006F2  5A		     1		pop	edx
- 000006F3			pasa6:
- 000006F3  83 3D 00005638 R	CMP boolEstadisticos[20], -1
-	   FF
- 000006FA  75 0C		JNE pasa7
-					mwrite "6-"
- 00005A5F		     1		.data		
- 00005A5F 36 2D 00	     1		??0014 BYTE "6-",0	
- 000006FC		     1		.code
- 000006FC  52		     1		push	edx
- 000006FD  BA 00005A5F R     1		mov	edx,OFFSET ??0014
- 00000702  E8 00000000 E     1		call	WriteString
- 00000707  5A		     1		pop	edx
- 00000708			pasa7:
- 00000708  83 3D 0000563C R	CMP boolEstadisticos[24], -1
-	   FF
- 0000070F  75 0C		JNE pasa8
-					mwrite "7-"
- 00005A62		     1		.data		
- 00005A62 37 2D 00	     1		??0015 BYTE "7-",0	
- 00000711		     1		.code
- 00000711  52		     1		push	edx
- 00000712  BA 00005A62 R     1		mov	edx,OFFSET ??0015
- 00000717  E8 00000000 E     1		call	WriteString
- 0000071C  5A		     1		pop	edx
- 0000071D			pasa8:
- 0000071D  83 3D 00005640 R	CMP boolEstadisticos[28], -1
-	   FF
- 00000724  75 0C		JNE pasa9
-					mwrite "8-"
- 00005A65		     1		.data		
- 00005A65 38 2D 00	     1		??0016 BYTE "8-",0	
- 00000726		     1		.code
- 00000726  52		     1		push	edx
- 00000727  BA 00005A65 R     1		mov	edx,OFFSET ??0016
- 0000072C  E8 00000000 E     1		call	WriteString
- 00000731  5A		     1		pop	edx
- 00000732			pasa9:
- 00000732  83 3D 00005644 R	CMP boolEstadisticos[32], -1
-	   FF
- 00000739  75 0C		JNE pasa10
-					mwrite "9-"
  00005A68		     1		.data		
- 00005A68 39 2D 00	     1		??0017 BYTE "9-",0	
- 0000073B		     1		.code
- 0000073B  52		     1		push	edx
- 0000073C  BA 00005A68 R     1		mov	edx,OFFSET ??0017
- 00000741  E8 00000000 E     1		call	WriteString
- 00000746  5A		     1		pop	edx
- 00000747			pasa10:
- 00000747  83 3D 00005648 R	CMP boolEstadisticos[36], -1
+ 00005A68 31 2D 00	     1		??000F BYTE "1-",0	
+ 00000692		     1		.code
+ 00000692  52		     1		push	edx
+ 00000693  BA 00005A68 R     1		mov	edx,OFFSET ??000F
+ 00000698  E8 00000000 E     1		call	WriteString
+ 0000069D  5A		     1		pop	edx
+ 0000069E			pasa2:
+ 0000069E  83 3D 00005640 R	CMP boolEstadisticos[4], -1
 	   FF
- 0000074E  75 0C		JNE pasa11
-					mwrite "10-"
+ 000006A5  75 0C		JNE pasa3
+					mwrite "2-"
  00005A6B		     1		.data		
- 00005A6B 31 30 2D 00	     1		??0018 BYTE "10-",0	
- 00000750		     1		.code
- 00000750  52		     1		push	edx
- 00000751  BA 00005A6B R     1		mov	edx,OFFSET ??0018
- 00000756  E8 00000000 E     1		call	WriteString
- 0000075B  5A		     1		pop	edx
- 0000075C			pasa11:
- 0000075C  83 3D 0000564C R	CMP boolEstadisticos[40], -1
+ 00005A6B 32 2D 00	     1		??0010 BYTE "2-",0	
+ 000006A7		     1		.code
+ 000006A7  52		     1		push	edx
+ 000006A8  BA 00005A6B R     1		mov	edx,OFFSET ??0010
+ 000006AD  E8 00000000 E     1		call	WriteString
+ 000006B2  5A		     1		pop	edx
+ 000006B3			pasa3:
+ 000006B3  83 3D 00005644 R	CMP boolEstadisticos[8], -1
 	   FF
- 00000763  75 0C		JNE pasa12
-					mwrite "11-"
- 00005A6F		     1		.data		
- 00005A6F 31 31 2D 00	     1		??0019 BYTE "11-",0	
- 00000765		     1		.code
- 00000765  52		     1		push	edx
- 00000766  BA 00005A6F R     1		mov	edx,OFFSET ??0019
- 0000076B  E8 00000000 E     1		call	WriteString
- 00000770  5A		     1		pop	edx
- 00000771			pasa12:
- 00000771  83 3D 00005650 R	CMP boolEstadisticos[44], -1
+ 000006BA  75 0C		JNE pasa4
+					mwrite "3-"
+ 00005A6E		     1		.data		
+ 00005A6E 33 2D 00	     1		??0011 BYTE "3-",0	
+ 000006BC		     1		.code
+ 000006BC  52		     1		push	edx
+ 000006BD  BA 00005A6E R     1		mov	edx,OFFSET ??0011
+ 000006C2  E8 00000000 E     1		call	WriteString
+ 000006C7  5A		     1		pop	edx
+ 000006C8			pasa4:
+ 000006C8  83 3D 00005648 R	CMP boolEstadisticos[12], -1
 	   FF
- 00000778  75 0C		JNE pasa13
-					mwrite "12-"
- 00005A73		     1		.data		
- 00005A73 31 32 2D 00	     1		??001A BYTE "12-",0	
- 0000077A		     1		.code
- 0000077A  52		     1		push	edx
- 0000077B  BA 00005A73 R     1		mov	edx,OFFSET ??001A
- 00000780  E8 00000000 E     1		call	WriteString
- 00000785  5A		     1		pop	edx
- 00000786			pasa13:
- 00000786  83 3D 00005654 R	CMP boolEstadisticos[48], -1
+ 000006CF  75 0C		JNE pasa5
+					mwrite "4-"
+ 00005A71		     1		.data		
+ 00005A71 34 2D 00	     1		??0012 BYTE "4-",0	
+ 000006D1		     1		.code
+ 000006D1  52		     1		push	edx
+ 000006D2  BA 00005A71 R     1		mov	edx,OFFSET ??0012
+ 000006D7  E8 00000000 E     1		call	WriteString
+ 000006DC  5A		     1		pop	edx
+ 000006DD			pasa5:
+ 000006DD  83 3D 0000564C R	CMP boolEstadisticos[16], -1
 	   FF
- 0000078D  75 0C		JNE pasa14
-					mwrite "13-"
+ 000006E4  75 0C		JNE pasa6
+					mwrite "5-"
+ 00005A74		     1		.data		
+ 00005A74 35 2D 00	     1		??0013 BYTE "5-",0	
+ 000006E6		     1		.code
+ 000006E6  52		     1		push	edx
+ 000006E7  BA 00005A74 R     1		mov	edx,OFFSET ??0013
+ 000006EC  E8 00000000 E     1		call	WriteString
+ 000006F1  5A		     1		pop	edx
+ 000006F2			pasa6:
+ 000006F2  83 3D 00005650 R	CMP boolEstadisticos[20], -1
+	   FF
+ 000006F9  75 0C		JNE pasa7
+					mwrite "6-"
  00005A77		     1		.data		
- 00005A77 31 33 2D 00	     1		??001B BYTE "13-",0	
- 0000078F		     1		.code
- 0000078F  52		     1		push	edx
- 00000790  BA 00005A77 R     1		mov	edx,OFFSET ??001B
- 00000795  E8 00000000 E     1		call	WriteString
- 0000079A  5A		     1		pop	edx
- 0000079B			pasa14:
- 0000079B  83 3D 00005658 R	CMP boolEstadisticos[52], -1
+ 00005A77 36 2D 00	     1		??0014 BYTE "6-",0	
+ 000006FB		     1		.code
+ 000006FB  52		     1		push	edx
+ 000006FC  BA 00005A77 R     1		mov	edx,OFFSET ??0014
+ 00000701  E8 00000000 E     1		call	WriteString
+ 00000706  5A		     1		pop	edx
+ 00000707			pasa7:
+ 00000707  83 3D 00005654 R	CMP boolEstadisticos[24], -1
 	   FF
- 000007A2  75 0C		JNE pasa15
+ 0000070E  75 0C		JNE pasa8
+					mwrite "7-"
+ 00005A7A		     1		.data		
+ 00005A7A 37 2D 00	     1		??0015 BYTE "7-",0	
+ 00000710		     1		.code
+ 00000710  52		     1		push	edx
+ 00000711  BA 00005A7A R     1		mov	edx,OFFSET ??0015
+ 00000716  E8 00000000 E     1		call	WriteString
+ 0000071B  5A		     1		pop	edx
+ 0000071C			pasa8:
+ 0000071C  83 3D 00005658 R	CMP boolEstadisticos[28], -1
+	   FF
+ 00000723  75 0C		JNE pasa9
+					mwrite "8-"
+ 00005A7D		     1		.data		
+ 00005A7D 38 2D 00	     1		??0016 BYTE "8-",0	
+ 00000725		     1		.code
+ 00000725  52		     1		push	edx
+ 00000726  BA 00005A7D R     1		mov	edx,OFFSET ??0016
+ 0000072B  E8 00000000 E     1		call	WriteString
+ 00000730  5A		     1		pop	edx
+ 00000731			pasa9:
+ 00000731  83 3D 0000565C R	CMP boolEstadisticos[32], -1
+	   FF
+ 00000738  75 0C		JNE pasa10
+					mwrite "9-"
+ 00005A80		     1		.data		
+ 00005A80 39 2D 00	     1		??0017 BYTE "9-",0	
+ 0000073A		     1		.code
+ 0000073A  52		     1		push	edx
+ 0000073B  BA 00005A80 R     1		mov	edx,OFFSET ??0017
+ 00000740  E8 00000000 E     1		call	WriteString
+ 00000745  5A		     1		pop	edx
+ 00000746			pasa10:
+ 00000746  83 3D 00005660 R	CMP boolEstadisticos[36], -1
+	   FF
+ 0000074D  75 0C		JNE pasa11
+					mwrite "10-"
+ 00005A83		     1		.data		
+ 00005A83 31 30 2D 00	     1		??0018 BYTE "10-",0	
+ 0000074F		     1		.code
+ 0000074F  52		     1		push	edx
+ 00000750  BA 00005A83 R     1		mov	edx,OFFSET ??0018
+ 00000755  E8 00000000 E     1		call	WriteString
+ 0000075A  5A		     1		pop	edx
+ 0000075B			pasa11:
+ 0000075B  83 3D 00005664 R	CMP boolEstadisticos[40], -1
+	   FF
+ 00000762  75 0C		JNE pasa12
+					mwrite "11-"
+ 00005A87		     1		.data		
+ 00005A87 31 31 2D 00	     1		??0019 BYTE "11-",0	
+ 00000764		     1		.code
+ 00000764  52		     1		push	edx
+ 00000765  BA 00005A87 R     1		mov	edx,OFFSET ??0019
+ 0000076A  E8 00000000 E     1		call	WriteString
+ 0000076F  5A		     1		pop	edx
+ 00000770			pasa12:
+ 00000770  83 3D 00005668 R	CMP boolEstadisticos[44], -1
+	   FF
+ 00000777  75 0C		JNE pasa13
+					mwrite "12-"
+ 00005A8B		     1		.data		
+ 00005A8B 31 32 2D 00	     1		??001A BYTE "12-",0	
+ 00000779		     1		.code
+ 00000779  52		     1		push	edx
+ 0000077A  BA 00005A8B R     1		mov	edx,OFFSET ??001A
+ 0000077F  E8 00000000 E     1		call	WriteString
+ 00000784  5A		     1		pop	edx
+ 00000785			pasa13:
+ 00000785  83 3D 0000566C R	CMP boolEstadisticos[48], -1
+	   FF
+ 0000078C  75 0C		JNE pasa14
+					mwrite "13-"
+ 00005A8F		     1		.data		
+ 00005A8F 31 33 2D 00	     1		??001B BYTE "13-",0	
+ 0000078E		     1		.code
+ 0000078E  52		     1		push	edx
+ 0000078F  BA 00005A8F R     1		mov	edx,OFFSET ??001B
+ 00000794  E8 00000000 E     1		call	WriteString
+ 00000799  5A		     1		pop	edx
+ 0000079A			pasa14:
+ 0000079A  83 3D 00005670 R	CMP boolEstadisticos[52], -1
+	   FF
+ 000007A1  75 0C		JNE pasa15
 					mwrite "14-"
- 00005A7B		     1		.data		
- 00005A7B 31 34 2D 00	     1		??001C BYTE "14-",0	
- 000007A4		     1		.code
- 000007A4  52		     1		push	edx
- 000007A5  BA 00005A7B R     1		mov	edx,OFFSET ??001C
- 000007AA  E8 00000000 E     1		call	WriteString
- 000007AF  5A		     1		pop	edx
- 000007B0			pasa15:
- 000007B0  83 3D 0000565C R	CMP boolEstadisticos[56], -1
+ 00005A93		     1		.data		
+ 00005A93 31 34 2D 00	     1		??001C BYTE "14-",0	
+ 000007A3		     1		.code
+ 000007A3  52		     1		push	edx
+ 000007A4  BA 00005A93 R     1		mov	edx,OFFSET ??001C
+ 000007A9  E8 00000000 E     1		call	WriteString
+ 000007AE  5A		     1		pop	edx
+ 000007AF			pasa15:
+ 000007AF  83 3D 00005674 R	CMP boolEstadisticos[56], -1
 	   FF
- 000007B7  75 0C		JNE pasaFin
+ 000007B6  75 0C		JNE pasaFin
 					mwrite "15"
- 00005A7F		     1		.data		
- 00005A7F 31 35 00	     1		??001D BYTE "15",0	
- 000007B9		     1		.code
- 000007B9  52		     1		push	edx
- 000007BA  BA 00005A7F R     1		mov	edx,OFFSET ??001D
- 000007BF  E8 00000000 E     1		call	WriteString
- 000007C4  5A		     1		pop	edx
- 000007C5			pasaFin:
+ 00005A97		     1		.data		
+ 00005A97 31 35 00	     1		??001D BYTE "15",0	
+ 000007B8		     1		.code
+ 000007B8  52		     1		push	edx
+ 000007B9  BA 00005A97 R     1		mov	edx,OFFSET ??001D
+ 000007BE  E8 00000000 E     1		call	WriteString
+ 000007C3  5A		     1		pop	edx
+ 000007C4			pasaFin:
 
 				;reinicializa el vector de booleanos
- 000007C5  B9 0000000F		MOV ecx, 15
- 000007CA  BE 00000000		MOV esi, 0
- 000007CF			ponerCeroSiguiente:
- 000007CF  C7 86 00005624 R		MOV boolEstadisticos[esi], 0
+ 000007C4  B9 0000000F		MOV ecx, 15
+ 000007C9  BE 00000000		MOV esi, 0
+ 000007CE			ponerCeroSiguiente:
+ 000007CE  C7 86 0000563C R		MOV boolEstadisticos[esi], 0
 	   00000000
- 000007D9  83 C6 04			ADD esi, 4
- 000007DC  E2 F1		LOOP ponerCeroSiguiente
- 000007DE  C3			RET
- 000007DF			mostrarEstadisticosSelec ENDP
+ 000007D8  83 C6 04			ADD esi, 4
+ 000007DB  E2 F1		LOOP ponerCeroSiguiente
+ 000007DD  C3			RET
+ 000007DE			mostrarEstadisticosSelec ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 000007DF			imprimirDato PROC
+ 000007DE			imprimirDato PROC
 				;Muestra un único dato
 				;-----------------------------------------------------------------------------------------------------------
 
- 000007DF  C3			RET
- 000007E0			imprimirDato ENDP
+ 000007DE  C3			RET
+ 000007DF			imprimirDato ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 000007E0			imprimirArreglo PROC
-				;Muestra un arreglo de datos
+ 000007DF			imprimirArregloReales PROC
+				;Muestra un arreglo de datos. La primera posición debe encontrarse en el reg EDX
+				;ceroReal REAL8 0.
+				;numeroReal REAL8 0.
 				;-----------------------------------------------------------------------------------------------------------
+ 000007DF  BB 00000000		MOV ebx,0
+ 000007E4			ImprimirReal:
+ 000007E4  8B 34 13			MOV esi,[edx+ebx]
+ 000007E7  89 35 00005204 R		MOV DWORD PTR numeroReal,esi
+ 000007ED  8B 74 13 04			MOV esi,[edx+ebx+4]
+ 000007F1  89 35 00005208 R		MOV DWORD PTR numeroReal[4],esi
+ 000007F7  DD 05 00005204 R		FLD numeroReal
+ 000007FD  E8 00000000 E		CALL WriteFloat
+ 00000802  E8 00000000 E		CALL Crlf
+ 00000807  DD 1D 00005204 R		FSTP numeroReal
+					;CALL waitMsg
+ 0000080D  83 C3 08			ADD ebx,8
+ 00000810  8B 34 13		MOV esi,[edx+ebx]
+ 00000813  89 35 00005204 R	MOV DWORD PTR numeroReal,esi
+ 00000819  8B 74 13 04		MOV esi,[edx+ebx+4]
+ 0000081D  89 35 00005208 R	MOV DWORD PTR numeroReal[4],esi
+ 00000823  DD 05 00005204 R	FLD numeroReal
+ 00000829  DC 1D 000051FC R	FCOMP ceroReal ; compara ST(0) con cero
+ 0000082F  DF E0		FNSTSW ax ; mueve la palabra de estado hacia AX
+ 00000831  9E			SAHF ; copia AH a EFLAGS
 
- 000007E0  C3			RET
- 000007E1			imprimirArreglo ENDP
+ 00000832  73 B0		JNB ImprimirReal
+ 00000834  E8 00000000 E	CALL waitMsg
+ 00000839  C3			RET
+ 0000083A			imprimirArregloReales ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 000007E1			ordenar PROC
+ 0000083A			ordenar PROC
 				;Ordena el vector y calcula las frecuencias
 				;posActual DWORD 0
 				;indiceCicloOrdenar DWORD 0
@@ -1526,174 +1568,176 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/10/14 20:45:00
 				;menorValor REAL8 0.
 				;-----------------------------------------------------------------------------------------------------------
 
- 000007E1			CicloOrdenar:
- 000007E1  B8 00000008			MOV eax,8
- 000007E6  F7 25 000051D4 R		MUL posActual
- 000007EC  DD 80 000005AE R		FLD numeros[eax]
- 000007F2  DD 1D 000051E0 R		FSTP menorValor;inicia menorValor en el valor de la posicion actual
- 000007F8  8B 35 000051D4 R		MOV esi,posActual
- 000007FE  89 35 000051DC R		MOV indiceCicloComparar,esi
- 00000804  FF 05 000051DC R		INC indiceCicloComparar; este ciclo inicia en posActual+1
- 0000080A				CicloComparar:
- 0000080A  B8 00000008				MOV eax,8
- 0000080F  F7 25 000051DC R			MUL indiceCicloComparar
- 00000815  DD 80 000005AE R			FLD numeros[eax] ; ST(0) = numeros[eax]
- 0000081B  DC 1D 000051E0 R			FCOMP menorValor ; compara ST(0) con menorValor
- 00000821  DF E0				FNSTSW ax ; mueve la palabra de estado hacia AX
- 00000823  9E					SAHF ; copia AH a EFLAGS
- 00000824  77 23				JA esMayor
- 00000826  B8 00000008					MOV eax,8
- 0000082B  F7 25 000051DC R				MUL indiceCicloComparar
- 00000831  DD 80 000005AE R				FLD numeros[eax]
- 00000837  DD 1D 000051E0 R				FSTP menorValor
- 0000083D  8B 35 000051DC R				MOV esi, indiceCicloComparar
- 00000843  89 35 000051F0 R				MOV posMenor,esi
- 00000849					esMayor:
+ 0000083A			CicloOrdenar:
+ 0000083A  B8 00000008			MOV eax,8
+ 0000083F  F7 25 000051DC R		MUL posActual
+ 00000845  DD 80 000005AE R		FLD numeros[eax]
+ 0000084B  DD 1D 000051E8 R		FSTP menorValor;inicia menorValor en el valor de la posicion actual
+ 00000851  8B 35 000051DC R		MOV esi,posActual
+ 00000857  89 35 000051E4 R		MOV indiceCicloComparar,esi
+ 0000085D  FF 05 000051E4 R		INC indiceCicloComparar; este ciclo inicia en posActual+1
+ 00000863				CicloComparar:
+ 00000863  B8 00000008				MOV eax,8
+ 00000868  F7 25 000051E4 R			MUL indiceCicloComparar
+ 0000086E  DD 80 000005AE R			FLD numeros[eax] ; ST(0) = numeros[eax]
+ 00000874  DC 1D 000051E8 R			FCOMP menorValor ; compara ST(0) con menorValor
+ 0000087A  DF E0				FNSTSW ax ; mueve la palabra de estado hacia AX
+ 0000087C  9E					SAHF ; copia AH a EFLAGS
+ 0000087D  77 23				JA esMayor
+ 0000087F  B8 00000008					MOV eax,8
+ 00000884  F7 25 000051E4 R				MUL indiceCicloComparar
+ 0000088A  DD 80 000005AE R				FLD numeros[eax]
+ 00000890  DD 1D 000051E8 R				FSTP menorValor
+ 00000896  8B 35 000051E4 R				MOV esi, indiceCicloComparar
+ 0000089C  89 35 000051F8 R				MOV posMenor,esi
+ 000008A2					esMayor:
 
- 00000849  FF 05 000051DC R		INC indiceCicloComparar
- 0000084F  8B 35 000051B0 R		MOV esi,realesLeidos
- 00000855  39 35 000051DC R		CMP indiceCicloComparar,esi
- 0000085B  7C AD			JL CicloComparar; el ciclo termina en la ultima posicion del vector
+ 000008A2  FF 05 000051E4 R		INC indiceCicloComparar
+ 000008A8  8B 35 000051B0 R		MOV esi,realesLeidos
+ 000008AE  39 35 000051E4 R		CMP indiceCicloComparar,esi
+ 000008B4  7C AD			JL CicloComparar; el ciclo termina en la ultima posicion del vector
 					;FinCicloComparar
 
 					;Intercambio de posiciones
 					
- 0000085D  DD 05 000051E0 R		FLD menorValor ;st(0) = menor
- 00000863  B8 00000008			MOV eax,8
- 00000868  F7 25 000051D4 R		MUL posActual
- 0000086E  DD 80 000005AE R		FLD numeros[eax] ;st(0) = numPosActual, st(1) = menor
- 00000874  B8 00000008			MOV eax,8
- 00000879  F7 25 000051F0 R		MUL posMenor
- 0000087F  DD 98 000005AE R		FSTP numeros[eax]; desapila la posicion actual, st(0)= menorValor
- 00000885  B8 00000008			MOV eax,8
- 0000088A  F7 25 000051D4 R		MUL posActual
- 00000890  DD 98 000005AE R		FSTP numeros[eax];desapila menorValor
+ 000008B6  DD 05 000051E8 R		FLD menorValor ;st(0) = menor
+ 000008BC  B8 00000008			MOV eax,8
+ 000008C1  F7 25 000051DC R		MUL posActual
+ 000008C7  DD 80 000005AE R		FLD numeros[eax] ;st(0) = numPosActual, st(1) = menor
+ 000008CD  B8 00000008			MOV eax,8
+ 000008D2  F7 25 000051F8 R		MUL posMenor
+ 000008D8  DD 98 000005AE R		FSTP numeros[eax]; desapila la posicion actual, st(0)= menorValor
+ 000008DE  B8 00000008			MOV eax,8
+ 000008E3  F7 25 000051DC R		MUL posActual
+ 000008E9  DD 98 000005AE R		FSTP numeros[eax];desapila menorValor
 					;Fin intercambio
 
- 00000896  FF 05 000051D4 R		INC posActual
- 0000089C  FF 05 000051D8 R	INC indiceCicloOrdenar
- 000008A2  8B 35 000051B0 R	MOV esi,realesLeidos
- 000008A8  39 35 000051D8 R	CMP indiceCicloOrdenar,esi
- 000008AE  0F 8C FFFFFF2D	JL CicloOrdenar
-
- 000008B4  C3			RET
- 000008B5			ordenar ENDP
+ 000008EF  FF 05 000051DC R		INC posActual
+ 000008F5  A1 000051E0 R	MOV eax,indiceCicloOrdenar
+ 000008FA  E8 00000000 E	CALL WriteInt
+ 000008FF  FF 05 000051E0 R	INC indiceCicloOrdenar
+ 00000905  8B 35 000051B0 R	MOV esi,realesLeidos
+ 0000090B  39 35 000051E0 R	CMP indiceCicloOrdenar,esi
+ 00000911  0F 8C FFFFFF23	JL CicloOrdenar
+ 00000917  E8 00000000 E	CALL WaitMsg
+ 0000091C  C3			RET
+ 0000091D			ordenar ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 000008B5			calcMedia PROC
+ 0000091D			calcMedia PROC
 				;Calcula el estadístico
 				;-----------------------------------------------------------------------------------------------------------
 
- 000008B5  C3			RET
- 000008B6			calcMedia ENDP
+ 0000091D  C3			RET
+ 0000091E			calcMedia ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 000008B6			calcMediana PROC
+ 0000091E			calcMediana PROC
 				;Calcula el estadístico
 				;-----------------------------------------------------------------------------------------------------------
 
- 000008B6  C3			RET
- 000008B7			calcMediana ENDP
+ 0000091E  C3			RET
+ 0000091F			calcMediana ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 000008B7			calcMediageometrica PROC
+ 0000091F			calcMediageometrica PROC
 				;Calcula el estadístico
 				;-----------------------------------------------------------------------------------------------------------
 
- 000008B7  C3			RET
- 000008B8			calcMediageometrica ENDP
+ 0000091F  C3			RET
+ 00000920			calcMediageometrica ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 000008B8			calcMediaarmonica PROC
+ 00000920			calcMediaarmonica PROC
 				;Calcula el estadístico
 				;-----------------------------------------------------------------------------------------------------------
 
- 000008B8  C3			RET
- 000008B9			calcMediaarmonica ENDP
+ 00000920  C3			RET
+ 00000921			calcMediaarmonica ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 000008B9			calcPercentiles PROC
+ 00000921			calcPercentiles PROC
 				;Calcula el estadístico
 				;-----------------------------------------------------------------------------------------------------------
 
- 000008B9  C3			RET
- 000008BA			calcPercentiles ENDP
+ 00000921  C3			RET
+ 00000922			calcPercentiles ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 000008BA			calcCuartiles PROC
+ 00000922			calcCuartiles PROC
 				;Calcula el estadístico
 				;-----------------------------------------------------------------------------------------------------------
 
- 000008BA  C3			RET
- 000008BB			calcCuartiles ENDP
+ 00000922  C3			RET
+ 00000923			calcCuartiles ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 000008BB			calcDeciles PROC
+ 00000923			calcDeciles PROC
 				;Calcula el estadístico
 				;-----------------------------------------------------------------------------------------------------------
 
- 000008BB  C3			RET
- 000008BC			calcDeciles ENDP
+ 00000923  C3			RET
+ 00000924			calcDeciles ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 000008BC			calcMomentosOrigen PROC
+ 00000924			calcMomentosOrigen PROC
 				;Calcula el estadístico
 				;-----------------------------------------------------------------------------------------------------------
 
- 000008BC  C3			RET
- 000008BD			calcMomentosOrigen ENDP
+ 00000924  C3			RET
+ 00000925			calcMomentosOrigen ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 000008BD			calcMomentosCentrales PROC
+ 00000925			calcMomentosCentrales PROC
 				;Calcula el estadístico
 				;-----------------------------------------------------------------------------------------------------------
 
- 000008BD  C3			RET
- 000008BE			calcMomentosCentrales ENDP
+ 00000925  C3			RET
+ 00000926			calcMomentosCentrales ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 000008BE			calcVarianza PROC
+ 00000926			calcVarianza PROC
 				;Calcula el estadístico
 				;-----------------------------------------------------------------------------------------------------------
 
- 000008BE  C3			RET
- 000008BF			calcVarianza ENDP
+ 00000926  C3			RET
+ 00000927			calcVarianza ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 000008BF			calcDesvEstandar PROC
+ 00000927			calcDesvEstandar PROC
 				;Calcula el estadístico
 				;-----------------------------------------------------------------------------------------------------------
 
- 000008BF  C3			RET
- 000008C0			calcDesvEstandar ENDP
+ 00000927  C3			RET
+ 00000928			calcDesvEstandar ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 000008C0			calcCuasiVarianza PROC
+ 00000928			calcCuasiVarianza PROC
 				;Calcula el estadístico
 				;-----------------------------------------------------------------------------------------------------------
 
- 000008C0  C3			RET
- 000008C1			calcCuasiVarianza ENDP
+ 00000928  C3			RET
+ 00000929			calcCuasiVarianza ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 000008C1			calcDesvMedia PROC
+ 00000929			calcDesvMedia PROC
 				;Calcula el estadístico
 				;-----------------------------------------------------------------------------------------------------------
 
- 000008C1  C3			RET
- 000008C2			calcDesvMedia ENDP
+ 00000929  C3			RET
+ 0000092A			calcDesvMedia ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 000008C2			calcDesvMediana PROC
+ 0000092A			calcDesvMediana PROC
 				;Calcula el estadístico
 				;-----------------------------------------------------------------------------------------------------------
 
- 000008C2  C3			RET
- 000008C3			calcDesvMediana ENDP
+ 0000092A  C3			RET
+ 0000092B			calcDesvMediana ENDP
 
 				;fin del programa
 				END main
-Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/10/14 20:45:00
+Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/10/14 23:04:07
 ESTADÍSTICAS						(main.asm  Symbols 2 - 1
 
 
@@ -1812,8 +1856,8 @@ Segments and Groups:
 
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00000400 Para	  Stack	  'STACK'	 
-_DATA  . . . . . . . . . . . . .	32 Bit	 00005A82 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 000008C3 Para	  Public  'CODE'	
+_DATA  . . . . . . . . . . . . .	32 Bit	 00005A9A Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 0000092B Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -1924,29 +1968,30 @@ animarBarra  . . . . . . . . . .	P Near	 000002BA _TEXT	Length= 00000044 Public 
   L1 . . . . . . . . . . . . . .	L Near	 000002C8 _TEXT	
   menor6 . . . . . . . . . . . .	L Near	 000002ED _TEXT	
   finsi  . . . . . . . . . . . .	L Near	 000002F9 _TEXT	
-calcCuartiles  . . . . . . . . .	P Near	 000008BA _TEXT	Length= 00000001 Public STDCALL
-calcCuasiVarianza  . . . . . . .	P Near	 000008C0 _TEXT	Length= 00000001 Public STDCALL
-calcDeciles  . . . . . . . . . .	P Near	 000008BB _TEXT	Length= 00000001 Public STDCALL
-calcDesvEstandar . . . . . . . .	P Near	 000008BF _TEXT	Length= 00000001 Public STDCALL
-calcDesvMediana  . . . . . . . .	P Near	 000008C2 _TEXT	Length= 00000001 Public STDCALL
-calcDesvMedia  . . . . . . . . .	P Near	 000008C1 _TEXT	Length= 00000001 Public STDCALL
-calcMediaarmonica  . . . . . . .	P Near	 000008B8 _TEXT	Length= 00000001 Public STDCALL
-calcMediageometrica  . . . . . .	P Near	 000008B7 _TEXT	Length= 00000001 Public STDCALL
-calcMediana  . . . . . . . . . .	P Near	 000008B6 _TEXT	Length= 00000001 Public STDCALL
-calcMedia  . . . . . . . . . . .	P Near	 000008B5 _TEXT	Length= 00000001 Public STDCALL
-calcMomentosCentrales  . . . . .	P Near	 000008BD _TEXT	Length= 00000001 Public STDCALL
-calcMomentosOrigen . . . . . . .	P Near	 000008BC _TEXT	Length= 00000001 Public STDCALL
-calcPercentiles  . . . . . . . .	P Near	 000008B9 _TEXT	Length= 00000001 Public STDCALL
-calcVarianza . . . . . . . . . .	P Near	 000008BE _TEXT	Length= 00000001 Public STDCALL
-calcularEstadisticos . . . . . .	P Near	 0000058C _TEXT	Length= 00000047 Public STDCALL
+calcCuartiles  . . . . . . . . .	P Near	 00000922 _TEXT	Length= 00000001 Public STDCALL
+calcCuasiVarianza  . . . . . . .	P Near	 00000928 _TEXT	Length= 00000001 Public STDCALL
+calcDeciles  . . . . . . . . . .	P Near	 00000923 _TEXT	Length= 00000001 Public STDCALL
+calcDesvEstandar . . . . . . . .	P Near	 00000927 _TEXT	Length= 00000001 Public STDCALL
+calcDesvMediana  . . . . . . . .	P Near	 0000092A _TEXT	Length= 00000001 Public STDCALL
+calcDesvMedia  . . . . . . . . .	P Near	 00000929 _TEXT	Length= 00000001 Public STDCALL
+calcMediaarmonica  . . . . . . .	P Near	 00000920 _TEXT	Length= 00000001 Public STDCALL
+calcMediageometrica  . . . . . .	P Near	 0000091F _TEXT	Length= 00000001 Public STDCALL
+calcMediana  . . . . . . . . . .	P Near	 0000091E _TEXT	Length= 00000001 Public STDCALL
+calcMedia  . . . . . . . . . . .	P Near	 0000091D _TEXT	Length= 00000001 Public STDCALL
+calcMomentosCentrales  . . . . .	P Near	 00000925 _TEXT	Length= 00000001 Public STDCALL
+calcMomentosOrigen . . . . . . .	P Near	 00000924 _TEXT	Length= 00000001 Public STDCALL
+calcPercentiles  . . . . . . . .	P Near	 00000921 _TEXT	Length= 00000001 Public STDCALL
+calcVarianza . . . . . . . . . .	P Near	 00000926 _TEXT	Length= 00000001 Public STDCALL
+calcularEstadisticos . . . . . .	P Near	 0000058B _TEXT	Length= 00000047 Public STDCALL
 cargarMensaje  . . . . . . . . .	P Near	 000000D0 _TEXT	Length= 000000BF Public STDCALL
 contadorEjec . . . . . . . . . .	P Near	 000002FE _TEXT	Length= 0000004E Public STDCALL
   noUno  . . . . . . . . . . . .	L Near	 00000334 _TEXT	
   todos  . . . . . . . . . . . .	L Near	 00000340 _TEXT	
   ceroEjec . . . . . . . . . . .	L Near	 00000345 _TEXT	
-imprimirArreglo  . . . . . . . .	P Near	 000007E0 _TEXT	Length= 00000001 Public STDCALL
-imprimirDato . . . . . . . . . .	P Near	 000007DF _TEXT	Length= 00000001 Public STDCALL
-leerArchivo  . . . . . . . . . .	P Near	 000003BD _TEXT	Length= 000001CF Public STDCALL
+imprimirArregloReales  . . . . .	P Near	 000007DF _TEXT	Length= 0000005B Public STDCALL
+  ImprimirReal . . . . . . . . .	L Near	 000007E4 _TEXT	
+imprimirDato . . . . . . . . . .	P Near	 000007DE _TEXT	Length= 00000001 Public STDCALL
+leerArchivo  . . . . . . . . . .	P Near	 000003BD _TEXT	Length= 000001CE Public STDCALL
   preguntaRuta . . . . . . . . .	L Near	 000003D8 _TEXT	
   file_ok  . . . . . . . . . . .	L Near	 00000409 _TEXT	
   check_buffer_size  . . . . . .	L Near	 0000042D _TEXT	
@@ -1962,29 +2007,29 @@ leerArchivo  . . . . . . . . . .	P Near	 000003BD _TEXT	Length= 000001CF Public 
   cicloDiv . . . . . . . . . . .	L Near	 0000052C _TEXT	
   finChar  . . . . . . . . . . .	L Near	 00000546 _TEXT	
   finNumero  . . . . . . . . . .	L Near	 00000550 _TEXT	
-  finLectura . . . . . . . . . .	L Near	 00000587 _TEXT	
+  finLectura . . . . . . . . . .	L Near	 00000586 _TEXT	
 main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 000000D0 Public STDCALL
   inicio . . . . . . . . . . . .	L Near	 0000001C _TEXT	
   ejec . . . . . . . . . . . . .	L Near	 0000003F _TEXT	
 mostrarDespedida . . . . . . . .	P Near	 0000034C _TEXT	Length= 00000071 Public STDCALL
   CICLOFIN . . . . . . . . . . .	L Near	 00000389 _TEXT	
-mostrarEstadisticosSelec . . . .	P Near	 0000068A _TEXT	Length= 00000155 Public STDCALL
-  pasa2  . . . . . . . . . . . .	L Near	 0000069F _TEXT	
-  pasa3  . . . . . . . . . . . .	L Near	 000006B4 _TEXT	
-  pasa4  . . . . . . . . . . . .	L Near	 000006C9 _TEXT	
-  pasa5  . . . . . . . . . . . .	L Near	 000006DE _TEXT	
-  pasa6  . . . . . . . . . . . .	L Near	 000006F3 _TEXT	
-  pasa7  . . . . . . . . . . . .	L Near	 00000708 _TEXT	
-  pasa8  . . . . . . . . . . . .	L Near	 0000071D _TEXT	
-  pasa9  . . . . . . . . . . . .	L Near	 00000732 _TEXT	
-  pasa10 . . . . . . . . . . . .	L Near	 00000747 _TEXT	
-  pasa11 . . . . . . . . . . . .	L Near	 0000075C _TEXT	
-  pasa12 . . . . . . . . . . . .	L Near	 00000771 _TEXT	
-  pasa13 . . . . . . . . . . . .	L Near	 00000786 _TEXT	
-  pasa14 . . . . . . . . . . . .	L Near	 0000079B _TEXT	
-  pasa15 . . . . . . . . . . . .	L Near	 000007B0 _TEXT	
-  pasaFin  . . . . . . . . . . .	L Near	 000007C5 _TEXT	
-  ponerCeroSiguiente . . . . . .	L Near	 000007CF _TEXT	
+mostrarEstadisticosSelec . . . .	P Near	 00000689 _TEXT	Length= 00000155 Public STDCALL
+  pasa2  . . . . . . . . . . . .	L Near	 0000069E _TEXT	
+  pasa3  . . . . . . . . . . . .	L Near	 000006B3 _TEXT	
+  pasa4  . . . . . . . . . . . .	L Near	 000006C8 _TEXT	
+  pasa5  . . . . . . . . . . . .	L Near	 000006DD _TEXT	
+  pasa6  . . . . . . . . . . . .	L Near	 000006F2 _TEXT	
+  pasa7  . . . . . . . . . . . .	L Near	 00000707 _TEXT	
+  pasa8  . . . . . . . . . . . .	L Near	 0000071C _TEXT	
+  pasa9  . . . . . . . . . . . .	L Near	 00000731 _TEXT	
+  pasa10 . . . . . . . . . . . .	L Near	 00000746 _TEXT	
+  pasa11 . . . . . . . . . . . .	L Near	 0000075B _TEXT	
+  pasa12 . . . . . . . . . . . .	L Near	 00000770 _TEXT	
+  pasa13 . . . . . . . . . . . .	L Near	 00000785 _TEXT	
+  pasa14 . . . . . . . . . . . .	L Near	 0000079A _TEXT	
+  pasa15 . . . . . . . . . . . .	L Near	 000007AF _TEXT	
+  pasaFin  . . . . . . . . . . .	L Near	 000007C4 _TEXT	
+  ponerCeroSiguiente . . . . . .	L Near	 000007CE _TEXT	
 mostrarMensaje . . . . . . . . .	P Near	 0000018F _TEXT	Length= 000000B3 Public STDCALL
   CICLO  . . . . . . . . . . . .	L Near	 000001B7 _TEXT	
   MENOR  . . . . . . . . . . . .	L Near	 000001E8 _TEXT	
@@ -1993,17 +2038,17 @@ mostrarMensaje . . . . . . . . .	P Near	 0000018F _TEXT	Length= 000000B3 Public 
   NoMEN  . . . . . . . . . . . .	L Near	 0000020B _TEXT	
   menor6 . . . . . . . . . . . .	L Near	 00000235 _TEXT	
   finsi  . . . . . . . . . . . .	L Near	 00000241 _TEXT	
-ordenar  . . . . . . . . . . . .	P Near	 000007E1 _TEXT	Length= 000000D4 Public STDCALL
-  CicloOrdenar . . . . . . . . .	L Near	 000007E1 _TEXT	
-  CicloComparar  . . . . . . . .	L Near	 0000080A _TEXT	
-  esMayor  . . . . . . . . . . .	L Near	 00000849 _TEXT	
-pedirEstadisticos  . . . . . . .	P Near	 000005D3 _TEXT	Length= 000000B7 Public STDCALL
-  seleccionEstad . . . . . . . .	L Near	 000005EE _TEXT	
-  cicloUsuario . . . . . . . . .	L Near	 0000061C _TEXT	
-  comaUsu  . . . . . . . . . . .	L Near	 00000625 _TEXT	
-  noComaUsu  . . . . . . . . . .	L Near	 0000063A _TEXT	
-  continueUsu  . . . . . . . . .	L Near	 0000065A _TEXT	
-  finSeleccion . . . . . . . . .	L Near	 00000689 _TEXT	
+ordenar  . . . . . . . . . . . .	P Near	 0000083A _TEXT	Length= 000000E3 Public STDCALL
+  CicloOrdenar . . . . . . . . .	L Near	 0000083A _TEXT	
+  CicloComparar  . . . . . . . .	L Near	 00000863 _TEXT	
+  esMayor  . . . . . . . . . . .	L Near	 000008A2 _TEXT	
+pedirEstadisticos  . . . . . . .	P Near	 000005D2 _TEXT	Length= 000000B7 Public STDCALL
+  seleccionEstad . . . . . . . .	L Near	 000005ED _TEXT	
+  cicloUsuario . . . . . . . . .	L Near	 0000061B _TEXT	
+  comaUsu  . . . . . . . . . . .	L Near	 00000624 _TEXT	
+  noComaUsu  . . . . . . . . . .	L Near	 00000639 _TEXT	
+  continueUsu  . . . . . . . . .	L Near	 00000659 _TEXT	
+  finSeleccion . . . . . . . . .	L Near	 00000688 _TEXT	
 pintarBarrasIni  . . . . . . . .	P Near	 00000242 _TEXT	Length= 00000033 Public STDCALL
 pintarBarra  . . . . . . . . . .	P Near	 00000275 _TEXT	Length= 00000045 Public STDCALL
   CiloImprimir . . . . . . . . .	L Near	 00000284 _TEXT	
@@ -2016,36 +2061,36 @@ Symbols:
 
                 N a m e                 Type     Value    Attr
 
-??0000 . . . . . . . . . . . . .	Byte	 0000569C _DATA	
-??0001 . . . . . . . . . . . . .	Byte	 00005711 _DATA	
-??0002 . . . . . . . . . . . . .	Byte	 0000576E _DATA	
-??0003 . . . . . . . . . . . . .	Byte	 000057CB _DATA	
-??0004 . . . . . . . . . . . . .	Byte	 000057FD _DATA	
-??0005 . . . . . . . . . . . . .	Byte	 0000581A _DATA	
-??0006 . . . . . . . . . . . . .	Byte	 0000581F _DATA	
-??0007 . . . . . . . . . . . . .	Byte	 00005826 _DATA	
-??0008 . . . . . . . . . . . . .	Byte	 00005865 _DATA	
-??0009 . . . . . . . . . . . . .	Byte	 000058AB _DATA	
-??000A . . . . . . . . . . . . .	Byte	 000058EE _DATA	
-??000B . . . . . . . . . . . . .	Byte	 0000593E _DATA	
-??000C . . . . . . . . . . . . .	Byte	 00005970 _DATA	
-??000D . . . . . . . . . . . . .	Byte	 000059B8 _DATA	
-??000E . . . . . . . . . . . . .	Byte	 000059EB _DATA	
-??000F . . . . . . . . . . . . .	Byte	 00005A50 _DATA	
-??0010 . . . . . . . . . . . . .	Byte	 00005A53 _DATA	
-??0011 . . . . . . . . . . . . .	Byte	 00005A56 _DATA	
-??0012 . . . . . . . . . . . . .	Byte	 00005A59 _DATA	
-??0013 . . . . . . . . . . . . .	Byte	 00005A5C _DATA	
-??0014 . . . . . . . . . . . . .	Byte	 00005A5F _DATA	
-??0015 . . . . . . . . . . . . .	Byte	 00005A62 _DATA	
-??0016 . . . . . . . . . . . . .	Byte	 00005A65 _DATA	
-??0017 . . . . . . . . . . . . .	Byte	 00005A68 _DATA	
-??0018 . . . . . . . . . . . . .	Byte	 00005A6B _DATA	
-??0019 . . . . . . . . . . . . .	Byte	 00005A6F _DATA	
-??001A . . . . . . . . . . . . .	Byte	 00005A73 _DATA	
-??001B . . . . . . . . . . . . .	Byte	 00005A77 _DATA	
-??001C . . . . . . . . . . . . .	Byte	 00005A7B _DATA	
-??001D . . . . . . . . . . . . .	Byte	 00005A7F _DATA	
+??0000 . . . . . . . . . . . . .	Byte	 000056B4 _DATA	
+??0001 . . . . . . . . . . . . .	Byte	 00005729 _DATA	
+??0002 . . . . . . . . . . . . .	Byte	 00005786 _DATA	
+??0003 . . . . . . . . . . . . .	Byte	 000057E3 _DATA	
+??0004 . . . . . . . . . . . . .	Byte	 00005815 _DATA	
+??0005 . . . . . . . . . . . . .	Byte	 00005832 _DATA	
+??0006 . . . . . . . . . . . . .	Byte	 00005837 _DATA	
+??0007 . . . . . . . . . . . . .	Byte	 0000583E _DATA	
+??0008 . . . . . . . . . . . . .	Byte	 0000587D _DATA	
+??0009 . . . . . . . . . . . . .	Byte	 000058C3 _DATA	
+??000A . . . . . . . . . . . . .	Byte	 00005906 _DATA	
+??000B . . . . . . . . . . . . .	Byte	 00005956 _DATA	
+??000C . . . . . . . . . . . . .	Byte	 00005988 _DATA	
+??000D . . . . . . . . . . . . .	Byte	 000059D0 _DATA	
+??000E . . . . . . . . . . . . .	Byte	 00005A03 _DATA	
+??000F . . . . . . . . . . . . .	Byte	 00005A68 _DATA	
+??0010 . . . . . . . . . . . . .	Byte	 00005A6B _DATA	
+??0011 . . . . . . . . . . . . .	Byte	 00005A6E _DATA	
+??0012 . . . . . . . . . . . . .	Byte	 00005A71 _DATA	
+??0013 . . . . . . . . . . . . .	Byte	 00005A74 _DATA	
+??0014 . . . . . . . . . . . . .	Byte	 00005A77 _DATA	
+??0015 . . . . . . . . . . . . .	Byte	 00005A7A _DATA	
+??0016 . . . . . . . . . . . . .	Byte	 00005A7D _DATA	
+??0017 . . . . . . . . . . . . .	Byte	 00005A80 _DATA	
+??0018 . . . . . . . . . . . . .	Byte	 00005A83 _DATA	
+??0019 . . . . . . . . . . . . .	Byte	 00005A87 _DATA	
+??001A . . . . . . . . . . . . .	Byte	 00005A8B _DATA	
+??001B . . . . . . . . . . . . .	Byte	 00005A8F _DATA	
+??001C . . . . . . . . . . . . .	Byte	 00005A93 _DATA	
+??001D . . . . . . . . . . . . .	Byte	 00005A97 _DATA	
 @CodeSize  . . . . . . . . . . .	Number	 00000000h   
 @DataSize  . . . . . . . . . . .	Number	 00000000h   
 @Interface . . . . . . . . . . .	Number	 00000003h   
@@ -2260,12 +2305,13 @@ auxCiclos  . . . . . . . . . . .	DWord	 00000334 _DATA
 auxSumatoria . . . . . . . . . .	QWord	 000051BC _DATA	
 black  . . . . . . . . . . . . .	Number	 00000000h   
 blue . . . . . . . . . . . . . .	Number	 00000001h   
-boolEstadisticos . . . . . . . .	DWord	 00005624 _DATA	
+boolEstadisticos . . . . . . . .	DWord	 0000563C _DATA	
 brown  . . . . . . . . . . . . .	Number	 00000006h   
 buferArchivo . . . . . . . . . .	Byte	 00003E12 _DATA	
-buferUsuario . . . . . . . . . .	Byte	 000055FC _DATA	
+buferUsuario . . . . . . . . . .	Byte	 00005614 _DATA	
 cantDatosDistintos . . . . . . .	DWord	 00003E0A _DATA	
 cantDatos  . . . . . . . . . . .	DWord	 00003E06 _DATA	
+ceroReal . . . . . . . . . . . .	QWord	 000051FC _DATA	
 colores1 . . . . . . . . . . . .	Number	 000000F9h   
 colores2 . . . . . . . . . . . .	Number	 0000009Bh   
 colores3 . . . . . . . . . . . .	Number	 0000009Fh   
@@ -2275,16 +2321,16 @@ contEjecuciones  . . . . . . . .	DWord	 00000330 _DATA
 contMensaje  . . . . . . . . . .	Byte	 0000032F _DATA	
 contadorBarra  . . . . . . . . .	DWord	 00000008 _DATA	
 contadorMensaje  . . . . . . . .	DWord	 0000032B _DATA	
-cuartiles  . . . . . . . . . . .	QWord	 0000553C _DATA	
-cuasiVarianza  . . . . . . . . .	QWord	 000055DC _DATA	
+cuartiles  . . . . . . . . . . .	QWord	 00005554 _DATA	
+cuasiVarianza  . . . . . . . . .	QWord	 000055F4 _DATA	
 cyan . . . . . . . . . . . . . .	Number	 00000003h   
 datoActual . . . . . . . . . . .	Byte	 0000519B _DATA	
-deciles  . . . . . . . . . . . .	QWord	 00005564 _DATA	
-desvEstandar . . . . . . . . . .	QWord	 000055D4 _DATA	
-desvMediana  . . . . . . . . . .	QWord	 000055EC _DATA	
-desvMedia  . . . . . . . . . . .	QWord	 000055E4 _DATA	
+deciles  . . . . . . . . . . . .	QWord	 0000557C _DATA	
+desvEstandar . . . . . . . . . .	QWord	 000055EC _DATA	
+desvMediana  . . . . . . . . . .	QWord	 00005604 _DATA	
+desvMedia  . . . . . . . . . . .	QWord	 000055FC _DATA	
 diez . . . . . . . . . . . . . .	QWord	 000051C4 _DATA	
-epsilon  . . . . . . . . . . . .	QWord	 000051E8 _DATA	
+epsilon  . . . . . . . . . . . .	QWord	 000051F0 _DATA	
 exit . . . . . . . . . . . . . .	Text   	 INVOKE ExitProcess,0
 fileHandle . . . . . . . . . . .	DWord	 000005AA _DATA	
 finArchivo . . . . . . . . . . .	DWord	 000051B8 _DATA	
@@ -2292,8 +2338,8 @@ frecuenciaMax  . . . . . . . . .	DWord	 00003E0E _DATA
 frecuencias  . . . . . . . . . .	QWord	 00002B3E _DATA	
 gray . . . . . . . . . . . . . .	Number	 00000008h   
 green  . . . . . . . . . . . . .	Number	 00000002h   
-indiceCicloComparar  . . . . . .	DWord	 000051DC _DATA	
-indiceCicloOrdenar . . . . . . .	DWord	 000051D8 _DATA	
+indiceCicloComparar  . . . . . .	DWord	 000051E4 _DATA	
+indiceCicloOrdenar . . . . . . .	DWord	 000051E0 _DATA	
 lightBlue  . . . . . . . . . . .	Number	 00000009h   
 lightCyan  . . . . . . . . . . .	Number	 0000000Bh   
 lightGray  . . . . . . . . . . .	Number	 00000007h   
@@ -2302,11 +2348,12 @@ lightMagenta . . . . . . . . . .	Number	 0000000Dh
 lightRed . . . . . . . . . . . .	Number	 0000000Ch   
 magenta  . . . . . . . . . . . .	Number	 00000005h   
 maxDatos . . . . . . . . . . . .	Number	 00000258h   
-mediaarmonica  . . . . . . . . .	QWord	 0000520C _DATA	
-mediageometrica  . . . . . . . .	QWord	 00005204 _DATA	
-mediana  . . . . . . . . . . . .	QWord	 000051FC _DATA	
-media  . . . . . . . . . . . . .	QWord	 000051F4 _DATA	
-menorValor . . . . . . . . . . .	QWord	 000051E0 _DATA	
+mediaarmonica  . . . . . . . . .	QWord	 00005224 _DATA	
+mediageometrica  . . . . . . . .	QWord	 0000521C _DATA	
+mediana  . . . . . . . . . . . .	QWord	 00005214 _DATA	
+media  . . . . . . . . . . . . .	QWord	 0000520C _DATA	
+menorValor . . . . . . . . . . .	QWord	 000051E8 _DATA	
+menosUno . . . . . . . . . . . .	QWord	 000051D4 _DATA	
 mensajeBienvenida10  . . . . . .	Byte	 00000180 _DATA	
 mensajeBienvenida11  . . . . . .	Byte	 000001BD _DATA	
 mensajeBienvenida12  . . . . . .	Byte	 000001F9 _DATA	
@@ -2328,18 +2375,19 @@ mensajeDespedida4  . . . . . . .	Byte	 000002EE _DATA
 mensajeDespedida5  . . . . . . .	Byte	 00000329 _DATA	
 mensajeD . . . . . . . . . . . .	DWord	 00000278 _DATA	
 mensaje  . . . . . . . . . . . .	DWord	 0000000C _DATA	
-momentosCentrales  . . . . . . .	QWord	 000055C4 _DATA	
-momentosOrigen . . . . . . . . .	QWord	 000055BC _DATA	
+momentosCentrales  . . . . . . .	QWord	 000055DC _DATA	
+momentosOrigen . . . . . . . . .	QWord	 000055D4 _DATA	
 numLineasMsjBv . . . . . . . . .	Number	 0000000Dh   
 numLineasMsjDp . . . . . . . . .	Number	 00000004h   
+numeroReal . . . . . . . . . . .	QWord	 00005204 _DATA	
 numerosDistintos . . . . . . . .	QWord	 00001876 _DATA	
 numeros  . . . . . . . . . . . .	QWord	 000005AE _DATA	
-ordenMomCent . . . . . . . . . .	DWord	 000055F8 _DATA	
-ordenMomOrig . . . . . . . . . .	DWord	 000055F4 _DATA	
-percentiles  . . . . . . . . . .	QWord	 00005214 _DATA	
-posActual  . . . . . . . . . . .	DWord	 000051D4 _DATA	
-posMenor . . . . . . . . . . . .	DWord	 000051F0 _DATA	
-ptrEstaadisticos . . . . . . . .	DWord	 00005660 _DATA	
+ordenMomCent . . . . . . . . . .	DWord	 00005610 _DATA	
+ordenMomOrig . . . . . . . . . .	DWord	 0000560C _DATA	
+percentiles  . . . . . . . . . .	QWord	 0000522C _DATA	
+posActual  . . . . . . . . . . .	DWord	 000051DC _DATA	
+posMenor . . . . . . . . . . . .	DWord	 000051F8 _DATA	
+ptrEstaadisticos . . . . . . . .	DWord	 00005678 _DATA	
 realActual . . . . . . . . . . .	QWord	 000051A0 _DATA	
 realesLeidos . . . . . . . . . .	DWord	 000051B0 _DATA	
 red  . . . . . . . . . . . . . .	Number	 00000004h   
@@ -2350,7 +2398,7 @@ tamanoBufer  . . . . . . . . . .	Number	 00001388h
 tiempoEspera . . . . . . . . . .	Word	 00000348 _DATA	
 unDecimo . . . . . . . . . . . .	QWord	 000051CC _DATA	
 urlDatos . . . . . . . . . . . .	Byte	 000004A6 _DATA	
-varianza . . . . . . . . . . . .	QWord	 000055CC _DATA	
+varianza . . . . . . . . . . . .	QWord	 000055E4 _DATA	
 white  . . . . . . . . . . . . .	Number	 0000000Fh   
 wsprintf . . . . . . . . . . . .	Text   	 wsprintfA
 yellow . . . . . . . . . . . . .	Number	 0000000Eh   

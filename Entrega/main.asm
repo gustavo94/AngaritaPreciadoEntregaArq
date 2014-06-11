@@ -109,6 +109,7 @@ finArchivo DWORD 0
 auxSumatoria REAL8 0.
 diez REAL8 10.
 unDecimo REAL8 0.1
+menosUno REAL8 -1.
 
 ;Auxiliares para ordenar
 posActual DWORD 0
@@ -117,6 +118,10 @@ indiceCicloComparar DWORD 0
 menorValor REAL8 0.
 epsilon REAL8 1.0E-12
 posMenor DWORD 0
+
+;Auxiliares para imprimir
+ceroReal REAL8 0.
+numeroReal REAL8 0.
 
 
 ;estadisticos
@@ -542,7 +547,7 @@ leerNum:
 		CMP al, 0
 		JNE noFinArchivo
 		MOV finArchivo, 1
-		JMP finNumero
+		JMP finLectura
 		noFinArchivo:
 
 		;si hay cr o lf, aumenta saltoDeLinea y pasa al siguiente caracter
@@ -618,16 +623,22 @@ leerNum:
 	;CALL writeFloat
 	;fstp realactual
 	;CALL crlf
+	;CALL WaitMsg
 	;;;;;;;;;;;;;;;;
 
 	;guarda el número en el array
 	FLD realActual
-	MOV eax, realesLeidos
-	MOV esi,8
-	MUL esi
+	MOV eax, 8
+	MUL realesLeidos
 	FSTP numeros[eax]
 	INC realesLeidos
-
+	;;;;;;; para comprobar el desplazamiento
+	;MOV eax, realesLeidos
+	;CALL WriteInt
+	;CALL Waitmsg
+	;CALL Crlf
+	;;;;;;;;;;;;;;;;
+	
 	;si llegó al final del archivo, sale
 	CMP finArchivo, 1
 	JE finLectura
@@ -637,7 +648,11 @@ leerNum:
 	JL leerNum
 finLectura:
 
+;MOV edx, OFFSET numeros; para el metodo imprimirArregloReales
+;CALL imprimirArregloReales; para comprobar que leyo correctamente
 CALL ordenar
+;MOV edx, OFFSET numeros; para el metodo imprimirArregloReales
+;CALL imprimirArregloReales; para comprobar que ordeno correctamente 
 
 leerArchivo ENDP
 
@@ -819,12 +834,36 @@ RET
 imprimirDato ENDP
 
 ;-----------------------------------------------------------------------------------------------------------
-imprimirArreglo PROC
-;Muestra un arreglo de datos
+imprimirArregloReales PROC
+;Muestra un arreglo de datos. La primera posición debe encontrarse en el reg EDX
+;ceroReal REAL8 0.
+;numeroReal REAL8 0.
 ;-----------------------------------------------------------------------------------------------------------
+MOV ebx,0
+ImprimirReal:
+	MOV esi,[edx+ebx]
+	MOV DWORD PTR numeroReal,esi
+	MOV esi,[edx+ebx+4]
+	MOV DWORD PTR numeroReal[4],esi
+	FLD numeroReal
+	CALL WriteFloat
+	CALL Crlf
+	FSTP numeroReal
+	;CALL waitMsg
+	ADD ebx,8
+MOV esi,[edx+ebx]
+MOV DWORD PTR numeroReal,esi
+MOV esi,[edx+ebx+4]
+MOV DWORD PTR numeroReal[4],esi
+FLD numeroReal
+FCOMP ceroReal ; compara ST(0) con cero
+FNSTSW ax ; mueve la palabra de estado hacia AX
+SAHF ; copia AH a EFLAGS
 
+JNB ImprimirReal
+CALL waitMsg
 RET
-imprimirArreglo ENDP
+imprimirArregloReales ENDP
 
 ;-----------------------------------------------------------------------------------------------------------
 ordenar PROC
@@ -881,6 +920,7 @@ CicloOrdenar:
 	;Fin intercambio
 
 	INC posActual
+
 INC indiceCicloOrdenar
 MOV esi,realesLeidos
 CMP indiceCicloOrdenar,esi
