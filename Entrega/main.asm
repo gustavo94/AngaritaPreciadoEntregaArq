@@ -1096,9 +1096,12 @@ calcMediana PROC
 
 ;ve si la cantidad de datos es par o impar
 MOV ebx, 2
+MOV edx, 0
 MOV eax, realesLeidos
+
 DIV ebx
-CMP edx, 0
+
+CMP dx, 0
 JNE noEsPar
 	;la mediana es el promedio entre los datos en las posiciones (realesleidos/2) y (realesleidos/2)+1
 	FLD numeros[eax*8] ;(realesleidos/2)+1
@@ -1113,7 +1116,6 @@ noEsPar:
 ;la mediana es el dato en la posición roof(realesleidos/2)=eax+1
 FLD numeros[eax*8]
 FSTP mediana
-
 
 finMediana:
 
