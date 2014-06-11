@@ -64,7 +64,7 @@ colores2 EQU lightCyan + (lightBlue * 16)
 colores3 EQU white + (lightBlue * 16)
 
 
-stringEstadisticos BYTE "1. Media aritm",130,"tica",0dh,0ah
+stringEstadisticos     BYTE "1. Media aritm",130,"tica",0dh,0ah
 				   BYTE	"2. Mediana",0dh,0ah
 				   BYTE	"3. Moda",0dh,0ah
 				   BYTE "4. Media geom",130,"trica",0dh,0ah
@@ -125,21 +125,21 @@ numeroReal REAL8 0.
 
 
 ;estadisticos
-media REAL8 ?
-mediana REAL8 ?
-;moda REAL8 maxDatos DUP(-1.), -1.
-mediageometrica REAL8 ?
-mediaarmonica REAL8 ?
+media REAL8 0.
+mediana REAL8 0.
+moda REAL8 maxDatos DUP(-1.), -1.
+mediageometrica REAL8 0.
+mediaarmonica REAL8 0.
 percentiles REAL8 101 DUP(-1.)
 cuartiles REAL8 5 DUP(-1.)
 deciles REAL8 11 DUP(-1.)
-momentosOrigen REAL8 ?
-momentosCentrales REAL8 ?
-varianza REAL8 ?
-desvEstandar REAL8 ?
-cuasiVarianza REAL8 ?
-desvMedia REAL8 ?
-desvMediana REAL8 ?
+momentosOrigen REAL8 0.
+momentosCentrales REAL8 0.
+varianza REAL8 0.
+desvEstandar REAL8 0.
+cuasiVarianza REAL8 0.
+desvMedia REAL8 0.
+desvMediana REAL8 0.
 
 ;orden de los momentos
 ordenMomOrig DWORD ?
@@ -184,23 +184,23 @@ CALL Clrscr
 CALL leerArchivo
 
 ejec:
-MOV eax, colores3
-CALL SetTextColor
-CALL Clrscr
-CALL contadorEjec
-mWrite <"Para cada ejecuci",162,"n usted puede utilizar un orden diferente para los momentos",0dh,0ah,"Por favor ingr",130,"selos a continuaci",162,"n",0dh,0ah>
-CALL crlf
-mWrite <"Por favor indique el orden que se usar",160," para calcular el momento ",0dh,0ah,"con respecto al origen:",0dh,0ah>
-CALL readInt
-MOV ordenMomOrig, eax
-mWrite <"Por favor indique el orden que se usar",160," para calcular el momento ",0dh,0ah,"con respecto a la media",0dh,0ah>
-CALL readInt
-MOV ordenMomCent, eax
-CALL calcularEstadisticos
-CALL pedirEstadisticos
-CALL mostrarEstadisticosSelec
+	MOV eax, colores3
+	CALL SetTextColor
+	CALL Clrscr
+	CALL contadorEjec
+	mWrite <"Para cada ejecuci",162,"n usted puede utilizar un orden diferente para los momentos",0dh,0ah,"Por favor ingr",130,"selos a continuaci",162,"n",0dh,0ah>
+	CALL crlf
+	mWrite <"Por favor indique el orden que se usar",160," para calcular el momento ",0dh,0ah,"con respecto al origen:",0dh,0ah>
+	CALL readInt
+	MOV ordenMomOrig, eax
+	mWrite <"Por favor indique el orden que se usar",160," para calcular el momento ",0dh,0ah,"con respecto a la media",0dh,0ah>
+	CALL readInt
+	MOV ordenMomCent, eax
+	CALL calcularEstadisticos
+	CALL pedirEstadisticos
+	CALL imprimirEstadisticosSelec
 
-CALL Crlf
+	CALL Crlf
 mWrite "Desea ejecutar nuevamente el programa? 1=si, 0=no"
 CALL Crlf
 CALL readInt
@@ -815,6 +815,115 @@ JNE pasaFin
 	mwrite "15"
 pasaFin:
 
+;Se reinicializan en imprimirEstadisticos
+;reinicializa el vector de booleanos
+;MOV ecx, 15
+;MOV esi, 0
+;ponerCeroSiguiente:
+;	MOV boolEstadisticos[esi], 0
+;	ADD esi, 4
+;LOOP ponerCeroSiguiente
+
+
+RET
+mostrarEstadisticosSelec ENDP
+
+;-----------------------------------------------------------------------------------------------------------
+imprimirEstadisticosSelec PROC
+;Imprime el valor o arreglo correspondiente al estadistico seleccionado
+;-----------------------------------------------------------------------------------------------------------
+;si el estadístico n fue marcado (está en 1), lo imprime. De lo contrario, pasa al siguiente
+CMP boolEstadisticos, -1
+JNE pasa2
+	mwrite <"1. Media aritm",130,"tica",0dh,0ah>
+	MOV edx, OFFSET media
+	CALL imprimirDato
+pasa2:
+CMP boolEstadisticos[4], -1
+JNE pasa3
+	mwrite <"2. Mediana",0dh,0ah>
+	MOV edx, OFFSET mediana 
+	CALL imprimirDato
+pasa3:
+CMP boolEstadisticos[8], -1
+JNE pasa4
+	mwrite <"3. Moda",0dh,0ah>
+	MOV edx, OFFSET moda 
+	CALL imprimirArregloReales
+pasa4:
+CMP boolEstadisticos[12], -1
+JNE pasa5
+	mwrite <"4. Media geom",130,"trica",0dh,0ah>
+	MOV edx, OFFSET mediageometrica  
+	CALL imprimirDato
+pasa5:
+CMP boolEstadisticos[16], -1
+JNE pasa6
+	mwrite <"5. Media arm",162,"nica",0dh,0ah>
+	MOV edx, OFFSET mediaarmonica   
+	CALL imprimirDato
+pasa6:
+CMP boolEstadisticos[20], -1
+JNE pasa7
+	mwrite <"6. Percentiles",0dh,0ah>
+	MOV edx, OFFSET percentiles  
+	CALL imprimirArregloReales
+pasa7:
+CMP boolEstadisticos[24], -1
+JNE pasa8
+	mwrite <"7. Cuartiles",0dh,0ah>
+	MOV edx, OFFSET cuartiles   
+	CALL imprimirArregloReales
+pasa8:
+CMP boolEstadisticos[28], -1
+JNE pasa9
+	mwrite <"8. Deciles",0dh,0ah>
+	MOV edx, OFFSET deciles    
+	CALL imprimirArregloReales
+pasa9:
+CMP boolEstadisticos[32], -1
+JNE pasa10
+	mwrite <"9. Momentos respecto al origen",0dh,0ah>
+	MOV edx, OFFSET momentosOrigen    
+	CALL imprimirDato
+pasa10:
+CMP boolEstadisticos[36], -1
+JNE pasa11
+	mwrite <"10. Momentos centrales o respecto a la media",0dh,0ah>
+	MOV edx, OFFSET momentosCentrales     
+	CALL imprimirDato
+pasa11:
+CMP boolEstadisticos[40], -1
+JNE pasa12
+	mwrite <"11. Varianza",0dh,0ah>
+	MOV edx, OFFSET varianza      
+	CALL imprimirDato
+pasa12:
+CMP boolEstadisticos[44], -1
+JNE pasa13
+	mwrite <"12. Desviaci",162,"n t",161,"pica",0dh,0ah>
+	MOV edx, OFFSET desvEstandar       
+	CALL imprimirDato
+pasa13:
+CMP boolEstadisticos[48], -1
+JNE pasa14
+	mwrite <"13. Cuasi-varianza",0dh,0ah>
+	MOV edx, OFFSET cuasiVarianza        
+	CALL imprimirDato
+pasa14:
+CMP boolEstadisticos[52], -1
+JNE pasa15
+	mwrite <"14. Desviaci",162,"n media respecto a la media",0dh,0ah>
+	MOV edx, OFFSET desvMedia         
+	CALL imprimirDato
+pasa15:
+CMP boolEstadisticos[56], -1
+JNE pasaFin
+	mwrite <"15. Desviaci",162,"n media respecto a la mediana",0dh,0ah>
+	MOV edx, OFFSET desvMediana          
+	CALL imprimirDato
+pasaFin:
+
 ;reinicializa el vector de booleanos
 MOV ecx, 15
 MOV esi, 0
@@ -822,13 +931,23 @@ ponerCeroSiguiente:
 	MOV boolEstadisticos[esi], 0
 	ADD esi, 4
 LOOP ponerCeroSiguiente
+
 RET
-mostrarEstadisticosSelec ENDP
+imprimirEstadisticosSelec ENDP
 
 ;-----------------------------------------------------------------------------------------------------------
 imprimirDato PROC
 ;Muestra un único dato
+;Para este metodo la direccion del Datos debe estar en el registro edx
 ;-----------------------------------------------------------------------------------------------------------
+	MOV esi,[edx]
+	MOV DWORD PTR numeroReal,esi
+	MOV esi,[edx+4]
+	MOV DWORD PTR numeroReal[4],esi
+	FLD numeroReal
+	CALL WriteFloat
+	CALL Crlf
+	FSTP numeroReal
 
 RET
 imprimirDato ENDP
@@ -861,7 +980,7 @@ FNSTSW ax ; mueve la palabra de estado hacia AX
 SAHF ; copia AH a EFLAGS
 
 JNB ImprimirReal
-CALL waitMsg
+;CALL waitMsg
 RET
 imprimirArregloReales ENDP
 
