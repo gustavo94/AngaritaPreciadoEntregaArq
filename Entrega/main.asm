@@ -106,6 +106,7 @@ finArchivo DWORD 0
 ;auxiliares para las sumatorias
 auxSumatoria REAL8 0.
 diez REAL8 10.
+cuatro REAL8 4.
 numDos REAL8 2.
 unoSobreCien REAL8 0.1
 menosUno REAL8 -1.
@@ -123,6 +124,8 @@ posMenor DWORD 0
 ;Auxiliares para imprimir
 ceroReal REAL8 0.
 numeroReal REAL8 0.
+auxImprimirNumeral DWORD 2 DUP(0)
+numeral DWORD 0 
 
 ;estadisticos
 media REAL8 0.
@@ -978,7 +981,9 @@ imprimirArregloReales PROC
 ;numeroReal REAL8 0.
 ;-----------------------------------------------------------------------------------------------------------
 MOV ebx,0
+MOV numeral,1
 ImprimirReal:
+	CALL imprimirNumeral
 	MOV esi,[edx+ebx]
 	MOV DWORD PTR numeroReal,esi
 	MOV esi,[edx+ebx+4]
@@ -989,6 +994,7 @@ ImprimirReal:
 	FSTP numeroReal
 	;CALL waitMsg
 	ADD ebx,8
+	
 MOV esi,[edx+ebx]
 MOV DWORD PTR numeroReal,esi
 MOV esi,[edx+ebx+4]
@@ -997,11 +1003,31 @@ FLD numeroReal
 FCOMP ceroReal ; compara ST(0) con cero
 FNSTSW ax ; mueve la palabra de estado hacia AX
 SAHF ; copia AH a EFLAGS
+INC numeral
 JNB ImprimirReal
 ;CALL waitMsg
 
 RET
 imprimirArregloReales ENDP
+
+;-----------------------------------------------------------------------------------------------------------
+imprimirNumeral PROC
+;imprime el numero q este en numeral EJ "  1-> "
+;numeral DWORD 0 
+;auxImprimirNumeral DWORD
+;-----------------------------------------------------------------------------------------------------------
+
+mWrite "  "
+MOV auxImprimirNumeral,eax
+MOV auxImprimirNumeral[1],edx
+MOV eax, numeral
+CALL WriteDec
+mWrite "-> "
+MOV eax,auxImprimirNumeral
+MOV edx,auxImprimirNumeral[1]
+
+RET
+imprimirNumeral ENDP
 
 ;-----------------------------------------------------------------------------------------------------------
 ordenar PROC
@@ -1289,7 +1315,6 @@ JL cicloFrAcu
 MOV posActual, 0
 MOV posCuantil, 0
 
-
 FILD realesLeidos
 FLD diez
 FMUL diez
@@ -1322,7 +1347,6 @@ INC posCuantil
 CMP posCuantil, 99
 JL cicloPerc
 
-
 RET
 calcPercentiles ENDP
 
@@ -1331,6 +1355,21 @@ calcCuartiles PROC
 ;Calcula el estadístico
 ;-----------------------------------------------------------------------------------------------------------
 
+;calcula los cuartiles
+MOV posActual, 0
+MOV posCuantil, 24
+
+cicloCuart:
+	
+	MOV esi, posCuantil
+	FLD percentiles[esi*8]
+	MOV esi, posActual
+	FSTP cuartiles[esi*8]
+INC posActual
+ADD posCuantil, 25
+CMP posCuantil, 75
+JL cicloCuart
+
 RET
 calcCuartiles ENDP
 
@@ -1338,6 +1377,21 @@ calcCuartiles ENDP
 calcDeciles PROC
 ;Calcula el estadístico
 ;-----------------------------------------------------------------------------------------------------------
+
+;calcula los deciles
+MOV posActual, 0
+MOV posCuantil, 9
+
+cicloDeci:
+	
+	MOV esi, posCuantil
+	FLD percentiles[esi*8]
+	MOV esi, posActual
+	FSTP deciles[esi*8]
+INC posActual
+ADD posCuantil, 10
+CMP posCuantil, 90
+JL cicloDeci
 
 RET
 calcDeciles ENDP
