@@ -125,8 +125,8 @@ numeroReal REAL8 0.
 media REAL8 0.
 mediana REAL8 0.
 moda REAL8 maxDatos DUP(-1.), -1.
-mediageometrica REAL8 0.
-mediaarmonica REAL8 0.
+mediaGeometrica REAL8 0.
+mediaArmonica REAL8 0.
 percentiles REAL8 101 DUP(-1.)
 cuartiles REAL8 5 DUP(-1.)
 deciles REAL8 11 DUP(-1.)
@@ -293,9 +293,9 @@ CALL animarBarra
 
 
 	MOV ax, [tiempoEspera+2] 
-	
+
 	CALL delay
-	
+
 	CMP contadorBarra, 6
 	JL menor6
 		MOV contadorBarra, 0
@@ -304,7 +304,7 @@ CALL animarBarra
 		INC contadorBarra
 		INC contadorBarra
 	finsi:
-	
+
 RET
 mostrarMensaje ENDP
 
@@ -340,9 +340,9 @@ MOV eax, colores2
 CALL SetTextColor
 
 MOV	ecx, 20 ; el ciclo se realizará 20 veces para llegar a 80 caracteres
-	
+
 CiloImprimir:
-		
+
 	MOV edx, OFFSET CuadrosAscii;
 	CALL	WriteString
 	MOV edx, OFFSET CuadrosAscii[2];
@@ -354,8 +354,8 @@ CiloImprimir:
 
 	MOV ax, tiempoEspera 
 	CALL delay
-	
-	
+
+
 LOOP CiloImprimir
 
 RET
@@ -386,7 +386,7 @@ L1:
 
 DEC cx
 JNZ L1 ;fin cilo para pintar la barra
-		
+
 RET
 animarBarra ENDP
 
@@ -455,7 +455,7 @@ CICLOFIN: ; en este ciclo se imprimen las líneas dentro de  las barras
 	MOV edx, [mensajeD+eax]
 	CALL WriteString ;imprime la línea del mensaje
 	CALL Crlf
-	
+
 	INC auxCiclos
 
 LOOP CICLOFIN
@@ -504,13 +504,13 @@ JNC	check_buffer_size
 mWrite <"Error leyendo el archivo. Por favor ingrese una direcci",162,"n v",160,"lida",0dh,0ah>
 CALL	WriteWindowsMsg
 JMP	preguntaRuta
-	
+
 check_buffer_size:
 CMP	eax, tamanoBufer
 JB	buf_size_ok
 mWrite <"El archivo es demasiado extenso. Ingrese la direcci",162,"n de un archivo m",160,"s corto",0dh,0ah>
 JMP	preguntaRuta
-	
+
 buf_size_ok:	
 MOV	buferArchivo[eax],0 ;terminación nula para el archivo. eax contiene la cantidad de caracteres leídos
 
@@ -533,7 +533,7 @@ leerNum:
 
 	;ciclo de lectura de caracteres
 	MOV ecx, 80
-	
+
 	leerChar:
 
 		MOV eax, 0
@@ -564,8 +564,8 @@ leerNum:
 		JE finNumero
 		JMP finChar
 		noLf:
-		
-	
+
+
 		;si hay una coma o un punto, activa el booleano para empezar a poner los decimales
 		CMP al, 44
 		JNE noEsComa
@@ -607,7 +607,7 @@ leerNum:
 		FLD realActual
 		FADD
 		FSTP realActual
-		
+
 		finChar:
 	DEC ecx
 	CMP ecx, 0
@@ -620,7 +620,7 @@ leerNum:
 	MUL realesLeidos
 	FSTP numeros[eax]
 	INC realesLeidos
-	
+
 	;si llegó al final del archivo, sale
 	CMP finArchivo, 1
 	JE finLectura
@@ -842,55 +842,55 @@ imprimirEstadisticosSelec PROC
 ;si el estadístico n fue marcado (está en -1), lo imprime. De lo contrario, pasa al siguiente
 CMP boolEstadisticos, -1
 JNE pasa2
-	mwrite <"1. Media aritm",130,"tica",0dh,0ah>
+	mwrite <"1) Media aritm",130,"tica",0dh,0ah>
 	MOV edx, OFFSET media
 	CALL imprimirDato
 pasa2:
 CMP boolEstadisticos[4], -1
 JNE pasa3
-	mwrite <"2. Mediana",0dh,0ah>
+	mwrite <"2) Mediana",0dh,0ah>
 	MOV edx, OFFSET mediana 
 	CALL imprimirDato
 pasa3:
 CMP boolEstadisticos[8], -1
 JNE pasa4
-	mwrite <"3. Moda",0dh,0ah>
+	mwrite <"3) Moda",0dh,0ah>
 	MOV edx, OFFSET moda 
 	CALL imprimirArregloReales
 pasa4:
 CMP boolEstadisticos[12], -1
 JNE pasa5
-	mwrite <"4. Media geom",130,"trica",0dh,0ah>
+	mwrite <"4) Media geom",130,"trica",0dh,0ah>
 	MOV edx, OFFSET mediageometrica  
 	CALL imprimirDato
 pasa5:
 CMP boolEstadisticos[16], -1
 JNE pasa6
-	mwrite <"5. Media arm",162,"nica",0dh,0ah>
+	mwrite <"5) Media arm",162,"nica",0dh,0ah>
 	MOV edx, OFFSET mediaarmonica   
 	CALL imprimirDato
 pasa6:
 CMP boolEstadisticos[20], -1
 JNE pasa7
-	mwrite <"6. Percentiles",0dh,0ah>
+	mwrite <"6) Percentiles",0dh,0ah>
 	MOV edx, OFFSET percentiles  
 	CALL imprimirArregloReales
 pasa7:
 CMP boolEstadisticos[24], -1
 JNE pasa8
-	mwrite <"7. Cuartiles",0dh,0ah>
+	mwrite <"7) Cuartiles",0dh,0ah>
 	MOV edx, OFFSET cuartiles   
 	CALL imprimirArregloReales
 pasa8:
 CMP boolEstadisticos[28], -1
 JNE pasa9
-	mwrite <"8. Deciles",0dh,0ah>
+	mwrite <"8) Deciles",0dh,0ah>
 	MOV edx, OFFSET deciles    
 	CALL imprimirArregloReales
 pasa9:
 CMP boolEstadisticos[32], -1
 JNE pasa10
-	mwrite <"9. Momento respecto al origen de orden ">
+	mwrite <"9) Momento respecto al origen de orden ">
 	MOV eax, ordenMomOrig
 	CALL writeDec
 	CALL crlf
@@ -899,7 +899,7 @@ JNE pasa10
 pasa10:
 CMP boolEstadisticos[36], -1
 JNE pasa11
-	mwrite <"10. Momento central o respecto a la media de orden ">
+	mwrite <"10) Momento central o respecto a la media de orden ">
 	MOV eax, ordenMomCent
 	CALL writeDec
 	CALL crlf
@@ -908,31 +908,31 @@ JNE pasa11
 pasa11:
 CMP boolEstadisticos[40], -1
 JNE pasa12
-	mwrite <"11. Varianza",0dh,0ah>
+	mwrite <"11) Varianza",0dh,0ah>
 	MOV edx, OFFSET varianza      
 	CALL imprimirDato
 pasa12:
 CMP boolEstadisticos[44], -1
 JNE pasa13
-	mwrite <"12. Desviaci",162,"n t",161,"pica",0dh,0ah>
+	mwrite <"12) Desviaci",162,"n t",161,"pica",0dh,0ah>
 	MOV edx, OFFSET desvEstandar       
 	CALL imprimirDato
 pasa13:
 CMP boolEstadisticos[48], -1
 JNE pasa14
-	mwrite <"13. Cuasi-varianza",0dh,0ah>
+	mwrite <"13) Cuasi-varianza",0dh,0ah>
 	MOV edx, OFFSET cuasiVarianza        
 	CALL imprimirDato
 pasa14:
 CMP boolEstadisticos[52], -1
 JNE pasa15
-	mwrite <"14. Desviaci",162,"n media respecto a la media",0dh,0ah>
+	mwrite <"14) Desviaci",162,"n media respecto a la media",0dh,0ah>
 	MOV edx, OFFSET desvMedia         
 	CALL imprimirDato
 pasa15:
 CMP boolEstadisticos[56], -1
 JNE pasaFin
-	mwrite <"15. Desviaci",162,"n media respecto a la mediana",0dh,0ah>
+	mwrite <"15) Desviaci",162,"n media respecto a la mediana",0dh,0ah>
 	MOV edx, OFFSET desvMediana          
 	CALL imprimirDato
 pasaFin:
@@ -1040,7 +1040,7 @@ CicloOrdenar:
 	;FinCicloComparar
 
 	;Intercambio de posiciones
-	
+
 	FLD menorValor ;st(0) = menor
 	MOV eax,8
 	MUL posActual
@@ -1145,7 +1145,7 @@ MOV posActual, 1
 MOV posModa, 0
 
 cicloFrecu:
-	
+
 	MOV esi, posActual
 	FLD numeros[esi*8]
 	FCOMP realActual
@@ -1201,6 +1201,32 @@ calcMediageometrica PROC
 ;Calcula el estadístico
 ;-----------------------------------------------------------------------------------------------------------
 
+MOV posActual, 0
+FLD1
+
+;productoria
+cicloMediaGeom:
+	MOV esi, posActual
+	FLD numeros[esi*8]
+	FMUL
+INC posActual
+MOV esi, realesLeidos
+CMP posActual, esi
+JL cicloMediaGeom
+
+;raíz n-ésima
+FLD1
+FILD realesLeidos
+FDIV
+FXCH ;st(0)=resultado de la productoria, st(1)=1/realesLeidos
+FYL2X ;st(0)=log2(productoria)/realesLeidos
+
+F2XM1 ;st(0)=productoria^(1/realesLeidos)-1
+FLD1
+FADD
+
+FSTP mediaGeometrica
+
 RET
 calcMediageometrica ENDP
 
@@ -1255,7 +1281,31 @@ calcMomentosCentrales ENDP
 ;-----------------------------------------------------------------------------------------------------------
 calcVarianza PROC
 ;Calcula el estadístico
+;auxSumatoria REAL8 0.
 ;-----------------------------------------------------------------------------------------------------------
+
+FLDZ
+FSTP auxSumatoria
+
+MOV posActual, 0
+cicloVar:
+	MOV esi, posActual
+	FLD numeros[esi*8]
+	FSUB media
+	FST realActual
+	FMUL realActual
+	FLD auxSumatoria
+	FADD
+	FSTP auxSumatoria
+INC posActual
+MOV esi, realesLeidos
+CMP posActual, esi
+JL cicloVar
+
+FLD auxSumatoria
+FILD realesLeidos
+FDIV
+FSTP varianza
 
 RET
 calcVarianza ENDP
@@ -1272,6 +1322,30 @@ calcDesvEstandar ENDP
 calcCuasiVarianza PROC
 ;Calcula el estadístico
 ;-----------------------------------------------------------------------------------------------------------
+
+FLDZ
+FSTP auxSumatoria
+
+MOV posActual, 0
+cicloVar:
+	MOV esi, posActual
+	FLD numeros[esi*8]
+	FSUB media
+	FST realActual
+	FMUL realActual
+	FLD auxSumatoria
+	FADD
+	FSTP auxSumatoria
+INC posActual
+MOV esi, realesLeidos
+CMP posActual, esi
+JL cicloVar
+
+FLD auxSumatoria
+FILD realesLeidos
+FADD menosUno
+FDIV
+FSTP cuasiVarianza
 
 RET
 calcCuasiVarianza ENDP
