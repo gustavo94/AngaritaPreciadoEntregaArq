@@ -1,0 +1,229 @@
+MOV posActual, 0
+cicloVar:
+
+INC posActual
+MOV esi, realesLeidos
+CMP posActual, esi
+JL cicloVar
+
+
+
+
+2^(rLog2(A))
+
+
+
+;-----------------------------------------------------------------------------------------------------------
+calcPercentiles PROC
+;Calcula el estadístico
+;cantDatosDistintos
+;-----------------------------------------------------------------------------------------------------------
+
+;calcula las frecuencias acumuladas
+MOV posActual, 0
+MOV frecAcum, 0
+cicloFrAcu:
+	MOV esi, posActual
+	MOV eax, frecuencias[esi*4]
+	ADD eax, frecAcum
+	MOV frecAcum, eax
+	MOV frecuenciasAcum[esi*4], eax
+INC posActual
+MOV esi, cantDatosDistintos
+CMP posActual, esi
+JL cicloFrAcu
+
+;calcula los percentiles
+MOV posActual, 0
+MOV posCuantil, 0
+
+FILD realesLeidos
+FLD diez
+FMUL diez
+FDIV
+FSTP porcentaje ;1% del total de datos
+
+cicloPerc:
+	;calcula el número de datos que hay por debajo del percentil #(poscuantil+1)
+	FLD porcentaje
+	FILD posCuantil
+	FLD1
+	FADD
+	FMUL ;(posCuantil+1)% del total de datos
+	FISTP cantDatosPorDebajo
+
+	;compara la frecuencia acumulada de cada dato con la cantidad de datos que debe superar el percentil
+	cicloCmpPerc:
+		MOV esi, posActual ;siguiente dato distinto
+		MOV eax, frecuenciasAcum[esi*4] ;frecuencia acumulada del dato
+		CMP eax, cantDatosPorDebajo
+		JG finCicloCmpPerc ;si la frecuencia acumulada es mayor al (posCuantil+1)% del total de datos, guarda el dato en el percentil
+		INC posActual
+		JMP cicloCmpPerc
+	finCicloCmpPerc:
+	FLD numerosDistintos[esi*8]
+	MOV esi, posCuantil
+	FSTP percentiles[esi*8]
+
+INC posCuantil
+CMP posCuantil, 99
+JL cicloPerc
+
+RET
+calcPercentiles ENDP
+
+;-----------------------------------------------------------------------------------------------------------
+calcCuartiles PROC
+;Calcula el estadístico
+;-----------------------------------------------------------------------------------------------------------
+
+;calcula los cuartiles
+MOV posActual, 0
+MOV posCuantil, 0
+
+FILD realesLeidos
+FLD cuatro
+FDIV
+FSTP porcentaje ;25% del total de datos
+
+cicloCuart:
+	;calcula el número de datos que hay por debajo del percentil #(poscuantil+1)
+	FLD porcentaje
+	FILD posCuantil
+	FLD1
+	FADD
+	FMUL ;(posCuantil+1)*25% del total de datos
+	FISTTP cantDatosPorDebajo
+
+	;compara la frecuencia acumulada de cada dato con la cantidad de datos que debe superar el percentil
+	cicloCmpCuart:
+		MOV esi, posActual ;siguiente dato distinto
+		MOV eax, frecuenciasAcum[esi*4] ;frecuencia acumulada del dato
+		CMP eax, cantDatosPorDebajo
+		JG finCicloCmpCuart ;si la frecuencia acumulada es mayor al (posCuantil+1)*25% del total de datos, guarda el dato en el percentil
+		INC posActual
+		JMP cicloCmpCuart
+	finCicloCmpCuart:
+	FLD numerosDistintos[esi*8]
+	MOV esi, posCuantil
+	FSTP cuartiles[esi*8]
+
+INC posCuantil
+CMP posCuantil, 3
+JL cicloCuart
+
+RET
+calcCuartiles ENDP
+
+
+
+__________________________________________
+_____________
+____________
+
+
+;-----------------------------------------------------------------------------------------------------------
+calcPercentiles PROC
+;Calcula el estadístico
+;cantDatosDistintos
+;-----------------------------------------------------------------------------------------------------------
+
+;calcula las frecuencias acumuladas
+MOV posActual, 0
+MOV frecAcum, 0
+cicloFrAcu:
+	MOV esi, posActual
+	MOV eax, frecuencias[esi*4]
+	ADD eax, frecAcum
+	MOV frecAcum, eax
+	MOV frecuenciasAcum[esi*4], eax
+INC posActual
+MOV esi, cantDatosDistintos
+CMP posActual, esi
+JL cicloFrAcu
+
+;calcula los percentiles
+MOV posActual, 0
+MOV posCuantil, 0
+
+;_____________
+;ve si la cantidad de datos es par o impar
+MOV ebx, 2
+MOV edx, 0
+MOV eax, realesLeidos
+
+DIV ebx
+
+CMP dx, 0
+JNE noEsPar
+	;la mediana es el promedio entre los datos en las posiciones (realesleidos/2) y (realesleidos/2)+1
+	FLD numeros[eax*8] ;(realesleidos/2)+1
+	FLD numeros[eax*8-8] ;(realesleidos/2)
+	FADD
+	FLD numDos
+	FDIV
+	FSTP mediana
+	JMP  finMediana
+noEsPar:
+
+;la mediana es el dato en la posición roof(realesleidos/2)=eax+1
+FLD numeros[eax*8]
+FSTP mediana
+
+finMediana:
+
+;___________________________
+
+
+
+cicloPerc:
+
+	;revisa si la división genera residuo
+	MOV edx, 0
+	MOV eax, realesLeidos
+
+	MOV ebx, posCuantil
+	INC ebx
+	MUL ebx
+	MOV ebx, 100
+
+	DIV ebx
+
+	CMP dx, 0
+	JNE noResiduo
+		cicloCmpPerc:
+			MOV esi, posActual ;siguiente dato distinto
+			MOV eax, frecuenciasAcum[esi*4] ;frecuencia acumulada del dato
+			CMP eax, cantDatosPorDebajo
+			JG finCicloCmpPerc ;si la frecuencia acumulada es mayor al (posCuantil+1)% del total de datos, guarda el dato en el percentil
+			INC posActual
+			JMP cicloCmpPerc
+		finCicloCmpPerc:
+		FLD numerosDistintos[esi*8]
+		MOV esi, posCuantil
+		FSTP percentiles[esi*8]
+
+		JMP finPercentil
+
+	noResiduo:
+
+		cicloCmpPerc:
+			MOV esi, posActual ;siguiente dato distinto
+			MOV eax, frecuenciasAcum[esi*4] ;frecuencia acumulada del dato
+			CMP eax, cantDatosPorDebajo
+			JG finCicloCmpPerc ;si la frecuencia acumulada es mayor al (posCuantil+1)% del total de datos, guarda el dato en el percentil
+			INC posActual
+			JMP cicloCmpPerc
+		finCicloCmpPerc:
+		FLD numerosDistintos[esi*8]
+		MOV esi, posCuantil
+		FSTP percentiles[esi*8]
+
+finPercentil:
+
+INC posCuantil
+CMP posCuantil, 99
+JL cicloPerc
+
+RET
+calcPercentiles ENDP

@@ -55,7 +55,7 @@ contEjecuciones DWORD 0
 
 auxCiclos	DWORD 5 DUP(0); array que servirá como variables auxiliares y de control durante los ciclos
 
-tiempoEspera WORD 10,10 ; tiempos de espera para las animaciones
+tiempoEspera WORD 50,1000 ; tiempos de espera para las animaciones
 
 ;fondos y colores de texto
 colores1 EQU lightBlue + (white * 16); Azul claro sobre blanco

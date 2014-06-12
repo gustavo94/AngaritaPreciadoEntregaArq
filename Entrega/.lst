@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/12/14 00:27:35
+Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/12/14 01:13:18
 ESTADÍSTICAS						(main.asm  Page 1 - 1
 
 
@@ -188,7 +188,7 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/12/14 00:27:35
 	    00000000
 	   ]
 
- 00000348 000A 000A		tiempoEspera WORD 10,10 ; tiempos de espera para las animaciones
+ 00000348 0032 03E8		tiempoEspera WORD 50,1000 ; tiempos de espera para las animaciones
 
 				;fondos y colores de texto
  = 000000F9			colores1 EQU lightBlue + (white * 16); Azul claro sobre blanco
@@ -2587,7 +2587,7 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/12/14 00:27:35
 				;Calcula el estadístico
 				;varianza REAL8 0.
 				;desvEstandar REAL8 0.
-;-----------------------------------------------------------------------------------------------------------
+				;-----------------------------------------------------------------------------------------------------------
 
  000010E5  DD 05 000068B8 R	 FLD varianza
  000010EB  D9 FA		 FSQRT
@@ -2693,7 +2693,7 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/12/14 00:27:35
 
 				;fin del programa
 				END main
-Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/12/14 00:27:35
+Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/12/14 01:13:18
 ESTADÍSTICAS						(main.asm  Symbols 2 - 1
 
 
