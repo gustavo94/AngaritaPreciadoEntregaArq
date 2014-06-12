@@ -967,6 +967,7 @@ imprimirDato PROC
 	MOV esi,[edx+4]
 	MOV DWORD PTR numeroReal[4],esi
 	FLD numeroReal
+	mWrite " "
 	CALL WriteFloat
 	CALL Crlf
 	FSTP numeroReal
