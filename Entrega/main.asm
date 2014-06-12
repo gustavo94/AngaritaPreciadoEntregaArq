@@ -1316,33 +1316,70 @@ JL cicloFrAcu
 MOV posActual, 0
 MOV posCuantil, 0
 
-FILD realesLeidos
-FLD diez
-FMUL diez
-FDIV
-FSTP porcentaje ;1% del total de datos
-
 cicloPerc:
-	;calcula el número de datos que hay por debajo del percentil #(poscuantil+1)
-	FLD porcentaje
-	FILD posCuantil
-	FLD1
-	FADD
-	FMUL ;(posCuantil+1)% del total de datos
-	FISTP cantDatosPorDebajo
 
-	;compara la frecuencia acumulada de cada dato con la cantidad de datos que debe superar el percentil
-	cicloCmpPerc:
-		MOV esi, posActual ;siguiente dato distinto
-		MOV eax, frecuenciasAcum[esi*4] ;frecuencia acumulada del dato
-		CMP eax, cantDatosPorDebajo
-		JG finCicloCmpPerc ;si la frecuencia acumulada es mayor al (posCuantil+1)% del total de datos, guarda el dato en el percentil
-		INC posActual
-		JMP cicloCmpPerc
-	finCicloCmpPerc:
-	FLD numerosDistintos[esi*8]
-	MOV esi, posCuantil
-	FSTP percentiles[esi*8]
+	;revisa si la división genera residuo
+	MOV edx, 0
+	MOV eax, realesLeidos
+
+	MOV ebx, posCuantil
+	INC ebx
+	MUL ebx
+	MOV ebx, 100
+
+	DIV ebx
+
+	MOV cantDatosPorDebajo, eax
+
+	;;;;
+	;call writedec
+	;call crlf
+	;call waitmsg
+	;mov eax, dword ptr edx
+	;call writedec
+	;call crlf
+	;call waitmsg
+	;;;;;
+
+	CMP dx, 0
+	JNE noResiduo
+		cicloCmpPerc:
+			MOV esi, posActual ;siguiente dato distinto
+			MOV eax, frecuenciasAcum[esi*4] ;frecuencia acumulada del dato
+			CMP eax, cantDatosPorDebajo
+			JGE finCicloCmpPerc ;si la frecuencia acumulada es mayor al (posCuantil+1)% del total de datos, guarda el dato en el percentil
+			INC posActual
+			JMP cicloCmpPerc
+		finCicloCmpPerc:
+			;promedio de los datos
+		FLD numerosDistintos[esi*8]
+		FLD numerosDistintos[esi*8+8]
+		FADD
+		FLD1
+		FLD1
+		FADD
+		FDIV
+		MOV esi, posCuantil
+		FSTP percentiles[esi*8]
+
+		JMP finPercentil
+
+	noResiduo:
+
+		cicloCmpPerc2:
+			MOV esi, posActual ;siguiente dato distinto
+			MOV eax, frecuenciasAcum[esi*4] ;frecuencia acumulada del dato
+			CMP eax, cantDatosPorDebajo
+			JG finCicloCmpPerc2 ;si la frecuencia acumulada es mayor al (posCuantil+1)% del total de datos, guarda el dato en el percentil
+			INC posActual
+			JMP cicloCmpPerc2
+
+		finCicloCmpPerc2:
+		FLD numerosDistintos[esi*8]
+		MOV esi, posCuantil
+		FSTP percentiles[esi*8]
+
+finPercentil:
 
 INC posCuantil
 CMP posCuantil, 99
