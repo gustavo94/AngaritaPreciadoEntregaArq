@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 15:42:52
+Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 19:07:10
 ESTADÍSTICAS						(main.asm  Page 1 - 1
 
 
@@ -1158,8 +1158,8 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 15:42:52
  000005B9  E8 0000073C		CALL calcVarianza
  000005BE  E8 0000079F		CALL calcDesvEstandar
  000005C3  E8 0000079B		CALL calcCuasiVarianza
- 000005C8  E8 00000797		CALL calcDesvMedia
- 000005CD  E8 00000793		CALL calcDesvMediana
+ 000005C8  E8 00000804		CALL calcDesvMedia
+ 000005CD  E8 00000800		CALL calcDesvMediana
 
 
  000005D2  C3			RET
@@ -2287,28 +2287,54 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 15:42:52
 				;Calcula el estadístico
 				;-----------------------------------------------------------------------------------------------------------
 
- 00000D63  C3			RET
- 00000D64			calcCuasiVarianza ENDP
+ 00000D63  D9 EE		FLDZ
+ 00000D65  DD 1D 00004854 R	FSTP auxSumatoria
+
+ 00000D6B  C7 05 0000487C R	MOV posActual, 0
+	   00000000
+ 00000D75			cicloVar:
+ 00000D75  8B 35 0000487C R		MOV esi, posActual
+ 00000D7B  DD 04 F5			FLD numeros[esi*8]
+	   000005AE R
+ 00000D82  DC 25 000048AC R		FSUB media
+ 00000D88  DD 15 00004838 R		FST realActual
+ 00000D8E  DC 0D 00004838 R		FMUL realActual
+ 00000D94  DD 05 00004854 R		FLD auxSumatoria
+ 00000D9A  DE C1			FADD
+ 00000D9C  DD 1D 00004854 R		FSTP auxSumatoria
+ 00000DA2  FF 05 0000487C R	INC posActual
+ 00000DA8  8B 35 00004848 R	MOV esi, realesLeidos
+ 00000DAE  39 35 0000487C R	CMP posActual, esi
+ 00000DB4  7C BF		JL cicloVar
+
+ 00000DB6  DD 05 00004854 R	FLD auxSumatoria
+ 00000DBC  DB 05 00004848 R	FILD realesLeidos
+ 00000DC2  DC 05 00004874 R	FADD menosUno
+ 00000DC8  DE F9		FDIV
+ 00000DCA  DD 1D 00005F5C R	FSTP cuasiVarianza
+
+ 00000DD0  C3			RET
+ 00000DD1			calcCuasiVarianza ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 00000D64			calcDesvMedia PROC
+ 00000DD1			calcDesvMedia PROC
 				;Calcula el estadístico
 				;-----------------------------------------------------------------------------------------------------------
 
- 00000D64  C3			RET
- 00000D65			calcDesvMedia ENDP
+ 00000DD1  C3			RET
+ 00000DD2			calcDesvMedia ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 00000D65			calcDesvMediana PROC
+ 00000DD2			calcDesvMediana PROC
 				;Calcula el estadístico
 				;-----------------------------------------------------------------------------------------------------------
 
- 00000D65  C3			RET
- 00000D66			calcDesvMediana ENDP
+ 00000DD2  C3			RET
+ 00000DD3			calcDesvMediana ENDP
 
 				;fin del programa
 				END main
-Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 15:42:52
+Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 19:07:10
 ESTADÍSTICAS						(main.asm  Symbols 2 - 1
 
 
@@ -2421,7 +2447,7 @@ Segments and Groups:
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00000400 Para	  Stack	  'STACK'	 
 _DATA  . . . . . . . . . . . . .	32 Bit	 00006876 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 00000D66 Para	  Public  'CODE'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000DD3 Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -2533,11 +2559,12 @@ animarBarra  . . . . . . . . . .	P Near	 000002BF _TEXT	Length= 00000044 Public 
   menor6 . . . . . . . . . . . .	L Near	 000002F2 _TEXT	
   finsi  . . . . . . . . . . . .	L Near	 000002FE _TEXT	
 calcCuartiles  . . . . . . . . .	P Near	 00000CF6 _TEXT	Length= 00000001 Public STDCALL
-calcCuasiVarianza  . . . . . . .	P Near	 00000D63 _TEXT	Length= 00000001 Public STDCALL
+calcCuasiVarianza  . . . . . . .	P Near	 00000D63 _TEXT	Length= 0000006E Public STDCALL
+  cicloVar . . . . . . . . . . .	L Near	 00000D75 _TEXT	
 calcDeciles  . . . . . . . . . .	P Near	 00000CF7 _TEXT	Length= 00000001 Public STDCALL
 calcDesvEstandar . . . . . . . .	P Near	 00000D62 _TEXT	Length= 00000001 Public STDCALL
-calcDesvMediana  . . . . . . . .	P Near	 00000D65 _TEXT	Length= 00000001 Public STDCALL
-calcDesvMedia  . . . . . . . . .	P Near	 00000D64 _TEXT	Length= 00000001 Public STDCALL
+calcDesvMediana  . . . . . . . .	P Near	 00000DD2 _TEXT	Length= 00000001 Public STDCALL
+calcDesvMedia  . . . . . . . . .	P Near	 00000DD1 _TEXT	Length= 00000001 Public STDCALL
 calcMediaarmonica  . . . . . . .	P Near	 00000CF4 _TEXT	Length= 00000001 Public STDCALL
 calcMediageometrica  . . . . . .	P Near	 00000CF3 _TEXT	Length= 00000001 Public STDCALL
 calcMediana  . . . . . . . . . .	P Near	 00000BA1 _TEXT	Length= 00000045 Public STDCALL

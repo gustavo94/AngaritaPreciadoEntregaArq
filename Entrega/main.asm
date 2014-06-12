@@ -1297,6 +1297,30 @@ calcCuasiVarianza PROC
 ;Calcula el estadístico
 ;-----------------------------------------------------------------------------------------------------------
 
+FLDZ
+FSTP auxSumatoria
+
+MOV posActual, 0
+cicloVar:
+	MOV esi, posActual
+	FLD numeros[esi*8]
+	FSUB media
+	FST realActual
+	FMUL realActual
+	FLD auxSumatoria
+	FADD
+	FSTP auxSumatoria
+INC posActual
+MOV esi, realesLeidos
+CMP posActual, esi
+JL cicloVar
+
+FLD auxSumatoria
+FILD realesLeidos
+FADD menosUno
+FDIV
+FSTP cuasiVarianza
+
 RET
 calcCuasiVarianza ENDP
 
