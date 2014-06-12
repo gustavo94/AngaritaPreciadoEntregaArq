@@ -125,8 +125,8 @@ numeroReal REAL8 0.
 media REAL8 0.
 mediana REAL8 0.
 moda REAL8 maxDatos DUP(-1.), -1.
-mediageometrica REAL8 0.
-mediaarmonica REAL8 0.
+mediaGeometrica REAL8 0.
+mediaArmonica REAL8 0.
 percentiles REAL8 101 DUP(-1.)
 cuartiles REAL8 5 DUP(-1.)
 deciles REAL8 11 DUP(-1.)
@@ -1200,6 +1200,32 @@ calcModa ENDP
 calcMediageometrica PROC
 ;Calcula el estadístico
 ;-----------------------------------------------------------------------------------------------------------
+
+MOV posActual, 0
+FLD1
+
+;productoria
+cicloMediaGeom:
+	MOV esi, posActual
+	FLD numeros[esi*8]
+	FMUL
+INC posActual
+MOV esi, realesLeidos
+CMP posActual, esi
+JL cicloMediaGeom
+
+;raíz n-ésima
+FLD1
+FILD realesLeidos
+FDIV
+FXCH ;st(0)=resultado de la productoria, st(1)=1/realesLeidos
+FYL2X ;st(0)=log2(productoria)/realesLeidos
+
+F2XM1 ;st(0)=productoria^(1/realesLeidos)-1
+FLD1
+FADD
+
+FSTP mediaGeometrica
 
 RET
 calcMediageometrica ENDP
