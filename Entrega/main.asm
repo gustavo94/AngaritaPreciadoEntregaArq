@@ -1235,6 +1235,26 @@ calcMediaarmonica PROC
 ;Calcula el estadístico
 ;-----------------------------------------------------------------------------------------------------------
 
+MOV posActual, 0
+FLDZ
+;sumatoria de recíprocos
+cicloMediaArm:
+	FLD1
+	MOV esi, posActual
+	FLD numeros[esi*8]
+	FDIV ;recíproco
+	FADD
+INC posActual
+MOV esi, realesLeidos
+CMP posActual, esi
+JL cicloMediaArm
+;división
+FILD realesLeidos
+FXCH
+FDIV
+
+FSTP mediaArmonica
+
 RET
 calcMediaarmonica ENDP
 

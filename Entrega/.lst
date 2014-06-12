@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 20:56:18
+Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 21:08:10
 ESTADÍSTICAS						(main.asm  Page 1 - 1
 
 
@@ -1150,16 +1150,16 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 20:56:18
  0000059B  E8 00000646		CALL calcModa
  000005A0  E8 0000074E		CALL calcMediageometrica
  000005A5  E8 00000793		CALL calcMediaarmonica
- 000005AA  E8 0000078F		CALL calcPercentiles
- 000005AF  E8 0000078B		CALL calcCuartiles
- 000005B4  E8 00000787		CALL calcDeciles
+ 000005AA  E8 000007D2		CALL calcPercentiles
+ 000005AF  E8 000007CE		CALL calcCuartiles
+ 000005B4  E8 000007CA		CALL calcDeciles
 				;CALL calcMomentosOrigen
 				;CALL calcMomentosCentrales
- 000005B9  E8 00000785		CALL calcVarianza
- 000005BE  E8 000007E8		CALL calcDesvEstandar
- 000005C3  E8 000007E4		CALL calcCuasiVarianza
- 000005C8  E8 0000084D		CALL calcDesvMedia
- 000005CD  E8 00000849		CALL calcDesvMediana
+ 000005B9  E8 000007C8		CALL calcVarianza
+ 000005BE  E8 0000082B		CALL calcDesvEstandar
+ 000005C3  E8 00000827		CALL calcCuasiVarianza
+ 000005C8  E8 00000890		CALL calcDesvMedia
+ 000005CD  E8 0000088C		CALL calcDesvMediana
 
 
  000005D2  C3			RET
@@ -1170,8 +1170,8 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 20:56:18
 				; Calcula los momentos según los datos que ingresó el usuario
 				;-----------------------------------------------------------------------------------------------------------
 
- 000005D3  E8 00000769		CALL calcMomentosOrigen
- 000005D8  E8 00000765		CALL calcMomentosCentrales
+ 000005D3  E8 000007AC		CALL calcMomentosOrigen
+ 000005D8  E8 000007A8		CALL calcMomentosCentrales
 
  000005DD  C3			RET
  000005DE			calcularMomentos ENDP
@@ -2225,144 +2225,166 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 20:56:18
 				;Calcula el estadístico
 				;-----------------------------------------------------------------------------------------------------------
 
- 00000D3D  C3			RET
- 00000D3E			calcMediaarmonica ENDP
+ 00000D3D  C7 05 0000487C R	MOV posActual, 0
+	   00000000
+ 00000D47  D9 EE		FLDZ
+				;sumatoria de recíprocos
+ 00000D49			cicloMediaArm:
+ 00000D49  D9 E8			FLD1
+ 00000D4B  8B 35 0000487C R		MOV esi, posActual
+ 00000D51  DD 04 F5			FLD numeros[esi*8]
+	   000005AE R
+ 00000D58  DE F9			FDIV ;recíproco
+ 00000D5A  DE C1			FADD
+ 00000D5C  FF 05 0000487C R	INC posActual
+ 00000D62  8B 35 00004848 R	MOV esi, realesLeidos
+ 00000D68  39 35 0000487C R	CMP posActual, esi
+ 00000D6E  7C D9		JL cicloMediaArm
+				;división
+ 00000D70  DB 05 00004848 R	FILD realesLeidos
+ 00000D76  D9 C9		FXCH
+ 00000D78  DE F9		FDIV
+
+ 00000D7A  DD 1D 00005B8C R	FSTP mediaArmonica
+
+ 00000D80  C3			RET
+ 00000D81			calcMediaarmonica ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 00000D3E			calcPercentiles PROC
+ 00000D81			calcPercentiles PROC
 				;Calcula el estadístico
 				;-----------------------------------------------------------------------------------------------------------
 
- 00000D3E  C3			RET
- 00000D3F			calcPercentiles ENDP
+ 00000D81  C3			RET
+ 00000D82			calcPercentiles ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 00000D3F			calcCuartiles PROC
+ 00000D82			calcCuartiles PROC
 				;Calcula el estadístico
 				;-----------------------------------------------------------------------------------------------------------
 
- 00000D3F  C3			RET
- 00000D40			calcCuartiles ENDP
+ 00000D82  C3			RET
+ 00000D83			calcCuartiles ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 00000D40			calcDeciles PROC
+ 00000D83			calcDeciles PROC
 				;Calcula el estadístico
 				;-----------------------------------------------------------------------------------------------------------
 
- 00000D40  C3			RET
- 00000D41			calcDeciles ENDP
+ 00000D83  C3			RET
+ 00000D84			calcDeciles ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 00000D41			calcMomentosOrigen PROC
+ 00000D84			calcMomentosOrigen PROC
 				;Calcula el estadístico
 				;-----------------------------------------------------------------------------------------------------------
 
- 00000D41  C3			RET
- 00000D42			calcMomentosOrigen ENDP
+ 00000D84  C3			RET
+ 00000D85			calcMomentosOrigen ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 00000D42			calcMomentosCentrales PROC
+ 00000D85			calcMomentosCentrales PROC
 				;Calcula el estadístico
 				;-----------------------------------------------------------------------------------------------------------
 
- 00000D42  C3			RET
- 00000D43			calcMomentosCentrales ENDP
+ 00000D85  C3			RET
+ 00000D86			calcMomentosCentrales ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 00000D43			calcVarianza PROC
+ 00000D86			calcVarianza PROC
 				;Calcula el estadístico
 				;auxSumatoria REAL8 0.
 				;-----------------------------------------------------------------------------------------------------------
 
- 00000D43  D9 EE		FLDZ
- 00000D45  DD 1D 00004854 R	FSTP auxSumatoria
+ 00000D86  D9 EE		FLDZ
+ 00000D88  DD 1D 00004854 R	FSTP auxSumatoria
 
- 00000D4B  C7 05 0000487C R	MOV posActual, 0
+ 00000D8E  C7 05 0000487C R	MOV posActual, 0
 	   00000000
- 00000D55			cicloVar:
- 00000D55  8B 35 0000487C R		MOV esi, posActual
- 00000D5B  DD 04 F5			FLD numeros[esi*8]
+ 00000D98			cicloVar:
+ 00000D98  8B 35 0000487C R		MOV esi, posActual
+ 00000D9E  DD 04 F5			FLD numeros[esi*8]
 	   000005AE R
- 00000D62  DC 25 000048AC R		FSUB media
- 00000D68  DD 15 00004838 R		FST realActual
- 00000D6E  DC 0D 00004838 R		FMUL realActual
- 00000D74  DD 05 00004854 R		FLD auxSumatoria
- 00000D7A  DE C1			FADD
- 00000D7C  DD 1D 00004854 R		FSTP auxSumatoria
- 00000D82  FF 05 0000487C R	INC posActual
- 00000D88  8B 35 00004848 R	MOV esi, realesLeidos
- 00000D8E  39 35 0000487C R	CMP posActual, esi
- 00000D94  7C BF		JL cicloVar
+ 00000DA5  DC 25 000048AC R		FSUB media
+ 00000DAB  DD 15 00004838 R		FST realActual
+ 00000DB1  DC 0D 00004838 R		FMUL realActual
+ 00000DB7  DD 05 00004854 R		FLD auxSumatoria
+ 00000DBD  DE C1			FADD
+ 00000DBF  DD 1D 00004854 R		FSTP auxSumatoria
+ 00000DC5  FF 05 0000487C R	INC posActual
+ 00000DCB  8B 35 00004848 R	MOV esi, realesLeidos
+ 00000DD1  39 35 0000487C R	CMP posActual, esi
+ 00000DD7  7C BF		JL cicloVar
 
- 00000D96  DD 05 00004854 R	FLD auxSumatoria
- 00000D9C  DB 05 00004848 R	FILD realesLeidos
- 00000DA2  DE F9		FDIV
- 00000DA4  DD 1D 00005F4C R	FSTP varianza
+ 00000DD9  DD 05 00004854 R	FLD auxSumatoria
+ 00000DDF  DB 05 00004848 R	FILD realesLeidos
+ 00000DE5  DE F9		FDIV
+ 00000DE7  DD 1D 00005F4C R	FSTP varianza
 
- 00000DAA  C3			RET
- 00000DAB			calcVarianza ENDP
+ 00000DED  C3			RET
+ 00000DEE			calcVarianza ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 00000DAB			calcDesvEstandar PROC
+ 00000DEE			calcDesvEstandar PROC
 				;Calcula el estadístico
 				;-----------------------------------------------------------------------------------------------------------
 
- 00000DAB  C3			RET
- 00000DAC			calcDesvEstandar ENDP
+ 00000DEE  C3			RET
+ 00000DEF			calcDesvEstandar ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 00000DAC			calcCuasiVarianza PROC
+ 00000DEF			calcCuasiVarianza PROC
 				;Calcula el estadístico
 				;-----------------------------------------------------------------------------------------------------------
 
- 00000DAC  D9 EE		FLDZ
- 00000DAE  DD 1D 00004854 R	FSTP auxSumatoria
+ 00000DEF  D9 EE		FLDZ
+ 00000DF1  DD 1D 00004854 R	FSTP auxSumatoria
 
- 00000DB4  C7 05 0000487C R	MOV posActual, 0
+ 00000DF7  C7 05 0000487C R	MOV posActual, 0
 	   00000000
- 00000DBE			cicloVar:
- 00000DBE  8B 35 0000487C R		MOV esi, posActual
- 00000DC4  DD 04 F5			FLD numeros[esi*8]
+ 00000E01			cicloVar:
+ 00000E01  8B 35 0000487C R		MOV esi, posActual
+ 00000E07  DD 04 F5			FLD numeros[esi*8]
 	   000005AE R
- 00000DCB  DC 25 000048AC R		FSUB media
- 00000DD1  DD 15 00004838 R		FST realActual
- 00000DD7  DC 0D 00004838 R		FMUL realActual
- 00000DDD  DD 05 00004854 R		FLD auxSumatoria
- 00000DE3  DE C1			FADD
- 00000DE5  DD 1D 00004854 R		FSTP auxSumatoria
- 00000DEB  FF 05 0000487C R	INC posActual
- 00000DF1  8B 35 00004848 R	MOV esi, realesLeidos
- 00000DF7  39 35 0000487C R	CMP posActual, esi
- 00000DFD  7C BF		JL cicloVar
+ 00000E0E  DC 25 000048AC R		FSUB media
+ 00000E14  DD 15 00004838 R		FST realActual
+ 00000E1A  DC 0D 00004838 R		FMUL realActual
+ 00000E20  DD 05 00004854 R		FLD auxSumatoria
+ 00000E26  DE C1			FADD
+ 00000E28  DD 1D 00004854 R		FSTP auxSumatoria
+ 00000E2E  FF 05 0000487C R	INC posActual
+ 00000E34  8B 35 00004848 R	MOV esi, realesLeidos
+ 00000E3A  39 35 0000487C R	CMP posActual, esi
+ 00000E40  7C BF		JL cicloVar
 
- 00000DFF  DD 05 00004854 R	FLD auxSumatoria
- 00000E05  DB 05 00004848 R	FILD realesLeidos
- 00000E0B  DC 05 00004874 R	FADD menosUno
- 00000E11  DE F9		FDIV
- 00000E13  DD 1D 00005F5C R	FSTP cuasiVarianza
+ 00000E42  DD 05 00004854 R	FLD auxSumatoria
+ 00000E48  DB 05 00004848 R	FILD realesLeidos
+ 00000E4E  DC 05 00004874 R	FADD menosUno
+ 00000E54  DE F9		FDIV
+ 00000E56  DD 1D 00005F5C R	FSTP cuasiVarianza
 
- 00000E19  C3			RET
- 00000E1A			calcCuasiVarianza ENDP
+ 00000E5C  C3			RET
+ 00000E5D			calcCuasiVarianza ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 00000E1A			calcDesvMedia PROC
+ 00000E5D			calcDesvMedia PROC
 				;Calcula el estadístico
 				;-----------------------------------------------------------------------------------------------------------
 
- 00000E1A  C3			RET
- 00000E1B			calcDesvMedia ENDP
+ 00000E5D  C3			RET
+ 00000E5E			calcDesvMedia ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 00000E1B			calcDesvMediana PROC
+ 00000E5E			calcDesvMediana PROC
 				;Calcula el estadístico
 				;-----------------------------------------------------------------------------------------------------------
 
- 00000E1B  C3			RET
- 00000E1C			calcDesvMediana ENDP
+ 00000E5E  C3			RET
+ 00000E5F			calcDesvMediana ENDP
 
 				;fin del programa
 				END main
-Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 20:56:18
+Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 21:08:10
 ESTADÍSTICAS						(main.asm  Symbols 2 - 1
 
 
@@ -2475,7 +2497,7 @@ Segments and Groups:
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00000400 Para	  Stack	  'STACK'	 
 _DATA  . . . . . . . . . . . . .	32 Bit	 00006876 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 00000E1C Para	  Public  'CODE'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000E5F Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -2586,14 +2608,15 @@ animarBarra  . . . . . . . . . .	P Near	 000002BF _TEXT	Length= 00000044 Public 
   L1 . . . . . . . . . . . . . .	L Near	 000002CD _TEXT	
   menor6 . . . . . . . . . . . .	L Near	 000002F2 _TEXT	
   finsi  . . . . . . . . . . . .	L Near	 000002FE _TEXT	
-calcCuartiles  . . . . . . . . .	P Near	 00000D3F _TEXT	Length= 00000001 Public STDCALL
-calcCuasiVarianza  . . . . . . .	P Near	 00000DAC _TEXT	Length= 0000006E Public STDCALL
-  cicloVar . . . . . . . . . . .	L Near	 00000DBE _TEXT	
-calcDeciles  . . . . . . . . . .	P Near	 00000D40 _TEXT	Length= 00000001 Public STDCALL
-calcDesvEstandar . . . . . . . .	P Near	 00000DAB _TEXT	Length= 00000001 Public STDCALL
-calcDesvMediana  . . . . . . . .	P Near	 00000E1B _TEXT	Length= 00000001 Public STDCALL
-calcDesvMedia  . . . . . . . . .	P Near	 00000E1A _TEXT	Length= 00000001 Public STDCALL
-calcMediaarmonica  . . . . . . .	P Near	 00000D3D _TEXT	Length= 00000001 Public STDCALL
+calcCuartiles  . . . . . . . . .	P Near	 00000D82 _TEXT	Length= 00000001 Public STDCALL
+calcCuasiVarianza  . . . . . . .	P Near	 00000DEF _TEXT	Length= 0000006E Public STDCALL
+  cicloVar . . . . . . . . . . .	L Near	 00000E01 _TEXT	
+calcDeciles  . . . . . . . . . .	P Near	 00000D83 _TEXT	Length= 00000001 Public STDCALL
+calcDesvEstandar . . . . . . . .	P Near	 00000DEE _TEXT	Length= 00000001 Public STDCALL
+calcDesvMediana  . . . . . . . .	P Near	 00000E5E _TEXT	Length= 00000001 Public STDCALL
+calcDesvMedia  . . . . . . . . .	P Near	 00000E5D _TEXT	Length= 00000001 Public STDCALL
+calcMediaarmonica  . . . . . . .	P Near	 00000D3D _TEXT	Length= 00000044 Public STDCALL
+  cicloMediaArm  . . . . . . . .	L Near	 00000D49 _TEXT	
 calcMediageometrica  . . . . . .	P Near	 00000CF3 _TEXT	Length= 0000004A Public STDCALL
   cicloMediaGeom . . . . . . . .	L Near	 00000CFF _TEXT	
 calcMediana  . . . . . . . . . .	P Near	 00000BA1 _TEXT	Length= 00000045 Public STDCALL
@@ -2607,11 +2630,11 @@ calcModa . . . . . . . . . . . .	P Near	 00000BE6 _TEXT	Length= 0000010D Public 
   finCompFrec  . . . . . . . . .	L Near	 00000C87 _TEXT	
   cicloModa  . . . . . . . . . .	L Near	 00000CAF _TEXT	
   noEsModa . . . . . . . . . . .	L Near	 00000CDE _TEXT	
-calcMomentosCentrales  . . . . .	P Near	 00000D42 _TEXT	Length= 00000001 Public STDCALL
-calcMomentosOrigen . . . . . . .	P Near	 00000D41 _TEXT	Length= 00000001 Public STDCALL
-calcPercentiles  . . . . . . . .	P Near	 00000D3E _TEXT	Length= 00000001 Public STDCALL
-calcVarianza . . . . . . . . . .	P Near	 00000D43 _TEXT	Length= 00000068 Public STDCALL
-  cicloVar . . . . . . . . . . .	L Near	 00000D55 _TEXT	
+calcMomentosCentrales  . . . . .	P Near	 00000D85 _TEXT	Length= 00000001 Public STDCALL
+calcMomentosOrigen . . . . . . .	P Near	 00000D84 _TEXT	Length= 00000001 Public STDCALL
+calcPercentiles  . . . . . . . .	P Near	 00000D81 _TEXT	Length= 00000001 Public STDCALL
+calcVarianza . . . . . . . . . .	P Near	 00000D86 _TEXT	Length= 00000068 Public STDCALL
+  cicloVar . . . . . . . . . . .	L Near	 00000D98 _TEXT	
 calcularEstadisticos . . . . . .	P Near	 00000591 _TEXT	Length= 00000042 Public STDCALL
 calcularMomentos . . . . . . . .	P Near	 000005D3 _TEXT	Length= 0000000B Public STDCALL
 cargarMensaje  . . . . . . . . .	P Near	 000000D5 _TEXT	Length= 000000BF Public STDCALL
