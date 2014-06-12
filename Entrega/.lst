@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 13:57:46
+Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 20:56:18
 ESTADÍSTICAS						(main.asm  Page 1 - 1
 
 
@@ -346,9 +346,9 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 13:57:46
 	    BFF0000000000000
 	   ]
 	   BFF0000000000000
- 00005B84			mediageometrica REAL8 0.
+ 00005B84			mediaGeometrica REAL8 0.
 	   0000000000000000
- 00005B8C			mediaarmonica REAL8 0.
+ 00005B8C			mediaArmonica REAL8 0.
 	   0000000000000000
  00005B94  00000065 [		percentiles REAL8 101 DUP(-1.)
 	    BFF0000000000000
@@ -656,9 +656,9 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 13:57:46
 
  0000021A  66| A1			MOV ax, [tiempoEspera+2] 
 	   0000034A R
-					
+
  00000220  E8 00000000 E		CALL delay
-					
+
  00000225  83 3D 00000008 R		CMP contadorBarra, 6
 	   06
  0000022C  7C 0C			JL menor6
@@ -669,7 +669,7 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 13:57:46
  0000023A  FF 05 00000008 R			INC contadorBarra
  00000240  FF 05 00000008 R			INC contadorBarra
  00000246				finsi:
-					
+
  00000246  C3			RET
  00000247			mostrarMensaje ENDP
 
@@ -705,9 +705,9 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 13:57:46
  0000027F  E8 00000000 E	CALL SetTextColor
 
  00000284  B9 00000014		MOV	ecx, 20 ; el ciclo se realizará 20 veces para llegar a 80 caracteres
-					
+
  00000289			CiloImprimir:
-						
+
  00000289  BA 00000000 R		MOV edx, OFFSET CuadrosAscii;
  0000028E  E8 00000000 E		CALL	WriteString
  00000293  BA 00000002 R		MOV edx, OFFSET CuadrosAscii[2];
@@ -720,8 +720,8 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 13:57:46
  000002B1  66| A1			MOV ax, tiempoEspera 
 	   00000348 R
  000002B7  E8 00000000 E		CALL delay
-					
-					
+
+
  000002BC  E2 CB		LOOP CiloImprimir
 
  000002BE  C3			RET
@@ -754,7 +754,7 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 13:57:46
 
  000002FE  66| 49		DEC cx
  00000300  75 CB		JNZ L1 ;fin cilo para pintar la barra
-						
+
  00000302  C3			RET
  00000303			animarBarra ENDP
 
@@ -854,7 +854,7 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 13:57:46
  0000039A  8B 90 00000278 R		MOV edx, [mensajeD+eax]
  000003A0  E8 00000000 E		CALL WriteString ;imprime la línea del mensaje
  000003A5  E8 00000000 E		CALL Crlf
-					
+
  000003AA  FF 05 00000334 R		INC auxCiclos
 
  000003B0  E2 DC		LOOP CICLOFIN
@@ -962,7 +962,7 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 13:57:46
  0000042A  5A		     1		pop	edx
  0000042B  E8 00000000 E	CALL	WriteWindowsMsg
  00000430  EB AB		JMP	preguntaRuta
-					
+
  00000432			check_buffer_size:
  00000432  3D 00001388		CMP	eax, tamanoBufer
  00000437  72 0E		JB	buf_size_ok
@@ -990,7 +990,7 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 13:57:46
  0000043F  E8 00000000 E     1		call	WriteString
  00000444  5A		     1		pop	edx
  00000445  EB 96		JMP	preguntaRuta
-					
+
  00000447			buf_size_ok:	
  00000447  C6 80 000034AA R	MOV	buferArchivo[eax],0 ;terminación nula para el archivo. eax contiene la cantidad de caracteres leídos
 	   00
@@ -1017,7 +1017,7 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 13:57:46
 
 					;ciclo de lectura de caracteres
  00000483  B9 00000050			MOV ecx, 80
-					
+
  00000488				leerChar:
 
  00000488  B8 00000000				MOV eax, 0
@@ -1044,15 +1044,15 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 13:57:46
  000004C3					noCr:
  000004C3  3C 0A				CMP al, 10
  000004C5  75 11				JNE noLf
- 000004C7  FF 05 0000484C R		INC saltoDeLinea
+ 000004C7  FF 05 0000484C R			INC saltoDeLinea
 						;si ya se leyeron los dos, se pasa al siguiente número
  000004CD  83 3D 0000484C R			CMP saltoDeLinea, 2
 	   02
  000004D4  74 7F				JE finNumero
  000004D6  EB 73				JMP finChar
  000004D8					noLf:
-						
-					
+
+
 						;si hay una coma o un punto, activa el booleano para empezar a poner los decimales
  000004D8  3C 2C				CMP al, 44
  000004DA  75 0C				JNE noEsComa
@@ -1097,7 +1097,7 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 13:57:46
  0000053D  DD 05 00004838 R			FLD realActual
  00000543  DE C1				FADD
  00000545  DD 1D 00004838 R			FSTP realActual
-						
+
  0000054B					finChar:
  0000054B  49				DEC ecx
  0000054C  83 F9 00			CMP ecx, 0
@@ -1110,7 +1110,7 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 13:57:46
  00000560  F7 25 00004848 R		MUL realesLeidos
  00000566  DD 98 000005AE R		FSTP numeros[eax]
  0000056C  FF 05 00004848 R		INC realesLeidos
-					
+
 					;si llegó al final del archivo, sale
  00000572  83 3D 00004850 R		CMP finArchivo, 1
 	   01
@@ -1149,17 +1149,17 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 13:57:46
  00000596  E8 00000606		CALL calcMediana
  0000059B  E8 00000646		CALL calcModa
  000005A0  E8 0000074E		CALL calcMediageometrica
- 000005A5  E8 0000074A		CALL calcMediaarmonica
- 000005AA  E8 00000746		CALL calcPercentiles
- 000005AF  E8 00000742		CALL calcCuartiles
- 000005B4  E8 0000073E		CALL calcDeciles
+ 000005A5  E8 00000793		CALL calcMediaarmonica
+ 000005AA  E8 0000078F		CALL calcPercentiles
+ 000005AF  E8 0000078B		CALL calcCuartiles
+ 000005B4  E8 00000787		CALL calcDeciles
 				;CALL calcMomentosOrigen
 				;CALL calcMomentosCentrales
- 000005B9  E8 0000073C		CALL calcVarianza
- 000005BE  E8 00000738		CALL calcDesvEstandar
- 000005C3  E8 00000734		CALL calcCuasiVarianza
- 000005C8  E8 00000730		CALL calcDesvMedia
- 000005CD  E8 0000072C		CALL calcDesvMediana
+ 000005B9  E8 00000785		CALL calcVarianza
+ 000005BE  E8 000007E8		CALL calcDesvEstandar
+ 000005C3  E8 000007E4		CALL calcCuasiVarianza
+ 000005C8  E8 0000084D		CALL calcDesvMedia
+ 000005CD  E8 00000849		CALL calcDesvMediana
 
 
  000005D2  C3			RET
@@ -1170,8 +1170,8 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 13:57:46
 				; Calcula los momentos según los datos que ingresó el usuario
 				;-----------------------------------------------------------------------------------------------------------
 
- 000005D3  E8 00000720		CALL calcMomentosOrigen
- 000005D8  E8 0000071C		CALL calcMomentosCentrales
+ 000005D3  E8 00000769		CALL calcMomentosOrigen
+ 000005D8  E8 00000765		CALL calcMomentosCentrales
 
  000005DD  C3			RET
  000005DE			calcularMomentos ENDP
@@ -1627,9 +1627,9 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 13:57:46
  000007F8  83 3D 00005FD0 R	CMP boolEstadisticos, -1
 	   FF
  000007FF  75 16		JNE pasa2
-					mwrite <"1. Media aritm",130,"tica",0dh,0ah>
+					mwrite <"1) Media aritm",130,"tica",0dh,0ah>
  00006702		     1		.data		
- 00006702 31 2E 20 4D 65     1		??0020 BYTE "1. Media aritm",130,"tica",0dh,0ah,0	
+ 00006702 31 29 20 4D 65     1		??0020 BYTE "1) Media aritm",130,"tica",0dh,0ah,0	
 	   64 69 61 20 61
 	   72 69 74 6D 82
 	   74 69 63 61 0D
@@ -1645,9 +1645,9 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 13:57:46
  00000817  83 3D 00005FD4 R	CMP boolEstadisticos[4], -1
 	   FF
  0000081E  75 16		JNE pasa3
-					mwrite <"2. Mediana",0dh,0ah>
+					mwrite <"2) Mediana",0dh,0ah>
  00006718		     1		.data		
- 00006718 32 2E 20 4D 65     1		??0021 BYTE "2. Mediana",0dh,0ah,0	
+ 00006718 32 29 20 4D 65     1		??0021 BYTE "2) Mediana",0dh,0ah,0	
 	   64 69 61 6E 61
 	   0D 0A 00
  00000820		     1		.code
@@ -1661,9 +1661,9 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 13:57:46
  00000836  83 3D 00005FD8 R	CMP boolEstadisticos[8], -1
 	   FF
  0000083D  75 16		JNE pasa4
-					mwrite <"3. Moda",0dh,0ah>
+					mwrite <"3) Moda",0dh,0ah>
  00006725		     1		.data		
- 00006725 33 2E 20 4D 6F     1		??0022 BYTE "3. Moda",0dh,0ah,0	
+ 00006725 33 29 20 4D 6F     1		??0022 BYTE "3) Moda",0dh,0ah,0	
 	   64 61 0D 0A 00
  0000083F		     1		.code
  0000083F  52		     1		push	edx
@@ -1676,9 +1676,9 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 13:57:46
  00000855  83 3D 00005FDC R	CMP boolEstadisticos[12], -1
 	   FF
  0000085C  75 16		JNE pasa5
-					mwrite <"4. Media geom",130,"trica",0dh,0ah>
+					mwrite <"4) Media geom",130,"trica",0dh,0ah>
  0000672F		     1		.data		
- 0000672F 34 2E 20 4D 65     1		??0023 BYTE "4. Media geom",130,"trica",0dh,0ah,0	
+ 0000672F 34 29 20 4D 65     1		??0023 BYTE "4) Media geom",130,"trica",0dh,0ah,0	
 	   64 69 61 20 67
 	   65 6F 6D 82 74
 	   72 69 63 61 0D
@@ -1694,9 +1694,9 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 13:57:46
  00000874  83 3D 00005FE0 R	CMP boolEstadisticos[16], -1
 	   FF
  0000087B  75 16		JNE pasa6
-					mwrite <"5. Media arm",162,"nica",0dh,0ah>
+					mwrite <"5) Media arm",162,"nica",0dh,0ah>
  00006745		     1		.data		
- 00006745 35 2E 20 4D 65     1		??0024 BYTE "5. Media arm",162,"nica",0dh,0ah,0	
+ 00006745 35 29 20 4D 65     1		??0024 BYTE "5) Media arm",162,"nica",0dh,0ah,0	
 	   64 69 61 20 61
 	   72 6D A2 6E 69
 	   63 61 0D 0A 00
@@ -1711,9 +1711,9 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 13:57:46
  00000893  83 3D 00005FE4 R	CMP boolEstadisticos[20], -1
 	   FF
  0000089A  75 16		JNE pasa7
-					mwrite <"6. Percentiles",0dh,0ah>
+					mwrite <"6) Percentiles",0dh,0ah>
  00006759		     1		.data		
- 00006759 36 2E 20 50 65     1		??0025 BYTE "6. Percentiles",0dh,0ah,0	
+ 00006759 36 29 20 50 65     1		??0025 BYTE "6) Percentiles",0dh,0ah,0	
 	   72 63 65 6E 74
 	   69 6C 65 73 0D
 	   0A 00
@@ -1728,9 +1728,9 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 13:57:46
  000008B2  83 3D 00005FE8 R	CMP boolEstadisticos[24], -1
 	   FF
  000008B9  75 16		JNE pasa8
-					mwrite <"7. Cuartiles",0dh,0ah>
+					mwrite <"7) Cuartiles",0dh,0ah>
  0000676A		     1		.data		
- 0000676A 37 2E 20 43 75     1		??0026 BYTE "7. Cuartiles",0dh,0ah,0	
+ 0000676A 37 29 20 43 75     1		??0026 BYTE "7) Cuartiles",0dh,0ah,0	
 	   61 72 74 69 6C
 	   65 73 0D 0A 00
  000008BB		     1		.code
@@ -1744,9 +1744,9 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 13:57:46
  000008D1  83 3D 00005FEC R	CMP boolEstadisticos[28], -1
 	   FF
  000008D8  75 16		JNE pasa9
-					mwrite <"8. Deciles",0dh,0ah>
+					mwrite <"8) Deciles",0dh,0ah>
  00006779		     1		.data		
- 00006779 38 2E 20 44 65     1		??0027 BYTE "8. Deciles",0dh,0ah,0	
+ 00006779 38 29 20 44 65     1		??0027 BYTE "8) Deciles",0dh,0ah,0	
 	   63 69 6C 65 73
 	   0D 0A 00
  000008DA		     1		.code
@@ -1760,9 +1760,9 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 13:57:46
  000008F0  83 3D 00005FF0 R	CMP boolEstadisticos[32], -1
 	   FF
  000008F7  75 25		JNE pasa10
-					mwrite <"9. Momento respecto al origen de orden ">
+					mwrite <"9) Momento respecto al origen de orden ">
  00006786		     1		.data		
- 00006786 39 2E 20 4D 6F     1		??0028 BYTE "9. Momento respecto al origen de orden ",0	
+ 00006786 39 29 20 4D 6F     1		??0028 BYTE "9) Momento respecto al origen de orden ",0	
 	   6D 65 6E 74 6F
 	   20 72 65 73 70
 	   65 63 74 6F 20
@@ -1784,9 +1784,9 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 13:57:46
  0000091E  83 3D 00005FF4 R	CMP boolEstadisticos[36], -1
 	   FF
  00000925  75 25		JNE pasa11
-					mwrite <"10. Momento central o respecto a la media de orden ">
+					mwrite <"10) Momento central o respecto a la media de orden ">
  000067AE		     1		.data		
- 000067AE 31 30 2E 20 4D     1		??0029 BYTE "10. Momento central o respecto a la media de orden ",0	
+ 000067AE 31 30 29 20 4D     1		??0029 BYTE "10) Momento central o respecto a la media de orden ",0	
 	   6F 6D 65 6E 74
 	   6F 20 63 65 6E
 	   74 72 61 6C 20
@@ -1811,9 +1811,9 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 13:57:46
  0000094C  83 3D 00005FF8 R	CMP boolEstadisticos[40], -1
 	   FF
  00000953  75 16		JNE pasa12
-					mwrite <"11. Varianza",0dh,0ah>
+					mwrite <"11) Varianza",0dh,0ah>
  000067E2		     1		.data		
- 000067E2 31 31 2E 20 56     1		??002A BYTE "11. Varianza",0dh,0ah,0	
+ 000067E2 31 31 29 20 56     1		??002A BYTE "11) Varianza",0dh,0ah,0	
 	   61 72 69 61 6E
 	   7A 61 0D 0A 00
  00000955		     1		.code
@@ -1827,9 +1827,9 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 13:57:46
  0000096B  83 3D 00005FFC R	CMP boolEstadisticos[44], -1
 	   FF
  00000972  75 16		JNE pasa13
-					mwrite <"12. Desviaci",162,"n t",161,"pica",0dh,0ah>
+					mwrite <"12) Desviaci",162,"n t",161,"pica",0dh,0ah>
  000067F1		     1		.data		
- 000067F1 31 32 2E 20 44     1		??002B BYTE "12. Desviaci",162,"n t",161,"pica",0dh,0ah,0	
+ 000067F1 31 32 29 20 44     1		??002B BYTE "12) Desviaci",162,"n t",161,"pica",0dh,0ah,0	
 	   65 73 76 69 61
 	   63 69 A2 6E 20
 	   74 A1 70 69 63
@@ -1845,9 +1845,9 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 13:57:46
  0000098A  83 3D 00006000 R	CMP boolEstadisticos[48], -1
 	   FF
  00000991  75 16		JNE pasa14
-					mwrite <"13. Cuasi-varianza",0dh,0ah>
+					mwrite <"13) Cuasi-varianza",0dh,0ah>
  00006809		     1		.data		
- 00006809 31 33 2E 20 43     1		??002C BYTE "13. Cuasi-varianza",0dh,0ah,0	
+ 00006809 31 33 29 20 43     1		??002C BYTE "13) Cuasi-varianza",0dh,0ah,0	
 	   75 61 73 69 2D
 	   76 61 72 69 61
 	   6E 7A 61 0D 0A
@@ -1863,9 +1863,9 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 13:57:46
  000009A9  83 3D 00006004 R	CMP boolEstadisticos[52], -1
 	   FF
  000009B0  75 16		JNE pasa15
-					mwrite <"14. Desviaci",162,"n media respecto a la media",0dh,0ah>
+					mwrite <"14) Desviaci",162,"n media respecto a la media",0dh,0ah>
  0000681E		     1		.data		
- 0000681E 31 34 2E 20 44     1		??002D BYTE "14. Desviaci",162,"n media respecto a la media",0dh,0ah,0	
+ 0000681E 31 34 29 20 44     1		??002D BYTE "14) Desviaci",162,"n media respecto a la media",0dh,0ah,0	
 	   65 73 76 69 61
 	   63 69 A2 6E 20
 	   6D 65 64 69 61
@@ -1885,9 +1885,9 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 13:57:46
  000009C8  83 3D 00006008 R	CMP boolEstadisticos[56], -1
 	   FF
  000009CF  75 16		JNE pasaFin
-					mwrite <"15. Desviaci",162,"n media respecto a la mediana",0dh,0ah>
+					mwrite <"15) Desviaci",162,"n media respecto a la mediana",0dh,0ah>
  00006849		     1		.data		
- 00006849 31 35 2E 20 44     1		??002E BYTE "15. Desviaci",162,"n media respecto a la mediana",0dh,0ah,0	
+ 00006849 31 35 29 20 44     1		??002E BYTE "15) Desviaci",162,"n media respecto a la mediana",0dh,0ah,0	
 	   65 73 76 69 61
 	   63 69 A2 6E 20
 	   6D 65 64 69 61
@@ -2010,7 +2010,7 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 13:57:46
 					;FinCicloComparar
 
 					;Intercambio de posiciones
-					
+
  00000B0A  DD 05 00004888 R		FLD menorValor ;st(0) = menor
  00000B10  B8 00000008			MOV eax,8
  00000B15  F7 25 0000487C R		MUL posActual
@@ -2122,7 +2122,7 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 13:57:46
 	   00000000
 
  00000C1E			cicloFrecu:
-					
+
  00000C1E  8B 35 0000487C R		MOV esi, posActual
  00000C24  DD 04 F5			FLD numeros[esi*8]
 	   000005AE R
@@ -2189,100 +2189,180 @@ Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 13:57:46
 				;Calcula el estadístico
 				;-----------------------------------------------------------------------------------------------------------
 
- 00000CF3  C3			RET
- 00000CF4			calcMediageometrica ENDP
+ 00000CF3  C7 05 0000487C R	MOV posActual, 0
+	   00000000
+ 00000CFD  D9 E8		FLD1
+
+				;productoria
+ 00000CFF			cicloMediaGeom:
+ 00000CFF  8B 35 0000487C R		MOV esi, posActual
+ 00000D05  DD 04 F5			FLD numeros[esi*8]
+	   000005AE R
+ 00000D0C  DE C9			FMUL
+ 00000D0E  FF 05 0000487C R	INC posActual
+ 00000D14  8B 35 00004848 R	MOV esi, realesLeidos
+ 00000D1A  39 35 0000487C R	CMP posActual, esi
+ 00000D20  7C DD		JL cicloMediaGeom
+
+				;raíz n-ésima
+ 00000D22  D9 E8		FLD1
+ 00000D24  DB 05 00004848 R	FILD realesLeidos
+ 00000D2A  DE F9		FDIV
+ 00000D2C  D9 C9		FXCH ;st(0)=resultado de la productoria, st(1)=1/realesLeidos
+ 00000D2E  D9 F1		FYL2X ;st(0)=log2(productoria)/realesLeidos
+
+ 00000D30  D9 F0		F2XM1 ;st(0)=productoria^(1/realesLeidos)-1
+ 00000D32  D9 E8		FLD1
+ 00000D34  DE C1		FADD
+
+ 00000D36  DD 1D 00005B84 R	FSTP mediaGeometrica
+
+ 00000D3C  C3			RET
+ 00000D3D			calcMediageometrica ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 00000CF4			calcMediaarmonica PROC
+ 00000D3D			calcMediaarmonica PROC
 				;Calcula el estadístico
 				;-----------------------------------------------------------------------------------------------------------
 
- 00000CF4  C3			RET
- 00000CF5			calcMediaarmonica ENDP
+ 00000D3D  C3			RET
+ 00000D3E			calcMediaarmonica ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 00000CF5			calcPercentiles PROC
+ 00000D3E			calcPercentiles PROC
 				;Calcula el estadístico
 				;-----------------------------------------------------------------------------------------------------------
 
- 00000CF5  C3			RET
- 00000CF6			calcPercentiles ENDP
+ 00000D3E  C3			RET
+ 00000D3F			calcPercentiles ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 00000CF6			calcCuartiles PROC
+ 00000D3F			calcCuartiles PROC
 				;Calcula el estadístico
 				;-----------------------------------------------------------------------------------------------------------
 
- 00000CF6  C3			RET
- 00000CF7			calcCuartiles ENDP
+ 00000D3F  C3			RET
+ 00000D40			calcCuartiles ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 00000CF7			calcDeciles PROC
+ 00000D40			calcDeciles PROC
 				;Calcula el estadístico
 				;-----------------------------------------------------------------------------------------------------------
 
- 00000CF7  C3			RET
- 00000CF8			calcDeciles ENDP
+ 00000D40  C3			RET
+ 00000D41			calcDeciles ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 00000CF8			calcMomentosOrigen PROC
+ 00000D41			calcMomentosOrigen PROC
 				;Calcula el estadístico
 				;-----------------------------------------------------------------------------------------------------------
 
- 00000CF8  C3			RET
- 00000CF9			calcMomentosOrigen ENDP
+ 00000D41  C3			RET
+ 00000D42			calcMomentosOrigen ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 00000CF9			calcMomentosCentrales PROC
+ 00000D42			calcMomentosCentrales PROC
 				;Calcula el estadístico
 				;-----------------------------------------------------------------------------------------------------------
 
- 00000CF9  C3			RET
- 00000CFA			calcMomentosCentrales ENDP
+ 00000D42  C3			RET
+ 00000D43			calcMomentosCentrales ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 00000CFA			calcVarianza PROC
+ 00000D43			calcVarianza PROC
+				;Calcula el estadístico
+				;auxSumatoria REAL8 0.
+				;-----------------------------------------------------------------------------------------------------------
+
+ 00000D43  D9 EE		FLDZ
+ 00000D45  DD 1D 00004854 R	FSTP auxSumatoria
+
+ 00000D4B  C7 05 0000487C R	MOV posActual, 0
+	   00000000
+ 00000D55			cicloVar:
+ 00000D55  8B 35 0000487C R		MOV esi, posActual
+ 00000D5B  DD 04 F5			FLD numeros[esi*8]
+	   000005AE R
+ 00000D62  DC 25 000048AC R		FSUB media
+ 00000D68  DD 15 00004838 R		FST realActual
+ 00000D6E  DC 0D 00004838 R		FMUL realActual
+ 00000D74  DD 05 00004854 R		FLD auxSumatoria
+ 00000D7A  DE C1			FADD
+ 00000D7C  DD 1D 00004854 R		FSTP auxSumatoria
+ 00000D82  FF 05 0000487C R	INC posActual
+ 00000D88  8B 35 00004848 R	MOV esi, realesLeidos
+ 00000D8E  39 35 0000487C R	CMP posActual, esi
+ 00000D94  7C BF		JL cicloVar
+
+ 00000D96  DD 05 00004854 R	FLD auxSumatoria
+ 00000D9C  DB 05 00004848 R	FILD realesLeidos
+ 00000DA2  DE F9		FDIV
+ 00000DA4  DD 1D 00005F4C R	FSTP varianza
+
+ 00000DAA  C3			RET
+ 00000DAB			calcVarianza ENDP
+
+				;-----------------------------------------------------------------------------------------------------------
+ 00000DAB			calcDesvEstandar PROC
 				;Calcula el estadístico
 				;-----------------------------------------------------------------------------------------------------------
 
- 00000CFA  C3			RET
- 00000CFB			calcVarianza ENDP
+ 00000DAB  C3			RET
+ 00000DAC			calcDesvEstandar ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 00000CFB			calcDesvEstandar PROC
+ 00000DAC			calcCuasiVarianza PROC
 				;Calcula el estadístico
 				;-----------------------------------------------------------------------------------------------------------
 
- 00000CFB  C3			RET
- 00000CFC			calcDesvEstandar ENDP
+ 00000DAC  D9 EE		FLDZ
+ 00000DAE  DD 1D 00004854 R	FSTP auxSumatoria
+
+ 00000DB4  C7 05 0000487C R	MOV posActual, 0
+	   00000000
+ 00000DBE			cicloVar:
+ 00000DBE  8B 35 0000487C R		MOV esi, posActual
+ 00000DC4  DD 04 F5			FLD numeros[esi*8]
+	   000005AE R
+ 00000DCB  DC 25 000048AC R		FSUB media
+ 00000DD1  DD 15 00004838 R		FST realActual
+ 00000DD7  DC 0D 00004838 R		FMUL realActual
+ 00000DDD  DD 05 00004854 R		FLD auxSumatoria
+ 00000DE3  DE C1			FADD
+ 00000DE5  DD 1D 00004854 R		FSTP auxSumatoria
+ 00000DEB  FF 05 0000487C R	INC posActual
+ 00000DF1  8B 35 00004848 R	MOV esi, realesLeidos
+ 00000DF7  39 35 0000487C R	CMP posActual, esi
+ 00000DFD  7C BF		JL cicloVar
+
+ 00000DFF  DD 05 00004854 R	FLD auxSumatoria
+ 00000E05  DB 05 00004848 R	FILD realesLeidos
+ 00000E0B  DC 05 00004874 R	FADD menosUno
+ 00000E11  DE F9		FDIV
+ 00000E13  DD 1D 00005F5C R	FSTP cuasiVarianza
+
+ 00000E19  C3			RET
+ 00000E1A			calcCuasiVarianza ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 00000CFC			calcCuasiVarianza PROC
+ 00000E1A			calcDesvMedia PROC
 				;Calcula el estadístico
 				;-----------------------------------------------------------------------------------------------------------
 
- 00000CFC  C3			RET
- 00000CFD			calcCuasiVarianza ENDP
+ 00000E1A  C3			RET
+ 00000E1B			calcDesvMedia ENDP
 
 				;-----------------------------------------------------------------------------------------------------------
- 00000CFD			calcDesvMedia PROC
+ 00000E1B			calcDesvMediana PROC
 				;Calcula el estadístico
 				;-----------------------------------------------------------------------------------------------------------
 
- 00000CFD  C3			RET
- 00000CFE			calcDesvMedia ENDP
-
-				;-----------------------------------------------------------------------------------------------------------
- 00000CFE			calcDesvMediana PROC
-				;Calcula el estadístico
-				;-----------------------------------------------------------------------------------------------------------
-
- 00000CFE  C3			RET
- 00000CFF			calcDesvMediana ENDP
+ 00000E1B  C3			RET
+ 00000E1C			calcDesvMediana ENDP
 
 				;fin del programa
 				END main
-Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 13:57:46
+Microsoft (R) Macro Assembler Version 10.00.30319.01	    06/11/14 20:56:18
 ESTADÍSTICAS						(main.asm  Symbols 2 - 1
 
 
@@ -2395,7 +2475,7 @@ Segments and Groups:
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00000400 Para	  Stack	  'STACK'	 
 _DATA  . . . . . . . . . . . . .	32 Bit	 00006876 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 00000CFF Para	  Public  'CODE'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000E1C Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -2506,14 +2586,16 @@ animarBarra  . . . . . . . . . .	P Near	 000002BF _TEXT	Length= 00000044 Public 
   L1 . . . . . . . . . . . . . .	L Near	 000002CD _TEXT	
   menor6 . . . . . . . . . . . .	L Near	 000002F2 _TEXT	
   finsi  . . . . . . . . . . . .	L Near	 000002FE _TEXT	
-calcCuartiles  . . . . . . . . .	P Near	 00000CF6 _TEXT	Length= 00000001 Public STDCALL
-calcCuasiVarianza  . . . . . . .	P Near	 00000CFC _TEXT	Length= 00000001 Public STDCALL
-calcDeciles  . . . . . . . . . .	P Near	 00000CF7 _TEXT	Length= 00000001 Public STDCALL
-calcDesvEstandar . . . . . . . .	P Near	 00000CFB _TEXT	Length= 00000001 Public STDCALL
-calcDesvMediana  . . . . . . . .	P Near	 00000CFE _TEXT	Length= 00000001 Public STDCALL
-calcDesvMedia  . . . . . . . . .	P Near	 00000CFD _TEXT	Length= 00000001 Public STDCALL
-calcMediaarmonica  . . . . . . .	P Near	 00000CF4 _TEXT	Length= 00000001 Public STDCALL
-calcMediageometrica  . . . . . .	P Near	 00000CF3 _TEXT	Length= 00000001 Public STDCALL
+calcCuartiles  . . . . . . . . .	P Near	 00000D3F _TEXT	Length= 00000001 Public STDCALL
+calcCuasiVarianza  . . . . . . .	P Near	 00000DAC _TEXT	Length= 0000006E Public STDCALL
+  cicloVar . . . . . . . . . . .	L Near	 00000DBE _TEXT	
+calcDeciles  . . . . . . . . . .	P Near	 00000D40 _TEXT	Length= 00000001 Public STDCALL
+calcDesvEstandar . . . . . . . .	P Near	 00000DAB _TEXT	Length= 00000001 Public STDCALL
+calcDesvMediana  . . . . . . . .	P Near	 00000E1B _TEXT	Length= 00000001 Public STDCALL
+calcDesvMedia  . . . . . . . . .	P Near	 00000E1A _TEXT	Length= 00000001 Public STDCALL
+calcMediaarmonica  . . . . . . .	P Near	 00000D3D _TEXT	Length= 00000001 Public STDCALL
+calcMediageometrica  . . . . . .	P Near	 00000CF3 _TEXT	Length= 0000004A Public STDCALL
+  cicloMediaGeom . . . . . . . .	L Near	 00000CFF _TEXT	
 calcMediana  . . . . . . . . . .	P Near	 00000BA1 _TEXT	Length= 00000045 Public STDCALL
   noEsPar  . . . . . . . . . . .	L Near	 00000BD8 _TEXT	
   finMediana . . . . . . . . . .	L Near	 00000BE5 _TEXT	
@@ -2525,10 +2607,11 @@ calcModa . . . . . . . . . . . .	P Near	 00000BE6 _TEXT	Length= 0000010D Public 
   finCompFrec  . . . . . . . . .	L Near	 00000C87 _TEXT	
   cicloModa  . . . . . . . . . .	L Near	 00000CAF _TEXT	
   noEsModa . . . . . . . . . . .	L Near	 00000CDE _TEXT	
-calcMomentosCentrales  . . . . .	P Near	 00000CF9 _TEXT	Length= 00000001 Public STDCALL
-calcMomentosOrigen . . . . . . .	P Near	 00000CF8 _TEXT	Length= 00000001 Public STDCALL
-calcPercentiles  . . . . . . . .	P Near	 00000CF5 _TEXT	Length= 00000001 Public STDCALL
-calcVarianza . . . . . . . . . .	P Near	 00000CFA _TEXT	Length= 00000001 Public STDCALL
+calcMomentosCentrales  . . . . .	P Near	 00000D42 _TEXT	Length= 00000001 Public STDCALL
+calcMomentosOrigen . . . . . . .	P Near	 00000D41 _TEXT	Length= 00000001 Public STDCALL
+calcPercentiles  . . . . . . . .	P Near	 00000D3E _TEXT	Length= 00000001 Public STDCALL
+calcVarianza . . . . . . . . . .	P Near	 00000D43 _TEXT	Length= 00000068 Public STDCALL
+  cicloVar . . . . . . . . . . .	L Near	 00000D55 _TEXT	
 calcularEstadisticos . . . . . .	P Near	 00000591 _TEXT	Length= 00000042 Public STDCALL
 calcularMomentos . . . . . . . .	P Near	 000005D3 _TEXT	Length= 0000000B Public STDCALL
 cargarMensaje  . . . . . . . . .	P Near	 000000D5 _TEXT	Length= 000000BF Public STDCALL
@@ -2928,8 +3011,8 @@ lightMagenta . . . . . . . . . .	Number	 0000000Dh
 lightRed . . . . . . . . . . . .	Number	 0000000Ch   
 magenta  . . . . . . . . . . . .	Number	 00000005h   
 maxDatos . . . . . . . . . . . .	Number	 00000258h   
-mediaarmonica  . . . . . . . . .	QWord	 00005B8C _DATA	
-mediageometrica  . . . . . . . .	QWord	 00005B84 _DATA	
+mediaArmonica  . . . . . . . . .	QWord	 00005B8C _DATA	
+mediaGeometrica  . . . . . . . .	QWord	 00005B84 _DATA	
 mediana  . . . . . . . . . . . .	QWord	 000048B4 _DATA	
 media  . . . . . . . . . . . . .	QWord	 000048AC _DATA	
 menorValor . . . . . . . . . . .	QWord	 00004888 _DATA	
