@@ -87,6 +87,7 @@ maxDatos = 600
 numeros REAL8 maxDatos DUP(-1.), -1.
 numerosDistintos REAL8 maxDatos DUP(-1.), -1.
 frecuencias DWORD maxDatos DUP(0), 0
+frecuenciasAcum DWORD maxDatos DUP(0), 0
 cantDatosDistintos DWORD 0
 frecuenciaMax DWORD 0 ;para la moda
 
@@ -106,11 +107,13 @@ finArchivo DWORD 0
 auxSumatoria REAL8 0.
 diez REAL8 10.
 numDos REAL8 2.
-unDecimo REAL8 0.1
+unoSobreCien REAL8 0.1
 menosUno REAL8 -1.
 
 ;Auxiliares para ordenar
 posActual DWORD 0
+posPasada DWORD 0
+porcentaje REAL8 0.
 indiceCicloOrdenar DWORD 0
 indiceCicloComparar DWORD 0
 menorValor REAL8 0.
@@ -127,9 +130,9 @@ mediana REAL8 0.
 moda REAL8 maxDatos DUP(-1.), -1.
 mediaGeometrica REAL8 0.
 mediaArmonica REAL8 0.
-percentiles REAL8 101 DUP(-1.)
-cuartiles REAL8 5 DUP(-1.)
-deciles REAL8 11 DUP(-1.)
+percentiles REAL8 100 DUP(-1.)
+cuartiles REAL8 4 DUP(-1.)
+deciles REAL8 10 DUP(-1.)
 momentosOrigen REAL8 0.
 momentosCentrales REAL8 0.
 varianza REAL8 0.
@@ -142,6 +145,9 @@ desvMediana REAL8 0.
 ordenMomOrig DWORD ?
 ordenMomCent DWORD ?
 posModa DWORD 0
+frecAcum DWORD 0
+posCuantil DWORD 0
+cantDatosPorDebajo DWORD 0
 
 ;contiene booleanos que indican si el usuario solicitó el estadístico n
 buferUsuario BYTE 80 DUP(0)
@@ -993,6 +999,7 @@ FNSTSW ax ; mueve la palabra de estado hacia AX
 SAHF ; copia AH a EFLAGS
 JNB ImprimirReal
 ;CALL waitMsg
+
 RET
 imprimirArregloReales ENDP
 
@@ -1138,9 +1145,9 @@ calcModa PROC
 FLD numeros
 FST realActual
 FSTP numerosDistintos
-INC frecuenciaMax
-INC frecuencias
-INC cantDatosDistintos
+MOV frecuenciaMax, 1
+MOV frecuencias, 1
+MOV cantDatosDistintos, 1
 MOV posActual, 1
 MOV posModa, 0
 
@@ -1261,7 +1268,60 @@ calcMediaarmonica ENDP
 ;-----------------------------------------------------------------------------------------------------------
 calcPercentiles PROC
 ;Calcula el estadístico
+;cantDatosDistintos
 ;-----------------------------------------------------------------------------------------------------------
+
+;calcula las frecuencias acumuladas
+MOV posActual, 0
+MOV frecAcum, 0
+cicloFrAcu:
+	MOV esi, posActual
+	MOV eax, frecuencias[esi*4]
+	ADD eax, frecAcum
+	MOV frecAcum, eax
+	MOV frecuenciasAcum[esi*4], eax
+INC posActual
+MOV esi, cantDatosDistintos
+CMP posActual, esi
+JL cicloFrAcu
+
+;calcula los percentiles
+MOV posActual, 0
+MOV posCuantil, 0
+
+
+FILD realesLeidos
+FLD diez
+FMUL diez
+FDIV
+FSTP porcentaje ;1% del total de datos
+
+cicloPerc:
+	;calcula el número de datos que hay por debajo del percentil #(poscuantil+1)
+	FLD porcentaje
+	FILD posCuantil
+	FLD1
+	FADD
+	FMUL ;(posCuantil+1)% del total de datos
+	FISTP cantDatosPorDebajo
+
+	;compara la frecuencia acumulada de cada dato con la cantidad de datos que debe superar el percentil
+	cicloCmpPerc:
+		MOV esi, posActual ;siguiente dato distinto
+		MOV eax, frecuenciasAcum[esi*4] ;frecuencia acumulada del dato
+		CMP eax, cantDatosPorDebajo
+		JG finCicloCmpPerc ;si la frecuencia acumulada es mayor al (posCuantil+1)% del total de datos, guarda el dato en el percentil
+		INC posActual
+		JMP cicloCmpPerc
+	finCicloCmpPerc:
+	FLD numerosDistintos[esi*8]
+	MOV esi, posCuantil
+	FSTP percentiles[esi*8]
+
+INC posCuantil
+CMP posCuantil, 99
+JL cicloPerc
+
 
 RET
 calcPercentiles ENDP
@@ -1285,7 +1345,49 @@ calcDeciles ENDP
 ;-----------------------------------------------------------------------------------------------------------
 calcMomentosOrigen PROC
 ;Calcula el estadístico
+;ordenMomOrig
+;momentosOrigen
+;auxCiclos
 ;-----------------------------------------------------------------------------------------------------------
+
+CMP ordenMomOrig,0
+JNE	NoOrdenCero; el cero es un caso especial
+	FLD1 
+	FSTP momentosOrigen
+JMP FinMomentosOrigen
+NoOrdenCero:
+CMP ordenMomOrig,1
+JNE NoOrdenUno;el uno es un caso especial
+	FLD media
+	FSTP momentosOrigen
+JMP FinMomentosOrigen
+NoOrdenUno:
+;Sino es ningun caso especial
+	MOV posActual,0
+	MOV esi,realesLeidos;para controlar el ciclo de la sumatoria comparando con esi
+	MOV ebx,ordenMomOrig;para controlar el ciclo para hallar la potencia con ebx
+	cicloMomentosOrigen: ;Suma las potencias
+		MOV eax, posActual
+		FLD numeros[eax*8]
+		MOV auxCiclos,1
+			cicloPotenciaMO:;Halla las potencias
+				FLD numeros[eax*8]
+				FMUL
+			INC auxCiclos
+			CMP auxCiclos,ebx
+			JL cicloPotenciaMO
+		FLD 	momentosOrigen
+		FADD
+		FSTP momentosOrigen
+	INC posActual
+	CMP posActual,esi
+	JL cicloMomentosOrigen
+	;Dividir por n
+	FLD momentosOrigen
+	FILD realesLeidos
+	FDIV
+	FSTP momentosOrigen
+FinMomentosOrigen:
 
 RET
 calcMomentosOrigen ENDP
@@ -1293,7 +1395,51 @@ calcMomentosOrigen ENDP
 ;-----------------------------------------------------------------------------------------------------------
 calcMomentosCentrales PROC
 ;Calcula el estadístico
+;ordenMomCent
+;momentosCentrales
+;auxCiclos
 ;-----------------------------------------------------------------------------------------------------------
+
+CMP ordenMomCent,0
+JNE	NoOrdenCero; el cero es un caso especial
+	FLD1 
+	FSTP momentosCentrales
+JMP FinMomentosCentrales
+NoOrdenCero:
+CMP ordenMomCent,1
+JNE NoOrdenUno;el uno es un caso especial
+	FLDZ 
+	FSTP momentosCentrales
+JMP FinMomentosCentrales
+NoOrdenUno:
+;Sino es ningun caso especial
+	MOV posActual,0
+	MOV esi,realesLeidos;para controlar el ciclo de la sumatoria comparando con esi
+	MOV ebx,ordenMomCent;para controlar el ciclo para hallar la potencia con ebx
+	cicloMomentosOrigen: ;Suma las potencias
+		MOV eax, posActual
+		FLD numeros[eax*8]
+		FSUB media
+		MOV auxCiclos,1
+			cicloPotenciaMO:;Halla las potencias
+				FLD numeros[eax*8]
+				FSUB media
+				FMUL
+			INC auxCiclos
+			CMP auxCiclos,ebx
+			JL cicloPotenciaMO
+		FLD 	momentosCentrales
+		FADD
+		FSTP momentosCentrales
+	INC posActual
+	CMP posActual,esi
+	JL cicloMomentosOrigen
+	;Dividir por n
+	FLD momentosCentrales
+	FILD realesLeidos
+	FDIV
+	FSTP momentosCentrales
+FinMomentosCentrales:
 
 RET
 calcMomentosCentrales ENDP
@@ -1333,7 +1479,13 @@ calcVarianza ENDP
 ;-----------------------------------------------------------------------------------------------------------
 calcDesvEstandar PROC
 ;Calcula el estadístico
+;varianza REAL8 0.
+;desvEstandar REAL8 0.
 ;-----------------------------------------------------------------------------------------------------------
+
+ FLD varianza
+ FSQRT
+ FSTP desvEstandar
 
 RET
 calcDesvEstandar ENDP
@@ -1373,7 +1525,28 @@ calcCuasiVarianza ENDP
 ;-----------------------------------------------------------------------------------------------------------
 calcDesvMedia PROC
 ;Calcula el estadístico
+;desvMedia
 ;-----------------------------------------------------------------------------------------------------------
+
+MOV posActual,0
+	MOV esi,realesLeidos;para controlar el ciclo de la sumatoria comparando con esi
+	
+	cicloDesvMedia: ;Suma las potencias
+		MOV eax, posActual
+		FLD numeros[eax*8]
+		FSUB media
+		FABS
+		FLD 	desvMedia
+		FADD
+		FSTP desvMedia
+	INC posActual
+	CMP posActual,esi
+	JL cicloDesvMedia
+	;Dividir por n
+	FLD desvMedia
+	FILD realesLeidos
+	FDIV
+	FSTP desvMedia
 
 RET
 calcDesvMedia ENDP
@@ -1382,6 +1555,26 @@ calcDesvMedia ENDP
 calcDesvMediana PROC
 ;Calcula el estadístico
 ;-----------------------------------------------------------------------------------------------------------
+
+MOV posActual,0
+	MOV esi,realesLeidos;para controlar el ciclo de la sumatoria comparando con esi
+	
+	cicloDesvMediana: ;Suma las potencias
+		MOV eax, posActual
+		FLD numeros[eax*8]
+		FSUB mediana
+		FABS
+		FLD 	desvMediana
+		FADD
+		FSTP desvMediana
+	INC posActual
+	CMP posActual,esi
+	JL cicloDesvMediana
+	;Dividir por n
+	FLD desvMediana
+	FILD realesLeidos
+	FDIV
+	FSTP desvMediana
 
 RET
 calcDesvMediana ENDP
